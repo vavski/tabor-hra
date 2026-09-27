@@ -66,15 +66,17 @@ const el=h=>{const t=document.createElement("template");t.innerHTML=h.trim();ret
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const norm=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpperCase().replace(/[^A-Z0-9]/g,"");
 const wait=ms=>new Promise(r=>setTimeout(r,TEST?15:ms));
-const scroll=()=>{requestAnimationFrame(()=>window.scrollTo({top:document.body.scrollHeight,behavior:TEST?"auto":"smooth"}))};
+// v2: zpráva se posouvá do obrazu přes scrollIntoView({block:"end",behavior:"smooth"}), karty na začátek (block:"start")
+const into=(e,block)=>{if(e&&e.scrollIntoView)e.scrollIntoView({block:block||"end",behavior:TEST?"auto":"smooth"})};
 let lastWho=null;
 
 function renderWindows(pop){
  const w=$("#windows");let h="";
- for(let i=1;i<=9;i++){const on=st.won.includes(i);h+=on?`<button class="win on${pop===i?" pop":""}" data-n="${i}" aria-label="Okénko ${i}"><img src="${NIGHT[i].img}" alt=""></button>`:`<div class="win">${i}</div>`}
+ for(let i=1;i<=9;i++){const on=st.won.includes(i);h+=on?`<button class="win on${pop===i?" new":""}" data-n="${i}" aria-label="Okénko ${i}"><img src="${NIGHT[i].img}" alt=""></button>`:`<div class="win">${i}</div>`}
  h+=`<div class="win fin">🔒 finále</div><div class="count" id="count">${st.won.length}/9</div>`;
  w.innerHTML=h;
  w.querySelectorAll(".win.on").forEach(b=>b.onclick=()=>openModal(NIGHT[b.dataset.n].img,NIGHT[b.dataset.n].t));
+ const nw=w.querySelector(".win.new");if(nw){void nw.offsetWidth;requestAnimationFrame(()=>requestAnimationFrame(()=>nw.classList.remove("new")))}
 }
 function openModal(src,txt){$("#modal img").src=src;$("#modal p").textContent=txt;$("#modal").classList.remove("hide")}
 
@@ -83,26 +85,27 @@ function addRow(who,inner){
  if(!me&&lastWho==="z"){const prev=[...feed.querySelectorAll(".row:not(.me) .av")].slice(-1)[0];if(prev)prev.classList.add("ghost")}
  const r=el(`<div class="row${me?" me":""}">${me?"":`<img class="av" src="${IMG}zizka-avatar.svg" alt="">`}</div>`);
  r.appendChild(typeof inner==="string"?el(inner):inner);
- feed.appendChild(r);lastWho=me?"me":"z";scroll();return r;
+ feed.appendChild(r);lastWho=me?"me":"z";into(r,"end");return r;
 }
-function sys(t){feed.appendChild(el(`<div class="sys">${esc(t)}</div>`));lastWho=null;scroll()}
-async function typing(ms){
- $("#status").textContent="píše…";$("#status").className="typing";
- const before=lastWho,prevAv=before==="z"?[...feed.querySelectorAll(".row:not(.me) .av")].slice(-1)[0]:null;
- const r=addRow("z",`<div class="bub"><span class="dots"><i></i><i></i><i></i></span></div>`);
- await wait(ms);r.remove();lastWho=before;if(prevAv)prevAv.classList.remove("ghost");
- $("#status").textContent="online";$("#status").className="";
+function sys(t){const e=el(`<div class="sys${/^Stanice|^Konec/.test(t)?" st":""}">${esc(t)}</div>`);feed.appendChild(e);lastWho=null;into(e,"end")}
+// v2: textový řádek „Žižka píše…“, délka min(1500, 300 + znaky×14) ms, po zprávě pauza 350 ms
+async function typing(len){
+ $("#status").textContent="píše…";
+ const ty=el(`<div class="typing">Žižka píše…</div>`);feed.appendChild(ty);into(ty,"end");
+ await wait(Math.min(1500,300+len*14));ty.remove();
+ $("#status").textContent="online";
 }
-const zSay=async(t,instant)=>{if(!instant)await typing(Math.min(1800,500+t.length*18));addRow("z",`<div class="bub">${esc(t)}</div>`)};
+const after=()=>wait(350);
+const zSay=async(t,instant)=>{if(!instant)await typing(t.length);addRow("z",`<div class="bub z">${esc(t)}</div>`);if(!instant)await after()};
 const meSay=t=>addRow("me",`<div class="bub">${esc(t)}</div>`);
 
 /* ---------- kroky ---------- */
 async function step(s,instant){
  if(s.sys)return sys(s.sys);
  if(s.z)return zSay(s.z,instant);
- if(s.pic){if(!instant)await typing(900);return addRow("z",`<div class="pic"><img src="${s.pic}" alt=""><div class="cap">${esc(s.cap)}</div></div>`)}
- if(s.receipt){if(!instant)await typing(900);return addRow("z",`<div class="receipt">${s.receipt}</div>`)}
- if(s.fwd){if(!instant)await typing(900);return addRow("z",`<div class="fwd"><div class="fh">↪ ${esc(s.fwd.h)}</div><div class="fb">${esc(s.fwd.b)}</div></div>`)}
+ if(s.pic){if(!instant)await typing(60);addRow("z",`<div class="pic"><div class="who2"></div><img src="${s.pic}" alt=""><div class="cap">${esc(s.cap)}</div></div>`);if(!instant)await after();return}
+ if(s.receipt){if(!instant)await typing(60);addRow("z",`<div class="receipt">${s.receipt}</div>`);if(!instant)await after();return}
+ if(s.fwd){if(!instant)await typing(60);addRow("z",`<div class="fwd"><div class="fh">↪ ${esc(s.fwd.h)}</div><div class="fb">${esc(s.fwd.b)}</div></div>`);if(!instant)await after();return}
  if(s.quick)return quick(s,instant);
  if(s.nav)return nav(s,instant);
  if(s.task)return task(s.task,instant);
@@ -111,40 +114,42 @@ async function step(s,instant){
 }
 function quick(s,instant){
  if(instant){meSay(st.q[s.id]||s.quick[0]);return}
- return new Promise(res=>{const q=el(`<div class="quick">${s.quick.map(o=>`<button>${esc(o)}</button>`).join("")}</div>`);feed.appendChild(q);scroll();
+ return new Promise(res=>{const q=el(`<div class="quick">${s.quick.map(o=>`<button class="btn ghost">${esc(o)}</button>`).join("")}</div>`);feed.appendChild(q);into(q,"end");
   q.querySelectorAll("button").forEach(b=>b.onclick=async()=>{q.remove();st.q[s.id]=b.textContent;meSay(b.textContent);
    if(b.textContent.startsWith("Proč"))await zSay("Máte jména napsaný na mojí ruce. Fixou. Takže jsme asi kámoši.");res()})});
 }
 function nav(s,instant){
  const n=s.nav;
  const c=el(`<div class="card nav"><div class="lbl">📍 Kam teď</div><h3>${esc(n.title)}</h3><div class="kv">${n.rows.map(([k,v])=>`<b>${esc(k)}</b><span>${esc(v)}</span>`).join("")}</div>${n.img?`<img class="ph" src="${n.img}" alt="">`:""}</div>`);
- feed.appendChild(c);lastWho=null;scroll();
+ feed.appendChild(c);lastWho=null;
  if(instant){meSay("Jsme tady 📍");return}
- return new Promise(res=>{const b=el(`<button class="btn">Jsme tady</button>`);c.appendChild(b);scroll();b.onclick=()=>{b.remove();meSay("Jsme tady 📍");res()}});
+ return new Promise(res=>{const b=el(`<button class="btn">Jsme tady</button>`);c.appendChild(b);into(c,"start");b.onclick=()=>{b.remove();meSay("Jsme tady 📍");res()}});
 }
 function taskCard(id){
  const t=TASKS[id];
- return el(`<div class="card task" id="card-${id}"><div class="lbl">🎯 Karta úkolu</div><h3>${esc(t.title)}</h3><div class="kv">${t.rows.map(([k,v])=>`<b>${esc(k)}</b><span>${esc(v)}</span>`).join("")}</div><div class="body"></div></div>`);
+ return el(`<div class="card task" id="card-${id}"><div class="lbl">🎯 Karta úkolu</div><h3>${esc(t.title)}</h3><div class="kv">${t.rows.map(([k,v])=>`<b>${esc(k)}</b><span>${esc(v)}</span>`).join("")}</div><div class="body"></div><div class="res"></div></div>`);
 }
 function task(id,instant){
- const t=TASKS[id],c=taskCard(id),body=c.querySelector(".body");
- feed.appendChild(c);lastWho=null;scroll();
- if(instant){body.innerHTML=`<div class="done-tag">✓ Vyřešeno</div>`;return}
- return new Promise(res=>{
-  let hi=0,busy=false;
-  const H={solved:()=>{body.innerHTML=`<div class="done-tag">✓ Vyřešeno</div>`;res()},
-   bad:async msg=>{if(busy)return;busy=true;await zSay(msg);busy=false}};
+ const t=TASKS[id],c=taskCard(id),body=c.querySelector(".body"),res=c.querySelector(".res");
+ feed.appendChild(c);lastWho=null;
+ if(instant){res.className="res small";res.textContent="✓ Vyřešeno";return}
+ into(c,"start");
+ return new Promise(res2=>{
+  let hi=0,busy=false,done=false;
+  const H={solved:()=>{if(done)return;done=true;c.querySelectorAll(".body button,.body input").forEach(b=>b.disabled=true);hb.remove();res.className="res good";res.textContent="✓ Správně!";res2()},
+   bad:async msg=>{c.classList.remove("shake");void c.offsetWidth;c.classList.add("shake");if(busy)return;busy=true;await zSay(msg);busy=false}};
+  const hb=el(`<button class="btn ghost sm">💡 Nevíme si rady</button>`);
   if(t.kind==="pick")pick(body,t,H);else grid(body,t,H);
-  const hb=el(`<button class="hintb">Nevíme si rady</button>`);c.appendChild(hb);
-  hb.onclick=async()=>{if(hi<t.hints.length){const h=t.hints[hi++];if(hi>=t.hints.length)hb.remove();await zSay(h)}};
+  c.appendChild(hb);
+  hb.onclick=async()=>{if(hi<t.hints.length){const h=t.hints[hi++];if(hi>=t.hints.length)hb.disabled=true;await zSay(h)}};
  });
 }
 function pick(body,t,H){
  let sel=null;
- body.innerHTML=`<div class="opts">${t.opts.map(([k,src])=>`<button class="opt" data-k="${k}"><img src="${src}" alt="Fotka ${k}"><span>${k}</span></button>`).join("")}</div><button class="btn" disabled>Vyberte fotku</button>`;
+ body.innerHTML=`<div class="opts">${t.opts.map(([k,src])=>`<button class="opt" data-k="${k}"><img src="${src}" alt="Fotka ${k}"><b>${k}</b></button>`).join("")}</div><button class="btn" disabled>Vyberte fotku</button>`;
  const go=body.querySelector(".btn");
- body.querySelectorAll(".opt").forEach(o=>o.onclick=()=>{sel=o.dataset.k;body.querySelectorAll(".opt").forEach(x=>x.classList.toggle("sel",x===o));go.disabled=false;go.textContent=`Zadat kód ${sel}`});
- go.onclick=()=>{if(!sel)return;meSay(`Kód ${sel}`);if(sel===t.ok)H.solved();else H.bad(t.bad[sel])};
+ body.querySelectorAll(".opt").forEach(o=>o.onclick=()=>{sel=o.dataset.k;body.querySelectorAll(".opt").forEach(x=>{x.classList.remove("bad");x.classList.toggle("sel",x===o)});go.disabled=false;go.textContent=`Zadat kód ${sel}`});
+ go.onclick=()=>{if(!sel)return;const o=body.querySelector(`.opt[data-k="${sel}"]`);meSay(`Kód ${sel}`);if(sel===t.ok){o.classList.add("good");H.solved()}else{o.classList.remove("bad");void o.offsetWidth;o.classList.add("bad");H.bad(t.bad[sel])}};
 }
 function grid(body,t,H){
  body.innerHTML=`<p style="font-size:14px;color:var(--mut)">${esc(t.howto)}</p><div class="gridwrap"><video class="hide" muted playsinline></video><svg viewBox="0 0 250 250"></svg></div>
@@ -172,12 +177,12 @@ async function unlock(n,instant){
  if(!st.won.includes(n))st.won.push(n);
  renderWindows(instant?0:n);
  const c=el(`<div class="card unlock"><div class="lbl">🔓 Okénko ${n}/9 odemčeno</div><div class="big">${esc(NIGHT[n].t.split(" · ").slice(1).join(" · "))}</div><img src="${NIGHT[n].img}" alt="Obrázek z noci"></div>`);
- feed.appendChild(c);lastWho=null;scroll();
- if(!instant)await wait(1100);
+ feed.appendChild(c);lastWho=null;
+ if(!instant){into(c,"start");await wait(900)}
 }
 function locked(){
  feed.appendChild(el(`<div class="card locked"><div class="ic">🔒</div><h3>Okénka 3–9 a finále</h3><p style="color:var(--mut)">V plné hře pokračujete k radničním hodinám. Až bude všech 9 okének, noc se složí a odemkne se finále.</p></div>`));
- const b=el(`<button class="btn sec">Zahrát ukázku znovu</button>`);b.onclick=reset;feed.appendChild(b);lastWho=null;scroll();
+ const b=el(`<button class="btn sec">Zahrát ukázku znovu</button>`);b.onclick=reset;feed.appendChild(b);lastWho=null;into(b,"end");
 }
 
 /* ---------- běh ---------- */
