@@ -1,8 +1,9 @@
 "use strict";
 /* Ukázka: úvod + stanice 1–2. Playtest r3: cliff bez spoileru, krátký brief st.1, chat-nav obě stanice. */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r3";
+const KEY="tabor-demo2-r4";
 const IMG="assets/img/";
+const AV_MARK=`<span class="av av-mark" aria-hidden="true"><svg viewBox="0 0 40 40" width="28" height="28" fill="none"><circle cx="20" cy="20" r="19" fill="#0a121c" stroke="#22d3ee" stroke-width="1.5"/><ellipse cx="20" cy="20" rx="6" ry="8" stroke="#5ee1ff" stroke-width="1.5"/><circle cx="20" cy="20" r="2.5" fill="#22d3ee"/><path d="M8 18h8M24 18h8" stroke="#ff9a3c" stroke-width="1.8" stroke-linecap="round"/></svg></span>`;
 const NIGHT={1:{img:IMG+"noc-1.jpg",t:"Okénko 1 · 02:14 · Kašna"},2:{img:IMG+"noc-2.jpg",t:"Okénko 2 · 02:47 · Škochův dům"}};
 
 const SCRIPT=[
@@ -10,7 +11,7 @@ const SCRIPT=[
  {sys:"Neděle · 6:40"},
  {z:"Lidi. Jste vzhůru?"},
  {z:"Probudil jsem se u kašny na náměstí. Na zemi. 🫠"},
- {pic:IMG+"noc-uvod.jpg",cap:"selfie, 6:38"},
+ {z:"Selfie z kašny. Vypadám… jinak. Až uvidíte okénka, pochopíte."},
  {z:"Mám na sobě cizí plášť. Je mi malej. A v kapse tohle:"},
  {receipt:`<h4>KRČMA · ÚČET č. 1419</h4><div class="l"><span>Pivo 0,5</span><span>38×</span></div><div class="l"><span>Nakládaný hermelín</span><span>4×</span></div><div class="l"><span>Škoda na majetku</span><span>1×</span></div><div class="l tot"><span>CELKEM</span><span>2 474 Kč</span></div><div class="scr">zaplatí Žižka ♥</div>`},
  {z:"38 piv. Já. Nic si nepamatuju."},
@@ -99,7 +100,7 @@ function openModal(src,txt){$("#modal img").src=src;$("#modal p").textContent=tx
 function addRow(who,inner){
  const me=who==="me";
  if(!me&&lastWho==="z"){const prev=[...feed.querySelectorAll(".row:not(.me) .av")].slice(-1)[0];if(prev)prev.classList.add("ghost")}
- const r=el(`<div class="row${me?" me":""}">${me?"":`<img class="av" src="${IMG}zizka-avatar.jpg" alt="">`}</div>`);
+ const r=el(`<div class="row${me?" me":""}">${me?"":AV_MARK}</div>`);
  r.appendChild(typeof inner==="string"?el(inner):inner);
  feed.appendChild(r);lastWho=me?"me":"z";into(r,"end");return r;
 }
