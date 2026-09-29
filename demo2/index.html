@@ -9,25 +9,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=r5">
+<link rel="stylesheet" href="style.css?v=r6">
 </head>
 <body>
 <div id="splash" class="splash">
-  <div class="splash-fx" aria-hidden="true"></div>
+  <div class="splash-bg" style="background-image:url(assets/img/splash-kasna.jpg)" role="img" aria-label="Žižkovo náměstí, kašna, Tábor"></div>
   <div class="splash-in">
-    <div class="brand-mark" aria-hidden="true">
-      <svg viewBox="0 0 64 64" width="72" height="72" fill="none">
-        <circle cx="32" cy="32" r="30" stroke="#22d3ee" stroke-width="1.5" opacity=".35"/>
-        <circle cx="32" cy="32" r="22" stroke="#22d3ee" stroke-width="2"/>
-        <ellipse cx="32" cy="32" rx="10" ry="14" stroke="#5ee1ff" stroke-width="2"/>
-        <circle cx="32" cy="32" r="4" fill="#22d3ee"/>
-        <path d="M14 28h12M38 28h12" stroke="#ff9a3c" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="M18 24v8M46 24v8" stroke="#ff9a3c" stroke-width="2" stroke-linecap="round" opacity=".7"/>
-      </svg>
-    </div>
     <div class="kicker">Tábor · městská mise</div>
     <h1>Co se stalo<br><span>v Táboře</span></h1>
-    <p class="tag">Žižka se probudil u kašny. Nepamatuje si nic.<br>Nebo to aspoň tvrdí. 90 minut do nástupu.</p>
+    <p class="tag">Probudil se u kašny. Účet za 38 piv.<br>Nic si nepamatuje.</p>
     <button class="btn cta" id="startBtn">Otevřít chat se Žižkou</button>
     <p class="demo-note">Ukázka · úvod + 2 stanice · zvrat zamčený</p>
   </div>
@@ -57,6 +47,6 @@
 
 <div id="modal" class="modal hide"><div class="modal-in"><img alt=""><p></p><button class="btn sec" id="modalClose">Zavřít</button></div></div>
 <div id="menu" class="modal hide"><div class="modal-in"><h3>Menu</h3><button class="btn sec" id="resetBtn">Začít znovu</button><button class="btn" id="menuClose">Zpět do chatu</button></div></div>
-<script src="app.js?v=r5"></script>
+<script src="app.js?v=r6"></script>
 </body>
 </html>
