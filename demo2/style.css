@@ -128,3 +128,15 @@ img{max-width:100%}
 .modal-in img{width:100%;border-radius:10px;display:block}
 .modal-in p{margin:10px 0 0;font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .modal-in h3{margin-bottom:6px;font:400 28px var(--head);letter-spacing:.04em}
+
+/* r2: brief úkol (bez Co/Kde/Kód), cliffhanger */
+.card .brief{color:#d6deea;font-size:14.5px;line-height:1.5;margin:2px 0 10px}
+.card .ask{color:var(--orange);font:600 14px var(--sans);margin:0 0 12px;padding:10px 12px;border-left:2px solid var(--orange);background:rgba(255,154,60,.06);border-radius:0 8px 8px 0}
+.card .howto{font-size:14px;color:var(--muted);margin:0 0 8px}
+.card.locked.cliff{text-align:left;border-style:solid;border-color:rgba(255,154,60,.45);background:linear-gradient(160deg,rgba(255,154,60,.08),rgba(14,22,34,.85));box-shadow:0 20px 50px -24px rgba(255,154,60,.55)}
+.card.locked.cliff .ic{text-align:center}
+.card.locked.cliff h3{font-size:28px;text-align:center;color:var(--orange);text-shadow:0 0 18px rgba(255,154,60,.35)}
+.cliff-lead{color:#c9d4e6;font-size:14.5px;line-height:1.5;margin:8px 0 14px}
+.cliff-punch{font:400 22px/1.25 var(--head);letter-spacing:.03em;text-transform:uppercase;color:var(--txt);margin:0 0 12px;padding:14px 14px;border:1px solid var(--line2);border-radius:12px;background:rgba(5,7,12,.55);text-align:center}
+.cliff-punch span{display:block;margin-top:8px;color:var(--cyan);text-shadow:0 0 16px rgba(34,211,238,.4);font-size:20px}
+.cliff-note{color:var(--muted);font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;margin:0;text-align:center}
