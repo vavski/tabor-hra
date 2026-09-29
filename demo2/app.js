@@ -1,7 +1,7 @@
 "use strict";
-/* Ukázka: úvod + stanice 1–2. Playtest r2: st.1 bez worksheet/A-B-C, silnější cliffhanger, rytmus st.2 jinak. */
+/* Ukázka: úvod + stanice 1–2. Playtest r3: cliff bez spoileru, krátký brief st.1, chat-nav obě stanice. */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r2";
+const KEY="tabor-demo2-r3";
 const IMG="assets/img/";
 const NIGHT={1:{img:IMG+"noc-1.jpg",t:"Okénko 1 · 02:14 · Kašna"},2:{img:IMG+"noc-2.jpg",t:"Okénko 2 · 02:47 · Škochův dům"}};
 
@@ -19,14 +19,16 @@ const SCRIPT=[
  {z:"Díky. Na každým místě, kde jsem v noci byl, zůstala stopa. Každá stopa = jedno okénko."},
  {z:"Až jich bude 9, noc se složí. A uvidíte, že to není tak jednoduchý, jak to teď vypadá."},
  {z:"Začneme tam, kde jsem se probudil."},
- // STANICE 1 — kašna (hledání záplaty, kód = slovo z noci, ne písmeno fotky)
+ // STANICE 1 — kašna (chat-nav jako st.2; kód = slovo z noci)
  {sys:"Stanice 1 / 9"},
- {nav:{title:"Kašna na Žižkově náměstí",rows:[["Kam","Doprostřed Žižkova náměstí, hlavního náměstí v Táboře."],["Poznáte","Velká kamenná kašna, uprostřed sloup a na něm malý rytíř s praporkem."],["Orientační bod","Kousek od kašny stojí velká socha Žižky s palcátem. Tou kašnu nepopletete."]],go:"Stojíme u kašny"},id:"n1"},
+ {z:"Jděte doprostřed Žižkova náměstí. Velká kamenná kašna — uprostřed sloup a na něm malý rytíř s praporkem."},
+ {z:"Kousek od ní stojí velká socha mě s palcátem. Tou kašnu nepopletete."},
+ {quick:["Stojíme u kašny"],id:"n1"},
  {z:"Tady. Ráno jsem ležel vedle. V kapse mám kámen. Normální šedej kámen. 🪨"},
  {z:"A v mobilu tuhle zprávu, co jsem v noci poslal do skupiny:"},
  {fwd:{h:"Přeposláno · skupina „Kumpáni“ · 02:14",b:"mám suvenýr 😎🪨 nikdo nic nepozná, díra je vidět jen zblízka"}},
- {z:"Vsadil jsem se, že kus kašny vylomím holou rukou. Díru jsem pak někdo… no, záplatoval. Hledejte to, než to najde radnice."},
- {z:"Až tu záplatu uvidíte naživo — napište mi, jak jsem tomu v noci říkal. Jedno slovo. Z té zprávy."},
+ {z:"Vsadil jsem se, že kus kašny vylomím holou rukou. Díru pak někdo… no, záplatoval. Najděte to dřív než radnice."},
+ {z:"Až tu záplatu uvidíte — napište mi, jak jsem tomu v noci říkal. Jedno slovo. Z té zprávy."},
  {task:"t1"},
  {unlock:1},
  {z:"Jo. Vyhrál jsem jedno pivo a doživotní zákaz od kameníka."},
@@ -56,11 +58,11 @@ const SCRIPT=[
 
 const TASKS={
  t1:{title:"Díra po suvenýru",lbl:"Stopa z noci",
-   brief:"Obejděte kašnu dokola. Dívejte se zblízka na kamennou obrubu, na kterou si lidi sedají. Někde je kus, který tam nepatří — hranatý kámen vsazený do jinak oblého okraje. To je ta díra (teď už záplata).",
-   ask:"Až to uvidíte, napište heslo z noci — jak jsem tomu říkal ve zprávě.",
+   brief:"Obejděte kašnu. Na obrubě je kus, který tam nepatří.",
+   ask:"Heslo z noci — jak jsem tomu říkal ve zprávě.",
    kind:"word",answers:["SUVENYR"],
    near:{KAMEN:"Jo, kámen. Ale jak jsem tomu říkal ve zprávě do skupiny?",ZAPLATA:"To je, co vidíte teď. Já tomu v noci říkal jinak.",DIRA:"Díru jste našli. Co jsem si z ní odnesl?",SUVENE:"Skoro. Dočtěte to slovo.",SUVENIR:"Bez i. Jak to mám ve zprávě.",SUVENY:"Ještě jedno písmeno. 🪨"},
-   hints:["Neřešte vodu ani rytíře nahoře. Jen kamenný lem dole, kolem dokola.","Hledejte místo, kde vodorovné žlábky najednou končí a místo nich je rovný hranatý blok.","Ve zprávě do skupiny jsem napsal, co si z díry odnáším. Jedno slovo. S emoji kamene."]
+   hints:["Neřešte vodu ani rytíře nahoře. Jen kamenný lem dole — ten, na který si lidi sedají. Kolem dokola.","Hledejte kus, co do oblého okraje nepatří: hranatý kámen vsazený mezi žlábky.","Ve zprávě do skupiny jsem napsal, co si z díry odnáším. Jedno slovo. S emoji kamene."]
  },
  t2:{title:"Co jsem prohrál?",lbl:"Stopa z noci",
    brief:"Na fasádě Škochova domu jsou namalované nůžky — pod druhým oknem v 1. patře, nad restaurací. Ne kovové, namalované.",
@@ -209,9 +211,9 @@ async function unlock(n,instant){
 function locked(){
  const c=el(`<div class="card locked cliff">
   <div class="ic"><i class="lock big"></i></div>
-  <h3>Zvrat je zamčený</h3>
-  <p class="cliff-lead">V plné hře jdete k orloji, k Bechyňské bráně a dál noční stopou. V půlce přijde krčmář. Žižka se přizná. A na konci u radnice se otevře truhla.</p>
-  <p class="cliff-punch">Truhla je prázdná.<br><span>Co se stalo v Táboře, zůstává v Táboře.</span></p>
+  <h3>Další okénka zamčená</h3>
+  <p class="cliff-lead">V plné hře jdete k orloji, k Bechyňské bráně a dál noční stopou. V půlce přijde krčmář. A na konci u radnice se otevře truhla.</p>
+  <p class="cliff-punch">Truhla se otevře.<br><span>Co je uvnitř — to teď neříkám.</span></p>
   <p class="cliff-note">Ukázka končí po 2 z 9 okének. Zbytek + finále je v plné hře.</p>
  </div>`);
  feed.appendChild(c);
