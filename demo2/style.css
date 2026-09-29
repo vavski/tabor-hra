@@ -148,3 +148,7 @@ img{max-width:100%}
 .cliff-punch{font:400 22px/1.25 var(--head);letter-spacing:.03em;text-transform:uppercase;color:var(--txt);margin:0 0 12px;padding:14px 14px;border:1px solid var(--line2);border-radius:12px;background:rgba(5,7,12,.55);text-align:center}
 .cliff-punch span{display:block;margin-top:8px;color:var(--cyan);text-shadow:0 0 16px rgba(34,211,238,.4);font-size:20px}
 .cliff-note{color:var(--muted);font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;margin:0;text-align:center}
+
+.shot.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:140px;background:radial-gradient(circle at 50% 40%,rgba(34,211,238,.12),rgba(5,7,12,.9));gap:8px}
+.shot.empty b{font:400 28px var(--head);letter-spacing:.08em;color:var(--cyan)}
+.win.on.lit{background:rgba(34,211,238,.15);color:var(--cyan);font:700 12px var(--mono)}

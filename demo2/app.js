@@ -1,17 +1,17 @@
 "use strict";
-/* Ukázka: úvod + stanice 1–2. Playtest r3: cliff bez spoileru, krátký brief st.1, chat-nav obě stanice. */
+/* Ukázka: úvod + stanice 1–2. r5: žádné anime tváře; okénka = reálné fotky Tábora. */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r4";
+const KEY="tabor-demo2-r5";
 const IMG="assets/img/";
 const AV_MARK=`<span class="av av-mark" aria-hidden="true"><svg viewBox="0 0 40 40" width="28" height="28" fill="none"><circle cx="20" cy="20" r="19" fill="#0a121c" stroke="#22d3ee" stroke-width="1.5"/><ellipse cx="20" cy="20" rx="6" ry="8" stroke="#5ee1ff" stroke-width="1.5"/><circle cx="20" cy="20" r="2.5" fill="#22d3ee"/><path d="M8 18h8M24 18h8" stroke="#ff9a3c" stroke-width="1.8" stroke-linecap="round"/></svg></span>`;
-const NIGHT={1:{img:IMG+"noc-1.jpg",t:"Okénko 1 · 02:14 · Kašna"},2:{img:IMG+"noc-2.jpg",t:"Okénko 2 · 02:47 · Škochův dům"}};
+const NIGHT={1:{img:IMG+"kasna-tabor.jpg",t:"Okénko 1 · 02:14 · Kašna"},2:{img:IMG+"skoch-fasada.jpg",t:"Okénko 2 · 02:47 · Škochův dům"}};
 
 const SCRIPT=[
  // ÚVOD
  {sys:"Neděle · 6:40"},
  {z:"Lidi. Jste vzhůru?"},
  {z:"Probudil jsem se u kašny na náměstí. Na zemi. 🫠"},
- {z:"Selfie z kašny. Vypadám… jinak. Až uvidíte okénka, pochopíte."},
+ {pic:IMG+"kasna-tabor.jpg",cap:"Žižkovo náměstí · kašna · Tábor"},
  {z:"Mám na sobě cizí plášť. Je mi malej. A v kapse tohle:"},
  {receipt:`<h4>KRČMA · ÚČET č. 1419</h4><div class="l"><span>Pivo 0,5</span><span>38×</span></div><div class="l"><span>Nakládaný hermelín</span><span>4×</span></div><div class="l"><span>Škoda na majetku</span><span>1×</span></div><div class="l tot"><span>CELKEM</span><span>2 474 Kč</span></div><div class="scr">zaplatí Žižka ♥</div>`},
  {z:"38 piv. Já. Nic si nepamatuju."},
@@ -89,10 +89,12 @@ let lastWho=null;
 
 function renderWindows(pop){
  const w=$("#windows");let h="";
- for(let i=1;i<=9;i++){const on=st.won.includes(i);h+=on?`<button class="win on${pop===i?" new":""}" data-n="${i}" aria-label="Okénko ${i}"><img src="${NIGHT[i].img}" alt=""></button>`:`<div class="win">${i}</div>`}
+ for(let i=1;i<=9;i++){
+  const on=st.won.includes(i),n=NIGHT[i],has=n&&n.img;
+  h+=on?(has?`<button class="win on${pop===i?" new":""}" data-n="${i}" aria-label="Okénko ${i}"><img src="${n.img}" alt=""></button>`:`<button class="win on lit${pop===i?" new":""}" data-n="${i}" aria-label="Okénko ${i}">${i}</button>`):`<div class="win">${i}</div>`}
  h+=`<div class="win fin" title="Finále"><i class="lock"></i></div>`;
  w.innerHTML=h;$("#count").textContent=st.won.length;
- w.querySelectorAll(".win.on").forEach(b=>b.onclick=()=>openModal(NIGHT[b.dataset.n].img,NIGHT[b.dataset.n].t));
+ w.querySelectorAll(".win.on").forEach(b=>b.onclick=()=>{const n=NIGHT[b.dataset.n];if(n&&n.img)openModal(n.img,n.t)});
  const nw=w.querySelector(".win.new");if(nw){void nw.offsetWidth;requestAnimationFrame(()=>requestAnimationFrame(()=>nw.classList.remove("new")))}
 }
 function openModal(src,txt){$("#modal img").src=src;$("#modal p").textContent=txt;$("#modal").classList.remove("hide")}
@@ -205,7 +207,13 @@ function grid(body,t,H){
 async function unlock(n,instant){
  if(!st.won.includes(n))st.won.push(n);
  renderWindows(instant?0:n);
- const c=el(`<div class="card unlock"><div class="lbl"><i class="dot"></i>Okénko ${n}/9 odemčeno</div><div class="big">${esc(NIGHT[n].t.split(" · ").slice(2).join(" · "))}</div><div class="shot"><img src="${NIGHT[n].img}" alt="Obrázek z noci"><span class="ts">${esc(NIGHT[n].t.split(" · ")[1])}</span></div></div>`);
+ const info=NIGHT[n]||{t:`Okénko ${n}`,img:""};
+ const place=info.t.includes(" · ")?info.t.split(" · ").slice(2).join(" · "):info.t;
+ const ts=info.t.includes(" · ")?info.t.split(" · ")[1]:"";
+ const shot=info.img
+  ?`<div class="shot"><img src="${info.img}" alt=""><span class="ts">${esc(ts)}</span></div>`
+  :`<div class="shot empty"><span class="ts">${esc(ts||"odemčeno")}</span><b>Okénko ${n}</b></div>`;
+ const c=el(`<div class="card unlock"><div class="lbl"><i class="dot"></i>Okénko ${n}/9 odemčeno</div><div class="big">${esc(place)}</div>${shot}</div>`);
  feed.appendChild(c);lastWho=null;
  if(!instant){into(c,"start");await wait(900)}
 }
