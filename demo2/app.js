@@ -1,7 +1,7 @@
 "use strict";
-/* Ukázka: plná trasa 9 stanic. r13 — stations 3–9 A-lite route; keep r12 mobile crops */
+/* Ukázka: plná trasa 9 stanic. r14 — orloj Caesar slider + jednoruký→orloj link */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r13";
+const KEY="tabor-demo2-r14";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={
@@ -57,17 +57,19 @@ const SCRIPT=[
  {task:"t2"},
  {unlock:2},
  {z:"Sázka s krejčím: kdo prohraje, přijde o rukáv. Prohrál jsem a celá hospoda mi pak říkala Jednorukej. Aspoň že ne Bezrukej."},
- {z:"Hele, kdo je tu ještě jednorukej? Ten ciferník na věži hned vedle má jen jednu ručičku."},
+ {z:"Počkat. JEDNORUKÝ — to není jen přezdívka, to je nápověda. Hned vedle stojí věž. A na ní ciferník s jedinou ručičkou. Taky jednorukej."},
+ {z:"Jděte k němu. Klíč ke zprávě z noci je na tom ciferníku."},
 
- // STANICE 3 — orloj Caesar
+ // STANICE 3 — orloj Caesar (wheel) · klíč = jednoruký ciferník
  {sys:"Stanice 3 / 9"},
- {z:"Radniční věž. Zvedněte hlavu."},
- {z:"Ciferník má jedinou zlatou ručičku a slunce. 24 hodin, 24 nahoře. Normální to není."},
- {pic:IMG+"orloj-placeholder.svg",cap:"Radniční orloj · 24h · 1 ručička"},
- {quick:["Vidíme ciferník"],id:"n3"},
+ {z:"Radniční věž. Zvedněte hlavu k jednorukému."},
+ {z:"Ciferník má jedinou zlatou ručičku a slunce. Spočítejte dílky — 24 hodin, 24 nahoře. Normální to není."},
+ {pic:IMG+"orloj-placeholder.svg",cap:"Radniční orloj · 24h · 1 ručička · jednoruký"},
+ {quick:["Vidíme jednorukého"],id:"n3"},
  {z:"Krčma zavírala o půlnoci. To vím."},
  {z:"Pak si pamatuju jen to, že jsem strašně chtěl, aby bylo o hodinu míň."},
- {z:"V kapse mám zprávu, kterou jsem si v noci „zašifroval“. Posunutou. O tolik, kolik je na ciferníku čísel."},
+ {z:"V kapse mám zprávu, kterou jsem si v noci „zašifroval“. Posunutou. O tolik, kolik čísel má jednoruký."},
+ {z:"Na posuvníku si abecedu posuňte, dokud nepřečtete text. Klíč jste spočítali na věži."},
  {task:"t3"},
  {unlock:3},
  {z:"„Odešli.“ Množný číslo. To je… taková řečnická figura. 🔎"},
@@ -195,12 +197,12 @@ const TASKS={
    hints:["Nůžky jsou namalované, ne kovové. Najdete je nad vchodem do restaurace, v 1. patře.","Očka mají nahoře, hroty dole. Dejte „očka nahoře“ a čtěte po zlatých čarách.","Levá čepel: J-E-D-N-O. Pravá: R-U-(D)-K-Y."]
  },
  t3:{title:"Posunutá zpráva",lbl:"Stopa z noci",
-   brief:"Ciferník má 24 hodin a jednu ručičku. Klíč šifry = počet dílků. Každé písmeno posuňte o stejný počet míst zpátky.",
-   ask:"Šifra: MBCQJG ZPYLMS",
+   brief:"Jednoruký ciferník = klíč. Spočítejte čísla na věži. Posuňte abecedu o tolik míst a na posuvníku přečtěte zprávu.",
+   ask:"Šifra z kapsy — posouvejte, dokud nepřečtete text",
    cipher:"MBCQJG ZPYLMS",
-   kind:"word",answers:["ODESLIBRANOU"],
-   near:{ODESLI:"První slovo máte. Kudy?",BRANOU:"Druhé sedí. Co bylo předtím?",MBCQJG:"To je ještě šifra. Posuňte písmena zpátky.",ZPYLMS:"To je druhá půlka šifry. Rozluštěte celou zprávu.",24:"Klíč sedí. Teď posuňte písmena a přečtěte text.",12:"Na normálních hodinách jo. Tenhle ciferník jich má víc.",2:"Posun o 2 zpátky sedí. Ale kolik čísel má ciferník?"},
-   hints:["Ciferník má 24 hodin, ne 12. Kolik je dílků, o tolik se posouvá abeceda.","Posuňte každé písmeno o stejný počet míst zpátky. (24 dopředu = 2 zpátky.)","První slovo je sloveso v minulém čase, druhé říká, kudy."]
+   kind:"wheel",answers:["ODESLIBRANOU"],
+   near:{ODESLI:"První slovo máte. Kudy?",BRANOU:"Druhé sedí. Co bylo předtím?",MBCQJG:"To je ještě šifra. Posuňte posuvník.",ZPYLMS:"To je druhá půlka šifry. Rozluštěte celou zprávu.",24:"Klíč sedí. Teď posuňte posuvník a přečtěte text.",12:"Na normálních hodinách jo. Tenhle jednoruký jich má víc.",2:"Posun o 2 zpátky sedí. Ale kolik čísel má jednoruký?"},
+   hints:["Jednoruký má 24 hodin, ne 12. Kolik je dílků, o tolik se posouvá abeceda.","Na posuvníku nastavte 24 (nebo −2). Horní řádek = šifra, spodní = text. Živý řádek nahoře ukáže zprávu.","První slovo je sloveso v minulém čase, druhé říká, kudy."]
  },
  t3w:{title:"Věž v dlani",lbl:"Úkol cestou",
    brief:"Vyfoťte kulatou věž Kotnov tak, aby to vypadalo, že ji někdo z vás drží v dlani. Perspektiva. Dokonalost se nehodnotí.",
@@ -368,8 +370,9 @@ function nav(s,instant){
 }
 function taskCard(id){
  const t=TASKS[id];
+ const showCipher=t.cipher&&t.kind!=="wheel";
  const body=t.brief
-  ?`<p class="brief">${esc(t.brief)}</p>${t.ask?`<p class="ask">${esc(t.ask)}</p>`:""}${t.cipher?`<div class="cipher">${esc(t.cipher)}</div>`:""}`
+  ?`<p class="brief">${esc(t.brief)}</p>${t.ask?`<p class="ask">${esc(t.ask)}</p>`:""}${showCipher?`<div class="cipher">${esc(t.cipher)}</div>`:""}`
   :(t.rows?`<div class="kv">${t.rows.map(([k,v])=>`<b>${esc(k)}</b><span>${esc(v)}</span>`).join("")}</div>`:"");
  return el(`<div class="card task" id="card-${id}"><div class="lbl"><i class="dot"></i>${esc(t.lbl||"Karta úkolu")}</div><h3>${esc(t.title)}</h3>${body}<div class="body"></div><div class="res"></div></div>`);
 }
@@ -385,6 +388,7 @@ function task(id,instant){
   const hb=el(`<button class="btn ghost sm">Nevíme si rady</button>`);
   if(t.kind==="pick")pick(body,t,H);
   else if(t.kind==="word")word(body,t,H);
+  else if(t.kind==="wheel")wheel(body,t,H);
   else if(t.kind==="honor")honor(body,t,H,c,hb);
   else if(t.kind==="choice")choice(body,t,H);
   else if(t.kind==="sort")sortUI(body,t,H);
@@ -411,6 +415,32 @@ function word(body,t,H){
   H.bad("Tohle neznám. Koukněte znovu na stopu.")};
  body.querySelector(".inrow .btn").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};
  if(!TEST)setTimeout(()=>inp.focus(),200);
+}
+function wheel(body,t,H){
+ const A="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+ const cipher=t.cipher||"";
+ let k=0;
+ body.innerHTML=`<div class="cipher-src"><span>Šifra</span><b>${esc(cipher)}</b></div>
+  <div class="cipher cipher-live" aria-live="polite">${esc(cipher)}</div>
+  <p class="wheel-lab">Posuvník · horní řádek = šifra → spodní = text</p>
+  <div class="wheel"><div class="r1">${A}</div><div class="r2"></div></div>
+  <div class="wheel-ctrl"><button type="button" class="btn sec wheel-m" aria-label="Posun minus">−</button><div class="wheel-k"><span class="kk">0</span><small>posun</small></div><button type="button" class="btn sec wheel-p" aria-label="Posun plus">+</button></div>
+  <div class="inrow"><input type="text" placeholder="Rozluštěný text" autocomplete="off" autocapitalize="characters" spellcheck="false"><button class="btn">Zadat</button></div>`;
+ const live=body.querySelector(".cipher-live"),r2=body.querySelector(".r2"),kk=body.querySelector(".kk");
+ const draw=()=>{
+  live.textContent=[...cipher].map(c=>{const i=A.indexOf(c);return i<0?c:A[(i-k+260)%26]}).join("");
+  r2.textContent=[...A].map((_,i)=>A[(i-k+260)%26]).join("");
+  kk.textContent=String(k);
+ };
+ body.querySelector(".wheel-m").onclick=()=>{k=(k+25)%26;draw()};
+ body.querySelector(".wheel-p").onclick=()=>{k=(k+1)%26;draw()};
+ draw();
+ const inp=body.querySelector("input");
+ const send=()=>{const raw=inp.value.trim();if(!raw)return;const n=norm(raw);meSay(raw.toUpperCase());inp.value="";
+  if(t.answers.includes(n))return H.solved();
+  if(t.near&&t.near[n])return H.bad(t.near[n]);
+  H.bad("Tohle neznám. Posuňte posuvník a přečtěte živý řádek.")};
+ body.querySelector(".inrow .btn").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};
 }
 function honor(body,t,H,card,hb){
  let html=`<button class="btn honor-btn">${esc(t.confirm||"Potvrdit na čest ✓")}</button>`;
@@ -524,7 +554,7 @@ function finaleCard(){
   <div class="lbl"><i class="dot"></i>Hotovo</div>
   <h3>Co se stalo v Táboře,<br>zůstává v Táboře</h3>
   <p class="finale-lead">9 okének. Prázdná truhla. Účet zaplacený palcátem. A vy nic nepřiznáte.</p>
-  <p class="finale-note">Díky za playtest · demo2 r13</p>
+  <p class="finale-note">Díky za playtest · demo2 r14</p>
  </div>`);
  feed.appendChild(c);
  const b=el(`<button class="btn sec">Zahrát znovu</button>`);b.onclick=reset;feed.appendChild(b);lastWho=null;into(c,"start");
