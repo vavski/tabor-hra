@@ -1,7 +1,7 @@
 "use strict";
-/* Ukázka: plná trasa 9 stanic. r14 — orloj Caesar slider + jednoruký→orloj link */
+/* Ukázka: plná trasa 9 stanic. r15 — kašna účet 3416 + orloj Caesar */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r14";
+const KEY="tabor-demo2-r15";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={
@@ -32,15 +32,17 @@ const SCRIPT=[
  {z:"Až jich bude 9, noc se složí. A uvidíte, že to není tak jednoduchý, jak to teď vypadá."},
  {z:"Začneme tam, kde jsem se probudil."},
 
- // STANICE 1 — kašna: jen příběh + navigace
+ // STANICE 1 — kašna: účet / dluh Rolandovi (1568+1848=3416)
  {sys:"Stanice 1 / 9"},
  {z:"Jděte doprostřed Žižkova náměstí. Velká kamenná kašna — uprostřed sloup, kolem ní lem, na který si lidi sedají."},
  {z:"Kousek od ní stojí velká socha mě s palcátem. Tou kašnu nepopletete."},
  {quick:["Stojíme u kašny"],id:"n1"},
  {z:"Tady. Ráno jsem ležel vedle. V cizím plášti, co mi je malej. A s účtem za 38 piv v kapse."},
  {z:"Nic si z noci nepamatuju. Jen že jsem se válel u vody a že mi je zima na jedno rameno."},
+ {z:"Roland má dva letopočty a já jeden účet. Sečtěte je. Tábor neplatí — Tábor dluží."},
+ {task:"t1"},
  {unlock:1},
- {z:"Okénko 1 je vaše. Kašna v noci — tady to začalo."},
+ {z:"Okénko 1 je vaše. Kašna v noci — tady to začalo. Dluh zapsán."},
  {z:"Ten plášť… zkoušel jsem ho natáhnout a zjistil jsem, že mu chybí rukáv. Kam se v noci ztrácejí rukávy? A kdo je krejčí, co má rád sázky? 🤔"},
 
  // STANICE 2 — nůžky / mřížka JEDNORUKY
@@ -189,6 +191,23 @@ const SCRIPT=[
 ];
 
 const TASKS={
+ t1:{title:"Účet u kašny",lbl:"Stopa z noci",
+   brief:"Na vnější stěně nádrže kašny najděte dva letopočty (vidět / nahmatat). Sečtěte je — to je částka, kterou Tábor dluží Rolandovi / kašně.",
+   ask:"Kolik dlužíme?",
+   ph:"Částka",
+   kind:"word",answers:["3416"],
+   near:{
+     "1568":"To je jen původní dluh. Najděte druhý řádek.",
+     "1848":"Oprava sama nestačí. Roland účtuje i stavbu.",
+     "3415":"1567 je začátek práce, ne letopočet na účtu.",
+     "1567":"1567 je začátek práce, ne letopočet na účtu."
+   },
+   hints:[
+     "Starý rok nahoře, oprava pod ním. Sáhněte — nebo boční světlo.",
+     "Dva letopočty na vnější stěně nádrže. Sečtěte je dohromady.",
+     "1568 + 1848."
+   ]
+ },
  t2:{title:"Co jsem prohrál?",lbl:"Stopa z noci",
    brief:"Na fasádě Škochova domu jsou namalované nůžky (pod druhým oknem v 1. patře, nad restaurací). Ty nůžky jsou klíč k mřížce — ne trivia.",
    howto:"Přiložte mřížku podle namalovaných nůžek: nastavte, kde mají očka. Čtěte po čepelích od oček ke hrotům — nejdřív levá, pak pravá. Písmeno uprostřed, kde se čepele kříží, jen jednou.",
@@ -407,7 +426,7 @@ function pick(body,t,H){
  go.onclick=()=>{if(!sel)return;const o=body.querySelector(`.opt[data-k="${sel}"]`);meSay(`Kód ${sel}`);if(sel===t.ok){o.classList.add("good");H.solved()}else{o.classList.remove("bad");void o.offsetWidth;o.classList.add("bad");H.bad(t.bad[sel])}};
 }
 function word(body,t,H){
- body.innerHTML=`<div class="inrow"><input type="text" placeholder="Heslo z noci" autocomplete="off" autocapitalize="characters" spellcheck="false"><button class="btn">Zadat</button></div>`;
+ body.innerHTML=`<div class="inrow"><input type="text" placeholder="${esc(t.ph||"Heslo z noci")}" inputmode="${t.answers&&/^[0-9]+$/.test(t.answers[0])?"numeric":"text"}" autocomplete="off" autocapitalize="characters" spellcheck="false"><button class="btn">Zadat</button></div>`;
  const inp=body.querySelector("input");
  const send=()=>{const raw=inp.value.trim();if(!raw)return;const n=norm(raw);meSay(raw.toUpperCase());inp.value="";
   if(t.answers.includes(n))return H.solved();
@@ -554,7 +573,7 @@ function finaleCard(){
   <div class="lbl"><i class="dot"></i>Hotovo</div>
   <h3>Co se stalo v Táboře,<br>zůstává v Táboře</h3>
   <p class="finale-lead">9 okének. Prázdná truhla. Účet zaplacený palcátem. A vy nic nepřiznáte.</p>
-  <p class="finale-note">Díky za playtest · demo2 r14</p>
+  <p class="finale-note">Díky za playtest · demo2 r15</p>
  </div>`);
  feed.appendChild(c);
  const b=el(`<button class="btn sec">Zahrát znovu</button>`);b.onclick=reset;feed.appendChild(b);lastWho=null;into(c,"start");

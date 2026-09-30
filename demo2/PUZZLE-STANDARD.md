@@ -19,4 +19,4 @@ Platí pro každou budoucí stanici.
 Když hráč může odpovědět z gauče / z Googlu / z pojmenování objektu → přepsat.
 
 ## Demo2 stanice 1
-Kašna = jen příběh + navigace, dokud nebude silná diegetická mechanika. První hádanka = nůžky (Škochův dům).
+Kašna = účet / dluh: najít na vnější stěně nádrže letopočty **1568** + **1848** (vidět/nahmatat), součet **3416**. Word/number input. Pak navigace na nůžky (Škoch, st.2).
