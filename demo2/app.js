@@ -1,7 +1,7 @@
 "use strict";
-/* Ukázka: úvod + stanice 1–2. r10 diegetic puzzles — station1 photo-patch, station2 scissors */
+/* Ukázka: úvod + stanice 1–2. r11 — fountain story-only, first puzzle scissors */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r10";
+const KEY="tabor-demo2-r11";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={1:{img:IMG+"kasna-tabor.jpg",t:"Okénko 1 · 02:14 · Kašna"},2:{img:IMG+"skoch-fasada.jpg",t:"Okénko 2 · 02:47 · Škochův dům"}};
@@ -21,27 +21,23 @@ const SCRIPT=[
  {z:"Díky. Na každým místě, kde jsem v noci byl, zůstala stopa. Každá stopa = jedno okénko."},
  {z:"Až jich bude 9, noc se složí. A uvidíte, že to není tak jednoduchý, jak to teď vypadá."},
  {z:"Začneme tam, kde jsem se probudil."},
- // STANICE 1 — kašna: záplata na lemu (photo-pick); chat-nav jako st.2
+ // STANICE 1 — kašna: jen příběh + navigace (žádná hádanka)
  {sys:"Stanice 1 / 9"},
  {z:"Jděte doprostřed Žižkova náměstí. Velká kamenná kašna — uprostřed sloup, kolem ní lem, na který si lidi sedají."},
  {z:"Kousek od ní stojí velká socha mě s palcátem. Tou kašnu nepopletete."},
  {quick:["Stojíme u kašny"],id:"n1"},
- {z:"Tady. Ráno jsem ležel vedle. V noci jsem si vsadil, že ulomím kus okraje kašny holýma rukama. Sázka byla blbá. Okraj pevnější."},
- {z:"A v mobilu tuhle zprávu, co jsem v noci poslal do skupiny:"},
- {fwd:{h:"Přeposláno · skupina „Kumpáni“ · 02:14",b:"díra v lemu · někdo to pak zalátal · najděte, co tam nepatří"}},
- {z:"Ráno jsem se díval — někdo tu díru opravdu zalátal. Jiný kámen. Hladší. Mezi žlábky."},
- {z:"Obejděte ten kamenný lem. Najděte kus, co tam nepatří. Pak ho srovnejte s fotkami."},
- {task:"t1"},
+ {z:"Tady. Ráno jsem ležel vedle. V cizím plášti, co mi je malej. A s účtem za 38 piv v kapse."},
+ {z:"Nic si z noci nepamatuju. Jen že jsem se válel u vody a že mi je zima na jedno rameno."},
  {unlock:1},
- {z:"Jo. Záplata. Já v noci čítal, že to ustojím. Proto jsem prohrál."},
- {z:"Mimochodem, ten plášť. Zkoušel jsem ho natáhnout a zjistil jsem, že mu chybí rukáv. Kam se v noci ztrácejí rukávy? 🤔"},
- // STANICE 2 — rytmus jinak: žádná karta Kam teď → Žižka naviguje v chatu
+ {z:"Okénko 1 je vaše. Kašna v noci — tady to začalo."},
+ {z:"Ten plášť… zkoušel jsem ho natáhnout a zjistil jsem, že mu chybí rukáv. Kam se v noci ztrácejí rukávy? A kdo je krejčí, co má rád sázky? 🤔"},
+ // STANICE 2 — první hádanka: nůžky / mřížka JEDNORUKY
  {sys:"Stanice 2 / 9"},
  {z:"Z náměstí do rohu k radniční věži. Minuta chůze."},
  {z:"Hledejte nejzdobnější dům na náměstí — nahoře vlnky do špičky jak šlehačka na dortu, dole restaurace. Stojí hned vedle radnice s hodinami."},
  {pic:IMG+"skoch-fasada.jpg",cap:"Škochův dům · fasáda"},
  {quick:["Jsme u Škocha"],id:"n2"},
- {z:"Tady se mi to trochu vrací. Bylo tu narváno a někdo mával obříma nůžkama."},
+ {z:"Tady se mi to trochu vrací. Bylo tu narváno a někdo mával obříma nůžkama. Asi krejčí. Asi sázka. Asi můj rukáv."},
  {z:"Na zadní straně účtenky mám tohle. Moje písmo to není."},
  {receipt:`<h4>ZADNÍ STRANA</h4><div style="font:800 20px/1.25 ui-monospace,monospace;letter-spacing:8px;text-align:center">J T A M R<br>B E S U L<br>P H D I A<br>V K Z N C<br>Y S L E O</div><div class="scr">přilož k nůžkám. prohrál jsi 😂</div>`},
  {z:"Prohrál? Co jsem prohrál?"},
@@ -59,15 +55,6 @@ const SCRIPT=[
 ];
 
 const TASKS={
- t1:{title:"Záplata na kašně",lbl:"Stopa z noci",
-   brief:"Obejděte kamenný lem kašny (ten, na který si lidi sedají). Najděte kus, který tam nepatří — hladší / jiný kámen vsazený mezi žlábky.",
-   ask:"Která fotka sedí s tím, co vidíte naživo?",
-   kind:"pick",
-   opts:[["A",IMG+"zaplata-fake1.jpg"],["B",IMG+"zaplata-ok.jpg"],["C",IMG+"zaplata-fake2.jpg"]],
-   ok:"B",
-   bad:{A:"Tohle je jiný kámen. Obejděte lem ještě jednou — hledejte hladší vsazený kus mezi žlábky.",C:"Blízko, ale nesedí. Koukněte na spáry a na to, jak je záplata vsazená mezi žlábky."},
-   hints:["Ne voda, ne rytíř na sloupu, ne velká socha mě. Jen kamenný lem kolem kašny, na který se sedá.","Hledejte místo, kde je kámen hladší / jiný než okolní žlábky — někdo to zalátal.","Až najdete záplatu naživo, srovnejte ji s detailními fotkami. Jedna sedí."]
- },
  t2:{title:"Co jsem prohrál?",lbl:"Stopa z noci",
    brief:"Na fasádě Škochova domu jsou namalované nůžky (pod druhým oknem v 1. patře, nad restaurací). Ty nůžky jsou klíč k mřížce — ne trivia.",
    howto:"Přiložte mřížku podle namalovaných nůžek: nastavte, kde mají očka. Čtěte po čepelích od oček ke hrotům — nejdřív levá, pak pravá. Písmeno uprostřed, kde se čepele kříží, jen jednou.",

@@ -17,3 +17,6 @@ Platí pro každou budoucí stanici.
 
 ## Test
 Když hráč může odpovědět z gauče / z Googlu / z pojmenování objektu → přepsat.
+
+## Demo2 stanice 1
+Kašna = jen příběh + navigace, dokud nebude silná diegetická mechanika. První hádanka = nůžky (Škochův dům).
