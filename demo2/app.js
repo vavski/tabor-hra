@@ -1,14 +1,15 @@
 "use strict";
-/* Ukázka: úvod + stanice 1–2. r5: žádné anime tváře; okénka = reálné fotky Tábora. */
+/* Ukázka: úvod + stanice 1–2. r8: younger Žižka SV-FILM avatar+hero; okénka = reálné fotky Tábora. */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r7";
+const KEY="tabor-demo2-r8";
 const IMG="assets/img/";
-const AV_MARK=`<span class="av av-mark" aria-hidden="true"><svg viewBox="0 0 40 40" width="28" height="28" fill="none"><circle cx="20" cy="20" r="19" fill="#0a121c" stroke="#22d3ee" stroke-width="1.5"/><ellipse cx="20" cy="20" rx="6" ry="8" stroke="#5ee1ff" stroke-width="1.5"/><circle cx="20" cy="20" r="2.5" fill="#22d3ee"/><path d="M8 18h8M24 18h8" stroke="#ff9a3c" stroke-width="1.8" stroke-linecap="round"/></svg></span>`;
+const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={1:{img:IMG+"kasna-tabor.jpg",t:"Okénko 1 · 02:14 · Kašna"},2:{img:IMG+"skoch-fasada.jpg",t:"Okénko 2 · 02:47 · Škochův dům"}};
 
 const SCRIPT=[
  // ÚVOD
  {sys:"Neděle · 6:40"},
+ {pic:IMG+"zizka-hero.jpg",cap:"Žižka · ráno · po noci"},
  {z:"Lidi. Jste vzhůru?"},
  {z:"Probudil jsem se u kašny na náměstí. Na zemi. 🫠"},
  {pic:IMG+"kasna-tabor.jpg",cap:"Žižkovo náměstí · kašna · Tábor"},
