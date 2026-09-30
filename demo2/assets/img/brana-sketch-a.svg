@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260">
+<rect width="200" height="260" fill="#0e1622"/>
+<!-- tower hint left -->
+<circle cx="28" cy="90" r="22" fill="#1a2438" stroke="#5ee1ff" stroke-width="1.5" opacity=".4"/>
+<!-- gate body -->
+<path d="M50 240 V110 Q100 40 150 110 V240 Z" fill="#2a3548" stroke="#8ea0b8" stroke-width="2"/>
+<!-- arch opening -->
+<path d="M75 240 V145 Q100 105 125 145 V240 Z" fill="#05070c" stroke="#5ee1ff" stroke-width="1.5"/>
+<rect x="97" y="55" width="6" height="42" fill="#05070c" stroke="#c9d4e6" stroke-width="1"/>
+<text x="100" y="230" text-anchor="middle" fill="#8ea0b8" font-family="ui-monospace,monospace" font-size="13">A · 1 štěrbina</text>
+</svg>
