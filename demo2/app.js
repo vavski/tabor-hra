@@ -1,7 +1,7 @@
 "use strict";
-/* Ukázka: úvod + stanice 1–2. r8: younger Žižka SV-FILM avatar+hero; okénka = reálné fotky Tábora. */
+/* Ukázka: úvod + stanice 1–2. r9 unified splash-05 + fountain + station1 PRAPOREK */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r8";
+const KEY="tabor-demo2-r9";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={1:{img:IMG+"kasna-tabor.jpg",t:"Okénko 1 · 02:14 · Kašna"},2:{img:IMG+"skoch-fasada.jpg",t:"Okénko 2 · 02:47 · Škochův dům"}};
@@ -21,19 +21,19 @@ const SCRIPT=[
  {z:"Díky. Na každým místě, kde jsem v noci byl, zůstala stopa. Každá stopa = jedno okénko."},
  {z:"Až jich bude 9, noc se složí. A uvidíte, že to není tak jednoduchý, jak to teď vypadá."},
  {z:"Začneme tam, kde jsem se probudil."},
- // STANICE 1 — kašna (chat-nav jako st.2; kód = slovo z noci)
+ // STANICE 1 — kašna: rytíř na sloupu (PRAPOREK); chat-nav jako st.2
  {sys:"Stanice 1 / 9"},
- {z:"Jděte doprostřed Žižkova náměstí. Velká kamenná kašna — uprostřed sloup a na něm malý rytíř s praporkem."},
+ {z:"Jděte doprostřed Žižkova náměstí. Velká kamenná kašna — uprostřed sloup a na něm malý rytíř."},
  {z:"Kousek od ní stojí velká socha mě s palcátem. Tou kašnu nepopletete."},
  {quick:["Stojíme u kašny"],id:"n1"},
- {z:"Tady. Ráno jsem ležel vedle. V kapse mám kámen. Normální šedej kámen. 🪨"},
+ {z:"Tady. Ráno jsem ležel vedle. V noci jsem si vsadil, že toho malýho rytíře na sloupu vyzvu. Myslel jsem, že je to rival. 🗡️"},
  {z:"A v mobilu tuhle zprávu, co jsem v noci poslal do skupiny:"},
- {fwd:{h:"Přeposláno · skupina „Kumpáni“ · 02:14",b:"mám suvenýr 😎🪨 nikdo nic nepozná, díra je vidět jen zblízka"}},
- {z:"Vsadil jsem se, že kus kašny vylomím holou rukou. Díru pak někdo… no, záplatoval. Najděte to dřív než radnice."},
- {z:"Až tu záplatu uvidíte — napište mi, jak jsem tomu v noci říkal. Jedno slovo. Z té zprávy."},
+ {fwd:{h:"Přeposláno · skupina „Kumpáni“ · 02:14",b:"souboj přijat ⚔️ ten nahoře má v ruce něco, co bych taky chtěl — uvidíte sami"}},
+ {z:"Souboj jsem prohrál dřív, než začal. On má výhodu: stojí na sloupu a nehýbe se. Ale v ruce drží něco konkrétního."},
+ {z:"Podívejte se na tu sošku na sloupu — co má v ruce? Jedno slovo."},
  {task:"t1"},
  {unlock:1},
- {z:"Jo. Vyhrál jsem jedno pivo a doživotní zákaz od kameníka."},
+ {z:"Jo. Praporek. Já v noci čítal, že je to meč. Proto jsem prohrál."},
  {z:"Mimochodem, ten plášť. Zkoušel jsem ho natáhnout a zjistil jsem, že mu chybí rukáv. Kam se v noci ztrácejí rukávy? 🤔"},
  // STANICE 2 — rytmus jinak: žádná karta Kam teď → Žižka naviguje v chatu
  {sys:"Stanice 2 / 9"},
@@ -59,12 +59,12 @@ const SCRIPT=[
 ];
 
 const TASKS={
- t1:{title:"Díra po suvenýru",lbl:"Stopa z noci",
-   brief:"Obejděte kašnu. Na obrubě je kus, který tam nepatří.",
-   ask:"Heslo z noci — jak jsem tomu říkal ve zprávě.",
-   kind:"word",answers:["SUVENYR"],
-   near:{KAMEN:"Jo, kámen. Ale jak jsem tomu říkal ve zprávě do skupiny?",ZAPLATA:"To je, co vidíte teď. Já tomu v noci říkal jinak.",DIRA:"Díru jste našli. Co jsem si z ní odnesl?",SUVENE:"Skoro. Dočtěte to slovo.",SUVENIR:"Bez i. Jak to mám ve zprávě.",SUVENY:"Ještě jedno písmeno. 🪨"},
-   hints:["Neřešte vodu ani rytíře nahoře. Jen kamenný lem dole — ten, na který si lidi sedají. Kolem dokola.","Hledejte kus, co do oblého okraje nepatří: hranatý kámen vsazený mezi žlábky.","Ve zprávě do skupiny jsem napsal, co si z díry odnáším. Jedno slovo. S emoji kamene."]
+ t1:{title:"Rytíř na sloupu",lbl:"Stopa z noci",
+   brief:"Podívejte se na malou sochu na sloupu uprostřed kašny — co drží v ruce?",
+   ask:"Jedno slovo — co má rytíř na sloupu v ruce.",
+   kind:"word",answers:["PRAPOREK","PRAPOR"],
+   near:{MEC:"Meč by seděl k souboji. Ale podívejte se ještě jednou — co opravdu drží?",STIT:"Štít má taky, ale to není to hlavní v ruce. Co drží nahoře?",PALCAT:"Palcát mám já na velké soše. Ten malý nahoře drží něco jiného.",FLAG:"Anglicky skoro. Česky — a menší.",RYTYR:"To je on. Co má v ruce?",ROLAND:"Možná je to Roland. Ale otázka je, co drží.",KOUDELA:"To není koudel. Koukejte na tyč v ruce.",KOPI:"Blízko tvarem. Ale na konci něco vlaje.",BANNER:"Anglicky. Hledejte české slovo — menší verzi.",VLASKA:"Ne vlajka velké velikosti. Menší české slovo.",VLAJKA:"Skoro — ale je to menší. České zdrobnělé slovo.",TYC:"Tyč ano, ale co je na ní?",MECIK:"Ne meč. Koukejte na konec tyče."},
+   hints:["Ne velká socha mě s palcátem — ta malá soška nahoře na sloupu uprostřed kašny.","Drží tyč a na ní kousek látky. Co se tomu říká, když je to malé?","České zdrobnělé slovo pro malou vlajku na tyči. Začíná na PRA…"]
  },
  t2:{title:"Co jsem prohrál?",lbl:"Stopa z noci",
    brief:"Na fasádě Škochova domu jsou namalované nůžky — pod druhým oknem v 1. patře, nad restaurací. Ne kovové, namalované.",
@@ -179,7 +179,7 @@ function word(body,t,H){
  const send=()=>{const raw=inp.value.trim();if(!raw)return;const n=norm(raw);meSay(raw.toUpperCase());inp.value="";
   if(t.answers.includes(n))return H.solved();
   if(t.near&&t.near[n])return H.bad(t.near[n]);
-  H.bad("Tohle slovo neznám. Podívejte se ještě jednou na tu zprávu z noci — a na kašnu zblízka.")};
+  H.bad("Tohle slovo neznám. Koukněte ještě jednou na sošku na sloupu — co drží v ruce?")};
  body.querySelector(".inrow .btn").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};
  if(!TEST)setTimeout(()=>inp.focus(),200);
 }
