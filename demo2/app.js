@@ -1,7 +1,7 @@
 "use strict";
-/* Ukázka: úvod + stanice 1–2. r9 unified splash-05 + fountain + station1 PRAPOREK */
+/* Ukázka: úvod + stanice 1–2. r10 diegetic puzzles — station1 photo-patch, station2 scissors */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r9";
+const KEY="tabor-demo2-r10";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={1:{img:IMG+"kasna-tabor.jpg",t:"Okénko 1 · 02:14 · Kašna"},2:{img:IMG+"skoch-fasada.jpg",t:"Okénko 2 · 02:47 · Škochův dům"}};
@@ -21,19 +21,19 @@ const SCRIPT=[
  {z:"Díky. Na každým místě, kde jsem v noci byl, zůstala stopa. Každá stopa = jedno okénko."},
  {z:"Až jich bude 9, noc se složí. A uvidíte, že to není tak jednoduchý, jak to teď vypadá."},
  {z:"Začneme tam, kde jsem se probudil."},
- // STANICE 1 — kašna: rytíř na sloupu (PRAPOREK); chat-nav jako st.2
+ // STANICE 1 — kašna: záplata na lemu (photo-pick); chat-nav jako st.2
  {sys:"Stanice 1 / 9"},
- {z:"Jděte doprostřed Žižkova náměstí. Velká kamenná kašna — uprostřed sloup a na něm malý rytíř."},
+ {z:"Jděte doprostřed Žižkova náměstí. Velká kamenná kašna — uprostřed sloup, kolem ní lem, na který si lidi sedají."},
  {z:"Kousek od ní stojí velká socha mě s palcátem. Tou kašnu nepopletete."},
  {quick:["Stojíme u kašny"],id:"n1"},
- {z:"Tady. Ráno jsem ležel vedle. V noci jsem si vsadil, že toho malýho rytíře na sloupu vyzvu. Myslel jsem, že je to rival. 🗡️"},
+ {z:"Tady. Ráno jsem ležel vedle. V noci jsem si vsadil, že ulomím kus okraje kašny holýma rukama. Sázka byla blbá. Okraj pevnější."},
  {z:"A v mobilu tuhle zprávu, co jsem v noci poslal do skupiny:"},
- {fwd:{h:"Přeposláno · skupina „Kumpáni“ · 02:14",b:"souboj přijat ⚔️ ten nahoře má v ruce něco, co bych taky chtěl — uvidíte sami"}},
- {z:"Souboj jsem prohrál dřív, než začal. On má výhodu: stojí na sloupu a nehýbe se. Ale v ruce drží něco konkrétního."},
- {z:"Podívejte se na tu sošku na sloupu — co má v ruce? Jedno slovo."},
+ {fwd:{h:"Přeposláno · skupina „Kumpáni“ · 02:14",b:"díra v lemu · někdo to pak zalátal · najděte, co tam nepatří"}},
+ {z:"Ráno jsem se díval — někdo tu díru opravdu zalátal. Jiný kámen. Hladší. Mezi žlábky."},
+ {z:"Obejděte ten kamenný lem. Najděte kus, co tam nepatří. Pak ho srovnejte s fotkami."},
  {task:"t1"},
  {unlock:1},
- {z:"Jo. Praporek. Já v noci čítal, že je to meč. Proto jsem prohrál."},
+ {z:"Jo. Záplata. Já v noci čítal, že to ustojím. Proto jsem prohrál."},
  {z:"Mimochodem, ten plášť. Zkoušel jsem ho natáhnout a zjistil jsem, že mu chybí rukáv. Kam se v noci ztrácejí rukávy? 🤔"},
  // STANICE 2 — rytmus jinak: žádná karta Kam teď → Žižka naviguje v chatu
  {sys:"Stanice 2 / 9"},
@@ -44,8 +44,8 @@ const SCRIPT=[
  {z:"Tady se mi to trochu vrací. Bylo tu narváno a někdo mával obříma nůžkama."},
  {z:"Na zadní straně účtenky mám tohle. Moje písmo to není."},
  {receipt:`<h4>ZADNÍ STRANA</h4><div style="font:800 20px/1.25 ui-monospace,monospace;letter-spacing:8px;text-align:center">J T A M R<br>B E S U L<br>P H D I A<br>V K Z N C<br>Y S L E O</div><div class="scr">přilož k nůžkám. prohrál jsi 😂</div>`},
- {z:"Prohrál? Co jsem prohrál? A co s tím mají nůžky?"},
- {z:"Najděte nůžky na fasádě. Pak přiložte mřížku a přečtěte, co jsem prohrál."},
+ {z:"Prohrál? Co jsem prohrál?"},
+ {z:"Najděte namalované nůžky na fasádě — to je klíč. Přiložte mřížku podle nich a přečtěte, co jsem prohrál."},
  {task:"t2"},
  {unlock:2},
  {z:"Sázka s krejčím: kdo prohraje, přijde o rukáv. Prohrál jsem a celá hospoda mi pak říkala Jednorukej. Aspoň že ne Bezrukej."},
@@ -59,16 +59,18 @@ const SCRIPT=[
 ];
 
 const TASKS={
- t1:{title:"Rytíř na sloupu",lbl:"Stopa z noci",
-   brief:"Podívejte se na malou sochu na sloupu uprostřed kašny — co drží v ruce?",
-   ask:"Jedno slovo — co má rytíř na sloupu v ruce.",
-   kind:"word",answers:["PRAPOREK","PRAPOR"],
-   near:{MEC:"Meč by seděl k souboji. Ale podívejte se ještě jednou — co opravdu drží?",STIT:"Štít má taky, ale to není to hlavní v ruce. Co drží nahoře?",PALCAT:"Palcát mám já na velké soše. Ten malý nahoře drží něco jiného.",FLAG:"Anglicky skoro. Česky — a menší.",RYTYR:"To je on. Co má v ruce?",ROLAND:"Možná je to Roland. Ale otázka je, co drží.",KOUDELA:"To není koudel. Koukejte na tyč v ruce.",KOPI:"Blízko tvarem. Ale na konci něco vlaje.",BANNER:"Anglicky. Hledejte české slovo — menší verzi.",VLASKA:"Ne vlajka velké velikosti. Menší české slovo.",VLAJKA:"Skoro — ale je to menší. České zdrobnělé slovo.",TYC:"Tyč ano, ale co je na ní?",MECIK:"Ne meč. Koukejte na konec tyče."},
-   hints:["Ne velká socha mě s palcátem — ta malá soška nahoře na sloupu uprostřed kašny.","Drží tyč a na ní kousek látky. Co se tomu říká, když je to malé?","České zdrobnělé slovo pro malou vlajku na tyči. Začíná na PRA…"]
+ t1:{title:"Záplata na kašně",lbl:"Stopa z noci",
+   brief:"Obejděte kamenný lem kašny (ten, na který si lidi sedají). Najděte kus, který tam nepatří — hladší / jiný kámen vsazený mezi žlábky.",
+   ask:"Která fotka sedí s tím, co vidíte naživo?",
+   kind:"pick",
+   opts:[["A",IMG+"zaplata-fake1.jpg"],["B",IMG+"zaplata-ok.jpg"],["C",IMG+"zaplata-fake2.jpg"]],
+   ok:"B",
+   bad:{A:"Tohle je jiný kámen. Obejděte lem ještě jednou — hledejte hladší vsazený kus mezi žlábky.",C:"Blízko, ale nesedí. Koukněte na spáry a na to, jak je záplata vsazená mezi žlábky."},
+   hints:["Ne voda, ne rytíř na sloupu, ne velká socha mě. Jen kamenný lem kolem kašny, na který se sedá.","Hledejte místo, kde je kámen hladší / jiný než okolní žlábky — někdo to zalátal.","Až najdete záplatu naživo, srovnejte ji s detailními fotkami. Jedna sedí."]
  },
  t2:{title:"Co jsem prohrál?",lbl:"Stopa z noci",
-   brief:"Na fasádě Škochova domu jsou namalované nůžky — pod druhým oknem v 1. patře, nad restaurací. Ne kovové, namalované.",
-   howto:"Nastavte, kde mají nůžky na zdi očka. Čtěte písmena po čepelích od oček ke hrotům: nejdřív levá čepel, pak pravá. Písmeno uprostřed, kde se čepele kříží, jen jednou.",
+   brief:"Na fasádě Škochova domu jsou namalované nůžky (pod druhým oknem v 1. patře, nad restaurací). Ty nůžky jsou klíč k mřížce — ne trivia.",
+   howto:"Přiložte mřížku podle namalovaných nůžek: nastavte, kde mají očka. Čtěte po čepelích od oček ke hrotům — nejdřív levá, pak pravá. Písmeno uprostřed, kde se čepele kříží, jen jednou.",
    kind:"grid",grid:["JTAMR","BESUL","PHDIA","VKZNC","YSLEO"],answers:["JEDNORUKY"],
    near:{JEDNO:"To je jen jedna čepel. Nůžky mají dvě.",RUKY:"Druhá čepel sedí. Kde je první?",RUDKY:"Prostřední písmeno, kde se čepele kříží, čtěte jen jednou.",JEDNORUDKY:"Skoro! Písmeno uprostřed jen jednou."},
    hints:["Nůžky jsou namalované, ne kovové. Najdete je nad vchodem do restaurace, v 1. patře.","Očka mají nahoře, hroty dole. Dejte „očka nahoře“ a čtěte po zlatých čarách.","Levá čepel: J-E-D-N-O. Pravá: R-U-(D)-K-Y."]
@@ -179,7 +181,7 @@ function word(body,t,H){
  const send=()=>{const raw=inp.value.trim();if(!raw)return;const n=norm(raw);meSay(raw.toUpperCase());inp.value="";
   if(t.answers.includes(n))return H.solved();
   if(t.near&&t.near[n])return H.bad(t.near[n]);
-  H.bad("Tohle slovo neznám. Koukněte ještě jednou na sošku na sloupu — co drží v ruce?")};
+  H.bad("Tohle neznám. Koukněte znovu na stopu.")};
  body.querySelector(".inrow .btn").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};
  if(!TEST)setTimeout(()=>inp.focus(),200);
 }
