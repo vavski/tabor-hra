@@ -1,18 +1,18 @@
 "use strict";
-/* Ukázka: úvod + stanice 1–2. r11 — fountain story-only, first puzzle scissors */
+/* Ukázka: úvod + stanice 1–2. r12 — mobile portrait crops for splash/hero/fountain */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r11";
+const KEY="tabor-demo2-r12";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
-const NIGHT={1:{img:IMG+"kasna-tabor.jpg",t:"Okénko 1 · 02:14 · Kašna"},2:{img:IMG+"skoch-fasada.jpg",t:"Okénko 2 · 02:47 · Škochův dům"}};
+const NIGHT={1:{img:IMG+"kasna-tabor-mobile.jpg",t:"Okénko 1 · 02:14 · Kašna"},2:{img:IMG+"skoch-fasada.jpg",t:"Okénko 2 · 02:47 · Škochův dům"}};
 
 const SCRIPT=[
  // ÚVOD
  {sys:"Neděle · 6:40"},
- {pic:IMG+"zizka-hero.jpg",cap:"Žižka · ráno · po noci"},
+ {pic:IMG+"zizka-hero-mobile.jpg",cap:"Žižka · ráno · po noci"},
  {z:"Lidi. Jste vzhůru?"},
  {z:"Probudil jsem se u kašny na náměstí. Na zemi. 🫠"},
- {pic:IMG+"kasna-tabor.jpg",cap:"Žižkovo náměstí · kašna · Tábor"},
+ {pic:IMG+"kasna-tabor-mobile.jpg",cap:"Žižkovo náměstí · kašna · Tábor"},
  {z:"Mám na sobě cizí plášť. Je mi malej. A v kapse tohle:"},
  {receipt:`<h4>KRČMA · ÚČET č. 1419</h4><div class="l"><span>Pivo 0,5</span><span>38×</span></div><div class="l"><span>Nakládaný hermelín</span><span>4×</span></div><div class="l"><span>Škoda na majetku</span><span>1×</span></div><div class="l tot"><span>CELKEM</span><span>2 474 Kč</span></div><div class="scr">zaplatí Žižka ♥</div>`},
  {z:"38 piv. Já. Nic si nepamatuju."},
