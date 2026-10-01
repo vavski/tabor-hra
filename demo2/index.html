@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=r25b">
+<link rel="stylesheet" href="style.css?v=r25c">
 </head>
 <body>
 <div id="splash" class="splash">
@@ -20,6 +20,7 @@
     <p class="tag">Dluh k Rolandovi ho drží v tomhle století.<br>Splatíte účet — otevře se cesta domů.</p>
     <button class="btn cta" id="startBtn">Otevřít chat se Žižkou</button>
     <p class="demo-note">plná trasa · 9 stanic · demo</p>
+    <p class="demo-note hide" id="devSplash">DEV · okénka odemčená pro skok</p>
   </div>
 </div>
 
@@ -31,7 +32,7 @@
       <button class="menu" id="menuBtn" aria-label="Menu"><i></i><i></i><i></i></button>
     </div>
     <div class="nightbar">
-      <div class="nb-head"><span>Okénka cesty</span><span class="nb-count"><b id="count">0</b>/9</span></div>
+      <div class="nb-head"><span>Okénka cesty <i id="devBadge" class="dev-badge hide" title="?dev=1 — skok na všechny úkoly">DEV</i></span><span class="nb-count"><b id="count">0</b>/9</span></div>
       <div class="windows" id="windows" aria-label="Okénka cesty"></div>
     </div>
   </header>
@@ -40,6 +41,6 @@
 
 <div id="modal" class="modal hide"><div class="modal-in"><img alt=""><p></p><button class="btn sec" id="modalClose">Zavřít</button></div></div>
 <div id="menu" class="modal hide"><div class="modal-in"><h3>Menu</h3><button class="btn sec" id="resetBtn">Začít znovu</button><button class="btn" id="menuClose">Zpět do chatu</button></div></div>
-<script src="app.js?v=r25b"></script>
+<script src="app.js?v=r25c"></script>
 </body>
 </html>

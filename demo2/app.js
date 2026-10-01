@@ -1,7 +1,8 @@
 "use strict";
-/* Ukázka: plná trasa 9 stanic. r25b — route A mid-loop · KEY tabor-demo2-r25b */
+/* Ukázka: plná trasa 9 stanic. r25c — DEV okénka jump · KEY tabor-demo2-r25c */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r25b";
+const DEV=/[?&]dev=1/.test(location.search);
+const KEY="tabor-demo2-r25c";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={
@@ -297,14 +298,42 @@ const into=(e,block)=>{if(e&&e.scrollIntoView)e.scrollIntoView({block:block||"en
 let lastWho=null;
 
 const WIN_TASK={1:"t1",2:"t2",3:"t3",4:"t4",5:"t5",6:"t6",7:"t7",8:"t8",9:"t9"};
+function flashCard(card){
+ if(!card)return;
+ into(card,"start");
+ card.classList.remove("jumpflash");void card.offsetWidth;card.classList.add("jumpflash");
+}
+/** DEV: mount a playable task card without advancing SCRIPT (for locked okénka). */
+function spawnDevTask(id){
+ const t=TASKS[id];if(!t)return null;
+ const old=document.getElementById("card-"+id);if(old)old.remove();
+ const c=taskCard(id);
+ c.classList.add("dev-spawn");
+ const lbl=c.querySelector(".lbl");
+ if(lbl)lbl.insertAdjacentHTML("beforeend",' <span class="dev-tag">DEV</span>');
+ feed.appendChild(c);lastWho=null;
+ const body=c.querySelector(".body"),res=c.querySelector(".res");
+ let hi=0,busy=false,done=false;
+ const H={solved:()=>{if(done)return;done=true;c.querySelectorAll(".body button,.body input").forEach(b=>b.disabled=true);const hb=c.querySelector(".btn.ghost.sm");if(hb)hb.remove();res.className="res good";res.textContent="✓ Správně! (DEV)"},
+  bad:async msg=>{c.classList.remove("shake");void c.offsetWidth;c.classList.add("shake");if(busy)return;busy=true;await zSay(msg);busy=false}};
+ const hb=el(`<button class="btn ghost sm">Nevíme si rady</button>`);
+ if(t.kind==="pick")pick(body,t,H);
+ else if(t.kind==="word")word(body,t,H);
+ else if(t.kind==="wheel")wheel(body,t,H);
+ else if(t.kind==="honor")honor(body,t,H,c,hb);
+ else if(t.kind==="choice")choice(body,t,H);
+ else if(t.kind==="sort")sortUI(body,t,H);
+ else grid(body,t,H);
+ if(!c.contains(hb))c.appendChild(hb);
+ hb.onclick=async()=>{if(hi<(t.hints||[]).length){const h=t.hints[hi++];if(hi>=t.hints.length)hb.disabled=true;await zSay(h)}};
+ flashCard(c);
+ return c;
+}
 function jumpToStation(n){
  const tid=WIN_TASK[n];
- const card=tid&&document.getElementById("card-"+tid);
- if(card){
-  into(card,"start");
-  card.classList.remove("jumpflash");void card.offsetWidth;card.classList.add("jumpflash");
-  return true;
- }
+ let card=tid&&document.getElementById("card-"+tid);
+ if(card){flashCard(card);return true}
+ if(DEV&&tid&&TASKS[tid]){spawnDevTask(tid);return true}
  const info=NIGHT[n];
  if(info&&info.img)openModal(info.img,info.t);
  else if(info)openModal("",info.t);
@@ -314,10 +343,18 @@ function renderWindows(pop){
  const w=$("#windows");let h="";
  for(let i=1;i<=9;i++){
   const on=st.won.includes(i),n=NIGHT[i],has=n&&n.img;
-  h+=on?(has?`<button class="win on${pop===i?" new":""}" data-n="${i}" aria-label="Okénko ${i} — skok na úkol"><img src="${n.img}" alt=""></button>`:`<button class="win on lit${pop===i?" new":""}" data-n="${i}" aria-label="Okénko ${i} — skok na úkol">${i}</button>`):`<div class="win">${i}</div>`}
+  const clickable=DEV||on;
+  if(clickable){
+   const cls=`win on${DEV&&!on?" dev":""}${pop===i?" new":""}${!has?" lit":""}`;
+   const label=DEV&&!on?`Okénko ${i} — DEV skok`:`Okénko ${i} — skok na úkol`;
+   h+=has?`<button class="${cls}" data-n="${i}" aria-label="${label}"><img src="${n.img}" alt=""></button>`:`<button class="${cls}" data-n="${i}" aria-label="${label}">${i}</button>`;
+  }else h+=`<div class="win">${i}</div>`;
+ }
  const done=st.won.includes(9);
  h+=done?`<div class="win fin open" title="Finále">✓</div>`:`<div class="win fin" title="Finále"><i class="lock"></i></div>`;
  w.innerHTML=h;$("#count").textContent=st.won.length;
+ const badge=$("#devBadge");if(badge)badge.classList.toggle("hide",!DEV);
+ if(DEV)document.body.classList.add("dev-mode");
  w.querySelectorAll(".win.on").forEach(b=>b.onclick=()=>jumpToStation(+b.dataset.n));
  const nw=w.querySelector(".win.new");if(nw){void nw.offsetWidth;requestAnimationFrame(()=>requestAnimationFrame(()=>nw.classList.remove("new")))}
 }
@@ -620,7 +657,7 @@ function finaleCard(){
   <div class="lbl"><i class="dot"></i>Hotovo</div>
   <h3>Cesta zpátky<br>je otevřená</h3>
   <p class="finale-lead">9 okének. Truhla splatila 3416 Rolandovi. Past praskla, brána domů otevřená. Žižka jde zpátky. Vy zůstaňte.</p>
-  <p class="finale-note">Díky za playtest · demo2 r25b</p>
+  <p class="finale-note">Díky za playtest · demo2 r25c</p>
  </div>`);
  feed.appendChild(c);
  const b=el(`<button class="btn sec">Zahrát znovu</button>`);b.onclick=reset;feed.appendChild(b);lastWho=null;into(c,"start");
@@ -632,10 +669,11 @@ async function run(){
  while(st.pos<SCRIPT.length){await step(SCRIPT[st.pos],false);st.pos++;save()}
 }
 function reset(){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}
-function start(){$("#splash").classList.add("hide");$("#app").classList.remove("hide");renderWindows();run()}
+function start(){$("#splash").classList.add("hide");$("#app").classList.remove("hide");if(DEV)document.body.classList.add("dev-mode");renderWindows();run()}
 $("#startBtn").onclick=()=>{st.started=true;save();start()};
 $("#modalClose").onclick=()=>$("#modal").classList.add("hide");
 $("#menuBtn").onclick=()=>$("#menu").classList.remove("hide");
 $("#menuClose").onclick=()=>$("#menu").classList.add("hide");
 $("#resetBtn").onclick=reset;
+if(DEV){const ds=$("#devSplash");if(ds)ds.classList.remove("hide")}
 if(st.started)start();
