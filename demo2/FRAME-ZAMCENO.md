@@ -19,4 +19,4 @@ Jan Žižka uvízl v **současném Táboře (2026)**. Hráči mu pomáhají naj�
 Trasa a hádanky: kašna **3416**, nůžky **JEDNORUKÝ**, orloj Caesar, stanice 4–9 (sort finále). Měnit jen text, když odporuje framu — ne mechaniku.
 
 ## Build
-`KEY=tabor-demo2-r16` · query `?v=r16`
+`KEY=tabor-demo2-r17` · query `?v=r17`

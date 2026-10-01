@@ -1,7 +1,7 @@
 "use strict";
-/* Ukázka: plná trasa 9 stanic. r16 — Žižka v současnosti → cesta zpět */
+/* Ukázka: plná trasa 9 stanic. r17 — Žižka v 2026 vizuály (SV-film modern Tábor) */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r16";
+const KEY="tabor-demo2-r17";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={
@@ -573,7 +573,7 @@ function finaleCard(){
   <div class="lbl"><i class="dot"></i>Hotovo</div>
   <h3>Cesta zpátky<br>je otevřená</h3>
   <p class="finale-lead">9 okének. Prázdná truhla — brána domů. Účet zaplacený palcátem. Žižka jde. Vy zůstaňte.</p>
-  <p class="finale-note">Díky za playtest · demo2 r16</p>
+  <p class="finale-note">Díky za playtest · demo2 r17</p>
  </div>`);
  feed.appendChild(c);
  const b=el(`<button class="btn sec">Zahrát znovu</button>`);b.onclick=reset;feed.appendChild(b);lastWho=null;into(c,"start");
