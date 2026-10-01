@@ -1,6 +1,6 @@
 # Frame zamčeno · demo2
 
-**Datum:** user lock · r23 · production pass (MOTIVE 2, anti-spoiler drží)
+**Datum:** user lock · r24 · P0 tón + fotky/čest (MOTIVE 2, anti-spoiler drží)
 
 ## Premisa · MOTIVE 2 — dluh-past
 Jan Žižka uvízl v **současném Táboře (dnes)**, **protože** nezaplacený dluh k **Rolandovi** ho drží, dokud není splatných **3416**. Hráči pomáhají splatit — pak se otevře cesta domů.
@@ -17,7 +17,7 @@ Jan Žižka uvízl v **současném Táboře (dnes)**, **protože** nezaplacený 
 ## Co platí
 - Místa jsou **reálná dnes** (kašna, Škoch, orloj, Bechyňská, Mariánská, Tržní, Jordán, podzemí…).
 - Žižka píše v chatu: **moderní čeština** (všichni rozumí), lehký slang OK, **žádná staročeskina**; zmatený mimočasový velitel, vtipný + drzejší; vtipy o střetu století OK.
-- „**Já jsem tady velitel / vás dám popravit**“ sedí (volba *Proč zrovna my?*).
+- Velitelství = **moderní cheeky slang + dluh-past** (volba *Proč zrovna my?* / st.6 muster). **Ne** středověká poprava LARP.
 - 9 okének = stopa k truhle / platbě → po 9. splatit 3416 → **brána / cesta domů**.
 
 ## Co NENÍ hlavní premisa
@@ -41,13 +41,18 @@ Po odpovědi **JEDNORUKÝ** jen **hádanka/nudge**: hledejte něco jednorukýho 
 Hráči ví jen: najít **dva letopočty** a **sečíst**. Číslo až **po vyřešení** st1, nebo jen ve validaci/`answers`.
 
 ## Build
-`KEY=tabor-demo2-r23` · query `?v=r23`
+`KEY=tabor-demo2-r24` · query `?v=r24`
 
 ## Production pass (r23)
 Checklist: no 3416 in splash/intro; debt-trap coherent; JEDNORUKÝ nudge without ručička spoiler; no calendar year in UI; stations 1–9 playable; mobile viewport OK.
 Payments/legal = OUT OF SCOPE (no fake Stripe).
 
+## Tone + fotky (r24)
+- Intro quick + st.6: žádná „poprava“ — cheeky velitelství v dluh-past frame (přičíst k účtu / směna).
+- Výběrčí: **ne** blackmail kamerou („celej Tábor se dívá“). Mild pressure = stopa/účet. Honor-confirm úkoly (t3w/t6/t7/t9s) zůstávají bez fake uploadu.
+- P1: kratší t5 brief; měkčí t1 wording (míň worksheet).
+
 ## Visual CANON (r18 assets)
 - Reference hero/splash: `assets/img/splash-r17.jpg` (Žižka surprised/standing at fountain / modern Tábor square).
 - Style bible: `STYLE-BIBLE.md` (+ `/workspace/styly/spider-verse-style/STYLE-BIBLE.md`) §13.
-- Voice: confused out-of-time commander, funny + cheeky; modern Czech; light slang OK; **NO** archaic/staročeská; century-clash jokes OK. „velitel / popravit“ OK.
+- Voice: confused out-of-time commander, funny + cheeky; modern Czech; light slang OK; **NO** archaic/staročeská; century-clash jokes OK. Velitelství = debt slang, **ne** poprava LARP.

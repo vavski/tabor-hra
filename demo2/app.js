@@ -1,7 +1,7 @@
 "use strict";
-/* Ukázka: plná trasa 9 stanic. r23 — production pass · KEY tabor-demo2-r23 */
+/* Ukázka: plná trasa 9 stanic. r24 — P0 tón + fotky/čest · KEY tabor-demo2-r24 */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r23";
+const KEY="tabor-demo2-r24";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={
@@ -23,7 +23,7 @@ const SCRIPT=[
  {z:"Lidi. Jste online? Stojím u kašny — a tohle století není moje. A nemůžu pryč."},
  {z:"Nejsem ztracenej. Nehledám cestu nazdařbůh. Drží mě tu dluh — Roland, mistr týhle kašny. Dokud mu nezaplatím, brána domů je zamčená."},
  {pic:IMG+"kasna-tabor-mobile.jpg",cap:"Žižkovo náměstí · kašna · Tábor"},
- {z:"Pomozte mi splatit účet a jít domů. Nebo si vás přepočítám palcátem. Velitelsky. ⚔️"},
+ {z:"Pomozte mi splatit účet a jít domů. Jinak vás přepíšu na účet jako ručitele. Soft. Velitelsky. ⚔️"},
  {z:"Mám 9 okének — stopa k truhle s vyrovnáním. Viz nahoře ⬆️ Najdete je, než se past zavře napevno?"},
  {quick:["Jasně, jdeme do toho","Proč zrovna my?"],id:"q0"},
  {z:"Past je jasná: částka → platba → domů. Každá stopa = jedno okénko."},
@@ -124,8 +124,8 @@ const SCRIPT=[
  {task:"t6"},
  {unlock:6},
  {z:"Sedněte si. Chvíli nikam nejdeme."},
- {fwd:{h:"Výběrčí",b:"3416 pořád na stole. Truhla je u mě. Dokud Roland nedostane svoje, brána domů zůstane zamčená. A fotky z cesty mám — celej Tábor se může dívat."}},
- {z:"🎙️ Poslouchejte. Já jsem tady velitel. Ne dlužník na úvěru. Jména na ruce = muster. Kdo jde se mnou domů, jde. Kdo ne — poprava. ⚔️"},
+ {fwd:{h:"Výběrčí",b:"3416 pořád na stole. Truhla je u mě. Dokud Roland nedostane svoje, brána domů zůstane zamčená. Stopu cesty mám zapsanou — účet roste, dokud to nedotáhnete."}},
+ {z:"🎙️ Poslouchejte. Já velím týhle směně. Ne dlužník na úvěru — jen jsem. Jména na ruce = muster. Kdo jde se mnou domů, jde. Kdo ne — přičtu vás k účtu. Soft. ⚔️"},
  {z:"Tohle je past, ne honička. Výběrčí drží truhlu s 3416. Roland dostane peníze — já jdu domů. Tečka."},
  {z:"A díra v kašně? Ne já. Ta kašna stála na hlavním, praskla, přestěhovali ji sem. Kašny v Táboře praskaj samy. Já praskám jen století."},
  {fwd:{h:"Výběrčí",b:"Chcete truhlu? Vsadili jste se, že v Táboře teče voda do kopce. Dokažte to — beru to jako zálohu na 3416. Jsem na Tržním."}},
@@ -148,7 +148,7 @@ const SCRIPT=[
  {sys:"Stanice 8 / 9"},
  {quick:["Jsme na hrázi"],id:"n8"},
  {z:"Tady jste chytali ryby. Na můj palcát. Jako na prut. V mý době by vás hejtman seřval. Já se zatím směju. Téměř."},
- {z:"Výběrčí vás fotil odněkud odsud — pojistka k truhle. Najděte přesně to místo — zatím bez noční fotky, tak vyberte úhel, co sedí."},
+ {z:"Výběrčí odtud bral stopu k truhle. Najděte přesně to místo — zatím bez noční reference, tak vyberte úhel, co sedí."},
  {task:"t8"},
  {unlock:8},
  {z:"🎙️ Ryby? Ani náhodou. Chytili jste rýmu a jednu tenisku. Vaši. Palcát je pořád můj — aspoň do finále."},
@@ -175,7 +175,7 @@ const SCRIPT=[
  {task:"t9"},
  {unlock:9},
  {z:"🧰 Truhla se otevřela. Uvnitř: vyrovnání 3416. Rolandovi zaplaceno. Past pryč. Teď je truhla prázdná. To je feature."},
- {z:"🎙️ Hotovo. Dluh pryč. Past pryč. Tohle je brána. Cesta domů. Fotky jsem smazal já. Férový obchod."},
+ {z:"🎙️ Hotovo. Dluh pryč. Past pryč. Tohle je brána. Cesta domů. Stopa smazaná, účet vyrovnaný. Férový obchod."},
  {z:"Co se stalo v Táboře, zůstává v Táboře. Já jdu zpátky do svýho času. Vy zůstaňte v tomhle. Díky, roto."},
  {z:"Jednu fotku si udělejte. Tu jedinou, co smí ven. Důkaz, že jste vrátili velitele — a splatili Rolandovi. 📸"},
  {task:"t9s"},
@@ -187,8 +187,8 @@ const SCRIPT=[
 
 const TASKS={
  t1:{title:"Rolandův účet",lbl:"Stopa cesty",
-   brief:"Na vnější stěně nádrže kašny najděte dva letopočty, které si Roland vyryl jako svůj účet (vidět / nahmatat). Sečtěte je — to je částka, kterou Žižka dluží Rolandovi.",
-   ask:"Kolik dluží Žižka Rolandovi?",
+   brief:"Na vnější stěně nádrže kašny jsou dva letopočty — Rolandův účet. Najděte je (vidět / nahmatat) a sečtěte. To je, kolik dlužím.",
+   ask:"Kolik dlužím Rolandovi?",
    ph:"Částka",
    kind:"word",answers:["3416"],
    near:{
@@ -236,7 +236,7 @@ const TASKS={
    hints:["Musíte stát venku, za branou, a dívat se na ni.","Dívejte se nad oblouk průjezdu, ne na věž.","Nad průjezdem jsou dvě úzké svislé škvíry. Náčrt B."]
  },
  t5:{title:"Která šipka?",lbl:"Vylučovačka",
-   brief:"Přečtěte šipky na rozcestníku. Žižka vylučuje: Bašty ne. Kotnov a brána ne (už jsme byli). Kostely ne. Muzeum a podzemí ne (zavřeno). WC ne (byl čtyřikrát). Zůstalo: hodně zelený, lavičky, klid — park.",
+   brief:"Šipky na rozcestníku. Žižka vylučuje Bašty, Kotnov/bránu (už byli), kostely, muzeum/podzemí (zavřeno) a WC. Zůstalo: zelený, lavičky, klid — park.",
    kind:"choice",
    opts:[
      {k:"sady",label:"Holečkovy sady"},
@@ -274,7 +274,7 @@ const TASKS={
    hints:["Hledejte věž přímo na Tržním náměstí.","Není to radnice ani Kotnov.","Vodárenská věž."]
  },
  t8:{title:"Úhel na hrázi",lbl:"Poloha",
-   brief:"Noční fotku ještě nemáme. Vyberte popis místa, odkud vás výběrčí fotil — čelem k vodě u zábradlí.",
+   brief:"Noční referenci ještě nemáme. Vyberte popis místa, odkud výběrčí bral stopu — čelem k vodě u zábradlí.",
    kind:"choice",
    opts:[
      {k:"zady",label:"Stojím zády k vodě (hledím do údolí)"},
@@ -373,7 +373,7 @@ function quick(s,instant){
  if(instant){meSay(st.q[s.id]||s.quick[0]);return}
  return new Promise(res=>{const q=el(`<div class="quick">${s.quick.map(o=>`<button class="btn ghost">${esc(o)}</button>`).join("")}</div>`);feed.appendChild(q);into(q,"end");
   q.querySelectorAll("button").forEach(b=>b.onclick=async()=>{q.remove();st.q[s.id]=b.textContent;meSay(b.textContent);
-   if(b.textContent.startsWith("Proč"))await zSay("Já jsem tady velitel. Kdo jde, jde. Kdo se ptá — vás dám popravit. ⚔️");res()})});
+   if(b.textContent.startsWith("Proč"))await zSay("Protože jste online a já dlužím. Já velím týhle směně. Kdo jde, jde. Kdo se ptá — přičtu vás k účtu. ⚔️");res()})});
 }
 function nav(s,instant){
  const n=s.nav,go=n.go||"Jsme tady";
