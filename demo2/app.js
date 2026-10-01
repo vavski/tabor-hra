@@ -1,7 +1,7 @@
 "use strict";
-/* Ukázka: plná trasa 9 stanic. r15 — kašna účet 3416 + orloj Caesar */
+/* Ukázka: plná trasa 9 stanic. r16 — Žižka v současnosti → cesta zpět */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r15";
+const KEY="tabor-demo2-r16";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={
@@ -17,20 +17,20 @@ const NIGHT={
 };
 
 const SCRIPT=[
- // ÚVOD
- {sys:"Neděle · 6:40"},
- {pic:IMG+"zizka-hero-mobile.jpg",cap:"Žižka · ráno · po noci"},
+ // ÚVOD — frame: Žižka uvízl v Táboře 2026, hráči hledají cestu zpět
+ {sys:"Čtvrtek · 6:40 · Tábor 2026"},
+ {pic:IMG+"zizka-hero-mobile.jpg",cap:"Žižka · Tábor · 2026"},
  {z:"Lidi. Jste vzhůru?"},
  {z:"Probudil jsem se u kašny na náměstí. Na zemi. 🫠"},
  {pic:IMG+"kasna-tabor-mobile.jpg",cap:"Žižkovo náměstí · kašna · Tábor"},
  {z:"Mám na sobě cizí plášť. Je mi malej. A v kapse tohle:"},
  {receipt:`<h4>KRČMA · ÚČET č. 1419</h4><div class="l"><span>Pivo 0,5</span><span>38×</span></div><div class="l"><span>Nakládaný hermelín</span><span>4×</span></div><div class="l"><span>Škoda na majetku</span><span>1×</span></div><div class="l tot"><span>CELKEM</span><span>2 474 Kč</span></div><div class="scr">zaplatí Žižka ♥</div>`},
- {z:"38 piv. Já. Nic si nepamatuju."},
- {z:"Z noci mám jen 9 okének. Viz nahoře ⬆️ Najdete je, než bude nástup?"},
+ {z:"38 piv. Já. V mým století tohle neexistovalo."},
+ {z:"Ulice znám. A zároveň ne. Na věži píšou rok 2026. Já sem nepatřím."},
+ {z:"Potřebuju cestu zpátky. Do svýho času. Mám 9 okének — místa, kudy jsem bloudil. Viz nahoře ⬆️ Najdete je, než se trhlina zavře?"},
  {quick:["Jasně, jdeme do toho","Proč zrovna my?"],id:"q0"},
- {z:"Díky. Na každým místě, kde jsem v noci byl, zůstala stopa. Každá stopa = jedno okénko."},
- {z:"Až jich bude 9, noc se složí. A uvidíte, že to není tak jednoduchý, jak to teď vypadá."},
- {z:"Začneme tam, kde jsem se probudil."},
+ {z:"Díky. Na každým místě, kudy jsem šel, zůstala stopa. Každá stopa = jedno okénko."},
+ {z:"Až jich bude 9, otevře se cesta domů. Začneme tam, kde jsem se probudil."},
 
  // STANICE 1 — kašna: účet / dluh Rolandovi (1568+1848=3416)
  {sys:"Stanice 1 / 9"},
@@ -38,12 +38,12 @@ const SCRIPT=[
  {z:"Kousek od ní stojí velká socha mě s palcátem. Tou kašnu nepopletete."},
  {quick:["Stojíme u kašny"],id:"n1"},
  {z:"Tady. Ráno jsem ležel vedle. V cizím plášti, co mi je malej. A s účtem za 38 piv v kapse."},
- {z:"Nic si z noci nepamatuju. Jen že jsem se válel u vody a že mi je zima na jedno rameno."},
+ {z:"Z tohodle století nechápu skoro nic. Jen že jsem se válel u vody a že mi je zima na jedno rameno."},
  {z:"Roland má dva letopočty a já jeden účet. Sečtěte je. Tábor neplatí — Tábor dluží."},
  {task:"t1"},
  {unlock:1},
- {z:"Okénko 1 je vaše. Kašna v noci — tady to začalo. Dluh zapsán."},
- {z:"Ten plášť… zkoušel jsem ho natáhnout a zjistil jsem, že mu chybí rukáv. Kam se v noci ztrácejí rukávy? A kdo je krejčí, co má rád sázky? 🤔"},
+ {z:"Okénko 1 je vaše. Kašna — tady to začalo. Dluh zapsán. První stopa zpátky."},
+ {z:"Ten plášť… zkoušel jsem ho natáhnout a zjistil jsem, že mu chybí rukáv. Kam se v tomhle století ztrácejí rukávy? A kdo je krejčí, co má rád sázky? 🤔"},
 
  // STANICE 2 — nůžky / mřížka JEDNORUKY
  {sys:"Stanice 2 / 9"},
@@ -70,12 +70,12 @@ const SCRIPT=[
  {quick:["Vidíme jednorukého"],id:"n3"},
  {z:"Krčma zavírala o půlnoci. To vím."},
  {z:"Pak si pamatuju jen to, že jsem strašně chtěl, aby bylo o hodinu míň."},
- {z:"V kapse mám zprávu, kterou jsem si v noci „zašifroval“. Posunutou. O tolik, kolik čísel má jednoruký."},
+ {z:"V kapse mám zprávu, kterou jsem si „zašifroval“, když jsem bloudil. Posunutou. O tolik, kolik čísel má jednoruký."},
  {z:"Na posuvníku si abecedu posuňte, dokud nepřečtete text. Klíč jste spočítali na věži."},
  {task:"t3"},
  {unlock:3},
  {z:"„Odešli.“ Množný číslo. To je… taková řečnická figura. 🔎"},
- {z:"Tyhle hodiny sem kdysi přestěhovali z kostelní věže. Já se v noci taky stěhoval. Hlavně mezi hospodama."},
+ {z:"Tyhle hodiny sem kdysi přestěhovali z kostelní věže. Já se taky stěhoval — stoletími. A mezi hospodama."},
  {z:"Brána. Dolů Klokotskou — to je ta hlavní ulice z rohu náměstí u radnice. Asi 6 minut z kopce."},
 
  // CESTOU 3→4 — Kotnov v dlani (honor)
@@ -92,7 +92,7 @@ const SCRIPT=[
  {quick:["Stojíme za branou, čelem k ní"],id:"n4"},
  {z:"Tady si pamatuju řetězy. A strašnej rámus."},
  {z:"Chtěli jsme ven pro další pivo. Teda… chtěl jsem. 🔎"},
- {z:"V noci jsem si nakreslil, jak se tu spouštěl padací most. Tři verze. Jedna sedí se skutečností."},
+ {z:"Nakreslil jsem si, jak se tu spouštěl padací most. Tři verze. Jedna sedí se skutečností — a s mou dobou."},
  {task:"t4"},
  {unlock:4},
  {z:"Dvě štěrbiny, dvě páky. Jenže u každý páky musí stát jeden chlap. A já byl sám. 🔎"},
@@ -117,7 +117,7 @@ const SCRIPT=[
  {z:"Vzpomínám si jen, kam jsem NEšel. Srovnejte to s rozcestníkem a vyberte."},
  {task:"t5"},
  {unlock:5},
- {z:"Sady. Tam jsem vás v noci hledal dvě hodiny."},
+ {z:"Sady. Tam jsem vás hledal dvě hodiny. Myslel jsem, že jste moje rota."},
  {z:"Dovnitř nejdeme. Stačí mi brána, pod kterou jsem se vyfotil. Najděte ji — po šipce Holečkovy sady, asi minuta."},
 
  // STANICE 6 — Mariánská + zvrat
@@ -130,8 +130,8 @@ const SCRIPT=[
  {unlock:6},
  {z:"Sedněte si. Chvíli nikam nejdeme."},
  {fwd:{h:"Krčmář",b:"38 piv pořád nezaplaceno. Do konce hry vyvěsím fotky z noci na náměstí. Na ty vaše tenisky se bude dívat celej Tábor."}},
- {z:"🎙️ Dobře, přiznám se. Vy jste si fakt mysleli, že jsem to byl já? Do prdele, lidi. Já měl dvě piva a hlídal vás. Zbylejch třicet šest je vašich."},
- {z:"Plášť je tvůj. Jména na ruce jsem si psal, abych vás v noci spočítal. A nesl jsem tě já."},
+ {z:"🎙️ Poslouchejte. Já jsem tady velitel. Ne kámoš z hospodský směny. Jména na ruce = muster. Kdo jde, jde. Kdo ne — poprava. ⚔️"},
+ {z:"Plášť je z vašeho století, ne můj. Jména jsem si psal, abych spočítal, kdo jde se mnou domů. A nesl jsem tě já."},
  {z:"A ta díra v kašně? Taky ne já. Vidíte tu kašnu tady na náměstí? Stála kdysi na hlavním, praskla, tak ji odstěhovali sem. Kašny v Táboře prostě praskaj samy."},
  {fwd:{h:"Krčmář",b:"Chcete fotky zpátky? Vsadili jste se se mnou, že v Táboře teče voda do kopce. Dokažte to. Jsem na Tržním."}},
  {z:"Z rohu u růžového domu Převrátilskou a pak rovně Dlouhou na Tržní. Asi 6 minut. V Dlouhé míjíte kašnu ve zdi — podle ní poznáte, že jdete dobře."},
@@ -152,7 +152,7 @@ const SCRIPT=[
  // STANICE 8 — hráz
  {sys:"Stanice 8 / 9"},
  {quick:["Jsme na hrázi"],id:"n8"},
- {z:"Tady jste v noci chytali ryby. Na můj palcát. Jako na prut."},
+ {z:"Tady jste chytali ryby. Na můj palcát. Jako na prut. V mý době by vás za to seřval hejtman."},
  {z:"Krčmář vás fotil odněkud odsud. Najděte přesně to místo — zatím bez noční fotky, tak vyberte úhel, co sedí."},
  {task:"t8"},
  {unlock:8},
@@ -174,24 +174,24 @@ const SCRIPT=[
  // STANICE 9 — finále
  {sys:"Stanice 9 / 9 · Finále"},
  {quick:["Jsme u vchodu do podzemí"],id:"n9"},
- {z:"Tady. Krčmář tu má truhlu s fotkama."},
- {z:"Zámek chce celou noc. Popořadě."},
- {z:"Poskládejte, co jste dělali. Od první sázky po ryby."},
+ {z:"Tady. Krčmář tu má truhlu. Já mám pocit, že to není o fotkách."},
+ {z:"Zámek chce celou cestu. Popořadě."},
+ {z:"Poskládejte, kudy jsme šli. Od první sázky po ryby."},
  {task:"t9"},
  {unlock:9},
  {z:"🧰 Truhla je PRÁZDNÁ."},
- {z:"🎙️ Prázdná, co? Fotky jsem smazal já. Ráno, než jste se probudili. A účet jsem zaplatil palcátem. Proto ho nemám."},
- {z:"Co se stalo v Táboře, zůstává v Táboře."},
- {z:"Jednu fotku si ale udělat můžete. Tu jedinou, co smí ven. 📸"},
+ {z:"🎙️ Prázdná? Ne. Tohle je brána. Cesta domů. Fotky jsem smazal já — a účet zaplatil palcátem. Proto ho nemám."},
+ {z:"Co se stalo v Táboře, zůstává v Táboře. Já jdu zpátky. Vy zůstaňte."},
+ {z:"Jednu fotku si ale udělejte. Tu jedinou, co smí ven. 📸"},
  {task:"t9s"},
- {z:"Rámeček: KUMPÁNI · Co se stalo v Táboře · Přísaháme, že nic nepřiznáme."},
- {z:"🎙️ A příště platíte vy."},
+ {z:"Rámeček: KUMPÁNI · Cesta zpátky · Tábor 2026"},
+ {z:"🎙️ A příště — až přistane někdo jinej — platíte vy."},
  {sys:"Konec · 9/9"},
  {finale:true}
 ];
 
 const TASKS={
- t1:{title:"Účet u kašny",lbl:"Stopa z noci",
+ t1:{title:"Účet u kašny",lbl:"Stopa cesty",
    brief:"Na vnější stěně nádrže kašny najděte dva letopočty (vidět / nahmatat). Sečtěte je — to je částka, kterou Tábor dluží Rolandovi / kašně.",
    ask:"Kolik dlužíme?",
    ph:"Částka",
@@ -208,14 +208,14 @@ const TASKS={
      "1568 + 1848."
    ]
  },
- t2:{title:"Co jsem prohrál?",lbl:"Stopa z noci",
+ t2:{title:"Co jsem prohrál?",lbl:"Stopa cesty",
    brief:"Na fasádě Škochova domu jsou namalované nůžky (pod druhým oknem v 1. patře, nad restaurací). Ty nůžky jsou klíč k mřížce — ne trivia.",
    howto:"Přiložte mřížku podle namalovaných nůžek: nastavte, kde mají očka. Čtěte po čepelích od oček ke hrotům — nejdřív levá, pak pravá. Písmeno uprostřed, kde se čepele kříží, jen jednou.",
    kind:"grid",grid:["JTAMR","BESUL","PHDIA","VKZNC","YSLEO"],answers:["JEDNORUKY"],
    near:{JEDNO:"To je jen jedna čepel. Nůžky mají dvě.",RUKY:"Druhá čepel sedí. Kde je první?",RUDKY:"Prostřední písmeno, kde se čepele kříží, čtěte jen jednou.",JEDNORUDKY:"Skoro! Písmeno uprostřed jen jednou."},
    hints:["Nůžky jsou namalované, ne kovové. Najdete je nad vchodem do restaurace, v 1. patře.","Očka mají nahoře, hroty dole. Dejte „očka nahoře“ a čtěte po zlatých čarách.","Levá čepel: J-E-D-N-O. Pravá: R-U-(D)-K-Y."]
  },
- t3:{title:"Posunutá zpráva",lbl:"Stopa z noci",
+ t3:{title:"Posunutá zpráva",lbl:"Stopa cesty",
    brief:"Jednoruký ciferník = klíč. Spočítejte čísla na věži. Posuňte abecedu o tolik míst a na posuvníku přečtěte zprávu.",
    ask:"Šifra z kapsy — posouvejte, dokud nepřečtete text",
    cipher:"MBCQJG ZPYLMS",
@@ -290,8 +290,8 @@ const TASKS={
    bad:{zady:"Pak byste viděli údolí, ne hladinu.",schody:"Ze schodů hladinu skoro nevidíte."},
    hints:["Hledejte místo s výhledem na velkou vodu.","Obzor ve výšce očí, u zábradlí.","Čelem k vodě."]
  },
- t9:{title:"Poskládejte noc",lbl:"Finále · zámek",
-   brief:"Seřaďte karty v pořadí, v jakém se to v noci stalo. Od první sázky po ryby.",
+ t9:{title:"Poskládejte cestu",lbl:"Finále · brána",
+   brief:"Seřaďte karty v pořadí, kudy jsme šli. Od první sázky po ryby.",
    kind:"sort",
    cards:[
      {k:"nuzky",t:"Sázka o rukáv",e:"✂️"},
@@ -303,10 +303,10 @@ const TASKS={
      {k:"hraz",t:"Ryby na palcát",e:"🎣"}
    ],
    order:["nuzky","orloj","brana","schody","okno","pitko","hraz"],
-   hints:["Pořadí noci = pořadí, v jakém jste dneska chodili.","Začíná se u nůžek a končí u vody.","Po bráně jsou schody, po schodech okno."]
+   hints:["Pořadí cesty = pořadí, v jakém jste dneska chodili.","Začíná se u nůžek a končí u vody.","Po bráně jsou schody, po schodech okno."]
  },
  t9s:{title:"Selfie KUMPÁNI",lbl:"Jediná fotka ven",
-   brief:"Všichni do záběru. Rámeček: KUMPÁNI · Co se stalo v Táboře · Přísaháme, že nic nepřiznáme.",
+   brief:"Všichni do záběru. Rámeček: KUMPÁNI · Cesta zpátky · Tábor 2026",
    kind:"honor",confirm:"Máme selfie ✓",
    hints:["Stačí jedna fotka celé party.","Rámeček si domyslete — nebo ho připište do Stories.","Přísaha nahlas je volitelná, ale slušnost."]
  }
@@ -378,7 +378,7 @@ function quick(s,instant){
  if(instant){meSay(st.q[s.id]||s.quick[0]);return}
  return new Promise(res=>{const q=el(`<div class="quick">${s.quick.map(o=>`<button class="btn ghost">${esc(o)}</button>`).join("")}</div>`);feed.appendChild(q);into(q,"end");
   q.querySelectorAll("button").forEach(b=>b.onclick=async()=>{q.remove();st.q[s.id]=b.textContent;meSay(b.textContent);
-   if(b.textContent.startsWith("Proč"))await zSay("Máte jména napsaný na mojí ruce. Fixou. Takže jsme asi kámoši.");res()})});
+   if(b.textContent.startsWith("Proč"))await zSay("Já jsem tady velitel. Kdo jde, jde. Kdo se ptá — vás dám popravit. ⚔️");res()})});
 }
 function nav(s,instant){
  const n=s.nav,go=n.go||"Jsme tady";
@@ -571,9 +571,9 @@ function locked(){
 function finaleCard(){
  const c=el(`<div class="card finale">
   <div class="lbl"><i class="dot"></i>Hotovo</div>
-  <h3>Co se stalo v Táboře,<br>zůstává v Táboře</h3>
-  <p class="finale-lead">9 okének. Prázdná truhla. Účet zaplacený palcátem. A vy nic nepřiznáte.</p>
-  <p class="finale-note">Díky za playtest · demo2 r15</p>
+  <h3>Cesta zpátky<br>je otevřená</h3>
+  <p class="finale-lead">9 okének. Prázdná truhla — brána domů. Účet zaplacený palcátem. Žižka jde. Vy zůstaňte.</p>
+  <p class="finale-note">Díky za playtest · demo2 r16</p>
  </div>`);
  feed.appendChild(c);
  const b=el(`<button class="btn sec">Zahrát znovu</button>`);b.onclick=reset;feed.appendChild(b);lastWho=null;into(c,"start");
