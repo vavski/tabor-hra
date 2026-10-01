@@ -1,7 +1,7 @@
 "use strict";
-/* Ukázka: plná trasa 9 stanic. r19 — Rolandův účet 3416, dluh→platba→domů, pryč hangover */
+/* Ukázka: plná trasa 9 stanic. r20 — MOTIVE 2 dluh-past: Roland drží Žižku do splatky 3416 */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r19";
+const KEY="tabor-demo2-r20";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={
@@ -17,30 +17,30 @@ const NIGHT={
 };
 
 const SCRIPT=[
- // ÚVOD — stranded 2026, standing at fountain, path home
- {sys:"Čtvrtek · 6:40 · Tábor 2026"},
- {pic:IMG+"zizka-hero-mobile.jpg",cap:"Žižka · Tábor · 2026"},
- {z:"Lidi. Jste online? Stojím u kašny a nic z tohohle století nechápu."},
- {z:"Na věži píšou 2026. Já sem nepatřím. Ulice znám — a zároveň ne. Chci domů."},
+ // ÚVOD — MOTIVE 2: dluh-past. Roland drží Žižku dnes, dokud 3416 není zaplaceno
+ {sys:"Čtvrtek · 6:40 · Tábor · dnes"},
+ {pic:IMG+"zizka-hero-mobile.jpg",cap:"Žižka · Tábor · dnes"},
+ {z:"Lidi. Jste online? Stojím u kašny — a tohle století není moje. A nemůžu pryč."},
+ {z:"Nejsem ztracenej. Nehledám cestu nazdařbůh. Drží mě tu dluh — Roland, mistr týhle kašny. Dokud mu nezaplatím, brána domů je zamčená."},
  {pic:IMG+"kasna-tabor-mobile.jpg",cap:"Žižkovo náměstí · kašna · Tábor"},
- {z:"Pomozte mi najít cestu zpátky do mýho času. Nebo si vás přepočítám palcátem. Velitelsky. ⚔️"},
- {z:"Mám 9 okének — místa, kudy jsem bloudil. Viz nahoře ⬆️ Najdete je, než se trhlina zavře?"},
+ {z:"Pomozte mi splatit účet a jít domů. Nebo si vás přepočítám palcátem. Velitelsky. ⚔️"},
+ {z:"Mám 9 okének — stopa k truhle s vyrovnáním. Viz nahoře ⬆️ Najdete je, než se past zavře napevno?"},
  {quick:["Jasně, jdeme do toho","Proč zrovna my?"],id:"q0"},
- {z:"Díky. Na každým místě stopa. Každá stopa = jedno okénko. Cíl: splatit starý dluh a otevřít bránu domů."},
- {z:"Až jich bude 9, splatíme účet a otevře se cesta zpátky. Začneme u kašny — tady to prasklo."},
+ {z:"Díky. Past je jasná: částka → platba → domů. Každá stopa = jedno okénko."},
+ {z:"Až jich bude 9, truhla splatí Rolandovi — a otevře se cesta zpátky. Začneme u kašny. Tam je napsaná částka."},
 
  // STANICE 1 — Rolandův účet 1568+1848=3416 (Žižka dluží Rolandovi)
  {sys:"Stanice 1 / 9"},
  {z:"Jděte doprostřed Žižkova náměstí. Velká kamenná kašna — uprostřed sloup, kolem ní lem, na který si lidi sedají."},
  {z:"Kousek od ní stojí velká socha mě s palcátem. Tou kašnu nepopletete."},
  {quick:["Stojíme u kašny"],id:"n1"},
- {z:"Přesně. Stojím tu mezi lidma s obdélníkama v ruce. Oni kouká do telefonů. Já do kašny. Klasika mimočasovýho velitele."},
- {z:"Roland — mistr, co tu kašnu stavěl — si na vnější stěně nádrže vyryl dva letopočty. Jeho účet. Pro mě."},
- {z:"Najděte ty dva roky a sečtěte je. To je, kolik já dlužím Rolandovi. Až to budete mít, dám další tip. Směr k platbě — a domů. 🗡️"},
+ {z:"Přesně. Stojím tu mezi lidma s obdélníkama v ruce. Oni kouká do telefonů. Já do kašny — tady je napsaný, kolik dlužím."},
+ {z:"Roland — mistr, co tu kašnu stavěl — si na vnější stěně nádrže vyryl dva letopočty. Jeho účet. Pro mě. Past, ne suvenýr."},
+ {z:"Najděte ty dva roky a sečtěte je. To je částka pastí. Dokud ji Roland nedostane, jsem tu uvázanej. 🗡️"},
  {task:"t1"},
  {unlock:1},
- {z:"Okénko 1. 3416 — Rolandův účet. Víme, kolik dlužím. Teď to musíme sehnat a splatit."},
- {z:"Roland šeptá dál: dům s nůžkama na fasádě. Nejzdobnější na náměstí. Tam je další klíč k truhle. 🤔"},
+ {z:"Okénko 1. 3416 — Rolandův účet. Víme, kolik dlužím. Teď to musíme sehnat a splatit — jinak brána zůstane zamčená."},
+ {z:"Roland šeptá dál: dům s nůžkama na fasádě. Nejzdobnější na náměstí. Tam je další klíč k truhle s platbou. 🤔"},
 
  // STANICE 2 — nůžky / mřížka JEDNORUKY
  {sys:"Stanice 2 / 9"},
@@ -111,7 +111,7 @@ const SCRIPT=[
  {z:"Vzpomínám si jen, kam jsem NEšel. Srovnejte to s rozcestníkem a vyberte."},
  {task:"t5"},
  {unlock:5},
- {z:"Sady. Hledal jsem stopu k truhle dvě hodiny. Myslel jsem, že jste moje rota. Pořád myslím."},
+ {z:"Sady. Hledal jsem klíč k platbě dvě hodiny. Myslel jsem, že jste moje rota. Pořád myslím."},
  {z:"Dovnitř nejdeme. Stačí mi brána, pod kterou jsem se vyfotil. Najděte ji — po šipce Holečkovy sady, asi minuta."},
 
  // STANICE 6 — zvrat: výběrčí drží truhlu / páku na 3416
@@ -119,13 +119,13 @@ const SCRIPT=[
  {z:"Světlý oblouk porostlý břečťanem, nahoře kamenná váza jak kopeček zmrzliny. Za ním zeleň."},
  {pic:IMG+"marianska-night.jpg",cap:"Mariánská brána · váza nahoře"},
  {quick:["Vidíme oblouk s vázou"],id:"n6"},
- {z:"Tuhle fotku jsem si poslal, když jsem bloudil. Postavte se do oblouku tak, aby váza byla přesně nad hlavou jednoho z vás. Svatozář. 📸"},
+ {z:"Tuhle fotku jsem si poslal cestou k truhle. Postavte se do oblouku tak, aby váza byla přesně nad hlavou jednoho z vás. Svatozář. 📸"},
  {task:"t6"},
  {unlock:6},
  {z:"Sedněte si. Chvíli nikam nejdeme."},
- {fwd:{h:"Výběrčí",b:"3416 pořád na stole. Truhla je u mě. Bez důkazu, že to umíte splatit, bránu domů neotevřu. A fotky z cesty mám — celej Tábor se může dívat."}},
+ {fwd:{h:"Výběrčí",b:"3416 pořád na stole. Truhla je u mě. Dokud Roland nedostane svoje, brána domů zůstane zamčená. A fotky z cesty mám — celej Tábor se může dívat."}},
  {z:"🎙️ Poslouchejte. Já jsem tady velitel. Ne dlužník na úvěru. Jména na ruce = muster. Kdo jde se mnou domů, jde. Kdo ne — poprava. ⚔️"},
- {z:"Výběrčí drží truhlu s částkou. Roland chce 3416. My musíme dokázat, že to splatíme — a jdeme domů. Tečka."},
+ {z:"Tohle je past, ne honička. Výběrčí drží truhlu s 3416. Roland dostane peníze — já jdu domů. Tečka."},
  {z:"A díra v kašně? Ne já. Ta kašna stála na hlavním, praskla, přestěhovali ji sem. Kašny v Táboře praskaj samy. Já praskám jen století."},
  {fwd:{h:"Výběrčí",b:"Chcete truhlu? Vsadili jste se, že v Táboře teče voda do kopce. Dokažte to — beru to jako zálohu na 3416. Jsem na Tržním."}},
  {z:"Z rohu u růžového domu Převrátilskou a pak rovně Dlouhou na Tržní. Asi 6 minut. V Dlouhé míjíte kašnu ve zdi — podle ní poznáte, že jdete dobře."},
@@ -165,21 +165,21 @@ const SCRIPT=[
  {z:"Tu kouli nechali Švédové. Výběrčí by to stejně hodil na mě. Klasika PR."},
  {z:"Rovně přes náměstí ke Staré radnici. Před Škochovým domem je v dlažbě plánek z kostek — červené ukazují chodby. Ke vchodu do podzemí. Dovnitř ne."},
 
- // STANICE 9 — finále: truhla = splatit 3416 → brána domů
+ // STANICE 9 — finále: truhla splatí Rolandovi 3416 → past praskne → brána domů
  {sys:"Stanice 9 / 9 · Finále"},
  {quick:["Jsme u vchodu do podzemí"],id:"n9"},
- {z:"Tady. Výběrčí tu má truhlu. Já cítím víc než zámek — cítím vyrovnání. 3416. Pak východ domů."},
+ {z:"Tady. Výběrčí tu má truhlu. Uvnitř vyrovnání 3416. Zaplatíme — past praskne — jdu domů."},
  {z:"Zámek chce celou cestu. Popořadě. Domů se nechodí nazdařbůh — a Roland nebere složenky."},
  {z:"Poskládejte, kudy jsme šli. Od nůžek po ryby. To je mapa k platbě."},
  {task:"t9"},
  {unlock:9},
- {z:"🧰 Truhla se otevřela. Uvnitř: vyrovnání 3416. Účet Rolandovi — zaplaceno. Teď je prázdná. To je feature."},
- {z:"🎙️ Hotovo. Dluh pryč. Tohle je brána. Cesta domů. Fotky jsem smazal já. Férový obchod."},
+ {z:"🧰 Truhla se otevřela. Uvnitř: vyrovnání 3416. Rolandovi zaplaceno. Past pryč. Teď je truhla prázdná. To je feature."},
+ {z:"🎙️ Hotovo. Dluh pryč. Past pryč. Tohle je brána. Cesta domů. Fotky jsem smazal já. Férový obchod."},
  {z:"Co se stalo v Táboře, zůstává v Táboře. Já jdu zpátky do svýho času. Vy zůstaňte v tomhle. Díky, roto."},
  {z:"Jednu fotku si udělejte. Tu jedinou, co smí ven. Důkaz, že jste vrátili velitele — a splatili Rolandovi. 📸"},
  {task:"t9s"},
- {z:"Rámeček: KUMPÁNI · Cesta zpátky · Tábor 2026"},
- {z:"🎙️ A příště — až přistane někdo jinej se stoletím a dluhem — platíte vy. Já už budu doma."},
+ {z:"Rámeček: KUMPÁNI · Cesta zpátky · Tábor · dnes"},
+ {z:"🎙️ A příště — až někoho jinýho chytí dluh napříč stoletím — platíte vy. Já už budu doma."},
  {sys:"Konec · 9/9"},
  {finale:true}
 ];
@@ -300,7 +300,7 @@ const TASKS={
    hints:["Pořadí cesty = pořadí, v jakém jste dneska chodili.","Začíná se u nůžek a končí u vody.","Po bráně jsou schody, po schodech okno."]
  },
  t9s:{title:"Selfie KUMPÁNI",lbl:"Jediná fotka ven",
-   brief:"Všichni do záběru. Rámeček: KUMPÁNI · Cesta zpátky · Tábor 2026",
+   brief:"Všichni do záběru. Rámeček: KUMPÁNI · Cesta zpátky · Tábor · dnes",
    kind:"honor",confirm:"Máme selfie ✓",
    hints:["Stačí jedna fotka celé party.","Rámeček si domyslete — nebo ho připište do Stories.","Přísaha nahlas je volitelná, ale slušnost."]
  }
@@ -566,8 +566,8 @@ function finaleCard(){
  const c=el(`<div class="card finale">
   <div class="lbl"><i class="dot"></i>Hotovo</div>
   <h3>Cesta zpátky<br>je otevřená</h3>
-  <p class="finale-lead">9 okének. Truhla vyrovnala 3416 Rolandovi — teď je prázdná. Dluh pryč, brána domů otevřená. Žižka jde zpátky. Vy zůstaňte.</p>
-  <p class="finale-note">Díky za playtest · demo2 r19</p>
+  <p class="finale-lead">9 okének. Truhla splatila 3416 Rolandovi. Past praskla, brána domů otevřená. Žižka jde zpátky. Vy zůstaňte.</p>
+  <p class="finale-note">Díky za playtest · demo2 r20</p>
  </div>`);
  feed.appendChild(c);
  const b=el(`<button class="btn sec">Zahrát znovu</button>`);b.onclick=reset;feed.appendChild(b);lastWho=null;into(c,"start");

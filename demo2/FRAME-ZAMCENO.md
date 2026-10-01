@@ -1,33 +1,40 @@
 # Frame zamčeno · demo2
 
-**Datum:** 2026-10-01 (user lock · r19 spine)
+**Datum:** user lock · r20 · MOTIVE 2
 
-## Premisa
-Jan Žižka uvízl v **současném Táboře (2026)**. Hráči mu pomáhají najít **cestu zpět do jeho času**.
+## Premisa · MOTIVE 2 — dluh-past
+Jan Žižka uvízl v **současném Táboře (dnes)**, **protože** nezaplacený dluh k **Rolandovi** ho drží, dokud není splatných **3416**. Hráči pomáhají splatit — pak se otevře cesta domů.
 
-## Páteř (r19)
-1. U kašny: Rolandovy dva letopočty → součet **3416** = co **Žižka dluží Rolandovi**.
-2. Trasa: sehnat / vydělat tu částku (truhla s vyrovnáním 3416).
-3. Finále: truhla splatí dluh → otevře se **brána / cesta domů**.
+**Není** amnézie. **Není** honička / chase. WHY = past dluhu.
+
+**Zákaz roku:** v copy nikdy nehardcodovat kalendářní rok. Jen „dnes / tohle století / teď“.
+
+## Páteř (r20)
+1. U kašny: Rolandovy dva letopočty → součet **3416** = **částka pastí** (co Žižka dluží Rolandovi).
+2. Trasa: sehnat / vydělat tu částku (klíče k truhle s vyrovnáním 3416).
+3. Finále: truhla splatí Rolandovi → past praskne → otevře se **brána / cesta domů**.
 
 ## Co platí
 - Místa jsou **reálná dnes** (kašna, Škoch, orloj, Bechyňská, Mariánská, Tržní, Jordán, podzemí…).
 - Žižka píše v chatu: **moderní čeština** (všichni rozumí), lehký slang OK, **žádná staročeskina**; zmatený mimočasový velitel, vtipný + drzejší; vtipy o střetu století OK.
 - „**Já jsem tady velitel / vás dám popravit**“ sedí (volba *Proč zrovna my?*).
-- 9 okének = stopy po bloudění → po 9. splatit 3416 → **brána / cesta domů**.
+- 9 okének = stopa k truhle / platbě → po 9. splatit 3416 → **brána / cesta domů**.
 
 ## Co NENÍ hlavní premisa
+- Amnézie („nevím, co se stalo / kde jsem“).
+- Honička / hunt bez důvodu.
 - Hangover / „byla to **vaše** noc“ / kocovinové krytí party / 38 piv jako důvod, proč je tu.
 - Cizí plášť jako hlavní zápletka.
 - Spánek u kašny („vzbuďte se“), když art ukazuje stojícího Žižku.
 - „Tábor dluží Táboru“ — dluží **Žižka Rolandovi**.
-- Finále není jen „prázdná truhla / smazané fotky“, ale **splatit dluh → brána domů**.
+- Finále není jen „prázdná truhla / smazané fotky“, ale **splatit dluh → past praskne → brána domů**.
+- Hardcoded kalendářní rok v UI textu.
 
 ## Mechaniky beze změny
 Trasa a hádanky: kašna **3416**, nůžky **JEDNORUKÝ**, orloj Caesar, stanice 4–9 (sort finále). Měnit text kolem páteře dluh→platba→domů — ne mechaniku.
 
 ## Build
-`KEY=tabor-demo2-r19` · query `?v=r19`
+`KEY=tabor-demo2-r20` · query `?v=r20`
 
 ## Visual CANON (r18 assets)
 - Reference hero/splash: `assets/img/splash-r17.jpg` (Žižka surprised/standing at fountain / modern Tábor square).

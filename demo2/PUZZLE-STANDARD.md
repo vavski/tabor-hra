@@ -19,4 +19,4 @@ Platí pro každou budoucí stanici.
 Když hráč může odpovědět z gauče / z Googlu / z pojmenování objektu → přepsat.
 
 ## Demo2 stanice 1
-Kašna = Rolandův účet: najít na vnější stěně nádrže letopočty **1568** + **1848** (vidět/nahmatat), součet **3416** = co **Žižka dluží Rolandovi**. Word/number input. Pak navigace na nůžky (Škoch, st.2) → trasa k truhle / splatit → domů.
+Kašna = Rolandův účet (MOTIVE 2 dluh-past): najít na vnější stěně nádrže letopočty **1568** + **1848** (vidět/nahmatat), součet **3416** = částka pastí / co **Žižka dluží Rolandovi**. Word/number input. Pak navigace na nůžky (Škoch, st.2) → trasa k truhle / splatit → past praskne → domů.

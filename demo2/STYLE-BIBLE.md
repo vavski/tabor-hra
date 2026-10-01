@@ -177,7 +177,7 @@ anime, manga, chibi, kawaii, photoreal, Unreal Engine, Pixar, soft blur, Spider-
 - Grey **chainmail** at collar/chest over tan/beige tunic; leather belt + pouch
 - **Flanged metal mace** in hand when full-body
 - Expression: surprised / bewildered at fountain; cheeky smirk OK in chat portrait
-- Setting contrast: **modern Tábor 2026** (neon shop signs, phones, cars) — **NOT Prague**, NOT pure medieval square
+- Setting contrast: **modern Tábor (dnes)** (neon shop signs, phones, cars) — **NOT Prague**, NOT pure medieval square
 
 ### Prompt add-on (after style lock from §10)
 ```
