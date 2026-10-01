@@ -1,8 +1,8 @@
 "use strict";
-/* Ukázka: plná trasa 9 stanic. r25e — dual concentric rings · KEY tabor-demo2-r25e */
+/* Ukázka: plná trasa 9 stanic. r25f — dual rings stable + sticky dial · KEY tabor-demo2-r25f */
 const TEST=/[?&]test=1/.test(location.search);
 const DEV=/[?&]dev=1/.test(location.search);
-const KEY="tabor-demo2-r25e";
+const KEY="tabor-demo2-r25f";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={
@@ -461,22 +461,29 @@ function wheel(body,t,H){
  const A="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
  const cipher=t.cipher||"";
  const STEP=360/26;
- /* Dual rings: outer šifra FIXED, inner text ROTATES. Caesar k 0–25; key = 24. */
+ /* Outer šifra FIXED, inner text ROTATES. Caesar k 0–25; key = 24.
+    Slots: rotate(a) on wrapper + counter-rotate on glyph — stays even when parent spins. */
  let k=0,angle=0;
- const mkRing=(cls)=>Array.from(A).map((ch,i)=>`<span class="${cls}" style="--a:${(i/26)*360}deg">${ch}</span>`).join("");
+ const mkRing=()=>Array.from(A).map((ch,i)=>{
+  const a=((i*360)/26).toFixed(4);
+  return `<span class="lr-slot" style="--a:${a}deg"><b class="lr-ch">${ch}</b></span>`;
+ }).join("");
  body.innerHTML=`<div class="wheel-sticky">
   <div class="cipher-src"><span>Šifra</span><b>${esc(cipher)}</b></div>
-  <p class="wheel-lab">Vnější prstenec = šifra (pevný). Vnitřní = text — potáhněte nebo ↺↻. Srovnejte u značky nahoře. Tajenku napište sem.</p>
- </div>
-  <div class="letter-ring" aria-label="Dva prstence písmen — šifra a text">
+  <div class="lr-legend" aria-hidden="true">
+   <span class="lg-out"><i></i>ŠIFRA · vnější</span>
+   <span class="lg-in"><i></i>TEXT · vnitřní</span>
+  </div>
+  <div class="letter-ring" aria-label="Dva prstence: vnější šifra, vnitřní text">
    <div class="lr-face" tabindex="0">
     <div class="lr-mark" title="srovnej zde"></div>
-    <div class="lr-outer" aria-hidden="true">${mkRing("lr-let lr-out")}</div>
-    <div class="lr-rotor" style="transform:rotate(0deg)" aria-hidden="true">${mkRing("lr-let lr-in")}</div>
+    <div class="lr-outer">${mkRing()}</div>
+    <div class="lr-rotor" style="transform:rotate(0deg)">${mkRing()}</div>
     <div class="lr-hub"><span class="kk">0</span><small>posun</small></div>
-    <div class="lr-labs"><span class="lr-lab-out">šifra</span><span class="lr-lab-in">text</span></div>
    </div>
   </div>
+  <p class="wheel-lab">Vnější (šedá) = šifra · vnitřní (cyan) = text. Potáhněte vnitřní prstenec. U oranžové značky srovnejte. Tajenku napište sem.</p>
+ </div>
   <div class="wheel-ctrl"><button type="button" class="btn sec wheel-m" aria-label="Otočit proti směru">↺</button><div class="wheel-k"><span class="kk2">0</span><small>posun</small></div><button type="button" class="btn sec wheel-p" aria-label="Otočit po směru">↻</button></div>
   <div class="inrow wheel-answer"><input type="text" placeholder="Rozluštěný text" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="done"><button class="btn">Zadat</button></div>`;
  const face=body.querySelector(".lr-face");
@@ -488,7 +495,6 @@ function wheel(body,t,H){
  const showK=nk=>{kk.textContent=String(nk);kk2.textContent=String(nk)};
  const setK=(nk,animate)=>{
   k=((nk%26)+26)%26;
-  /* +k*STEP: under outer A[i] sits inner A[(i-k) mod 26] — decode map */
   angle=k*STEP;
   rotor.style.transition=animate?"transform .18s ease":"none";
   rotor.style.transform=`rotate(${angle}deg)`;
@@ -528,22 +534,23 @@ function wheel(body,t,H){
  body.querySelector(".wheel-p").onclick=()=>setK(k+1,true);
  setK(0,false);
  const inp=body.querySelector(".wheel-answer input");
- const pinCipher=()=>{
+ /* Pin WHOLE dial (cipher + both rings) under header while typing */
+ const pinDial=()=>{
   if(card)card.classList.add("cipher-focus");
-  sticky.classList.add("pinned");
+  sticky.classList.add("pinned","compact");
   requestAnimationFrame(()=>{
    const nb=$(".top");
-   sticky.style.top=((nb?nb.getBoundingClientRect().bottom:0)+6)+"px";
+   sticky.style.top=((nb?nb.getBoundingClientRect().bottom:0)+4)+"px";
    sticky.scrollIntoView({block:"start",behavior:TEST?"auto":"smooth"});
   });
  };
- const unpinCipher=()=>{
+ const unpinDial=()=>{
   if(card)card.classList.remove("cipher-focus");
-  sticky.classList.remove("pinned");
+  sticky.classList.remove("pinned","compact");
   sticky.style.top="";
  };
- inp.addEventListener("focus",pinCipher);
- inp.addEventListener("blur",()=>setTimeout(unpinCipher,150));
+ inp.addEventListener("focus",pinDial);
+ inp.addEventListener("blur",()=>setTimeout(unpinDial,150));
  const send=()=>{const raw=inp.value.trim();if(!raw)return;const n=norm(raw);meSay(raw.toUpperCase());inp.value="";
   if(t.answers.includes(n))return H.solved();
   if(t.near&&t.near[n])return H.bad(t.near[n]);
@@ -694,7 +701,7 @@ function finaleCard(){
   <div class="lbl"><i class="dot"></i>Hotovo</div>
   <h3>Cesta zpátky<br>je otevřená</h3>
   <p class="finale-lead">9 okének. Truhla splatila 3416 Rolandovi. Past praskla, brána domů otevřená. Žižka jde zpátky. Vy zůstaňte.</p>
-  <p class="finale-note">Díky za playtest · demo2 r25e</p>
+  <p class="finale-note">Díky za playtest · demo2 r25f</p>
  </div>`);
  feed.appendChild(c);
  const b=el(`<button class="btn sec">Zahrát znovu</button>`);b.onclick=reset;feed.appendChild(b);lastWho=null;into(c,"start");
