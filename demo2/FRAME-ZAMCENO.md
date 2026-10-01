@@ -19,4 +19,9 @@ Jan Žižka uvízl v **současném Táboře (2026)**. Hráči mu pomáhají naj�
 Trasa a hádanky: kašna **3416**, nůžky **JEDNORUKÝ**, orloj Caesar, stanice 4–9 (sort finále). Měnit jen text, když odporuje framu — ne mechaniku.
 
 ## Build
-`KEY=tabor-demo2-r17` · query `?v=r17`
+`KEY=tabor-demo2-r18` · query `?v=r18`
+
+## Visual CANON (r18)
+- Reference hero/splash: `assets/img/splash-r17.jpg` (Žižka surprised at fountain / modern Tábor square).
+- Style bible: `STYLE-BIBLE.md` (+ `/workspace/styly/spider-verse-style/STYLE-BIBLE.md`) §13.
+- Voice: confused out-of-time commander, funny + cheeky; modern Czech; light slang OK; **NO** archaic/staročeská; century-clash jokes OK. „velitel / popravit“ OK.
