@@ -1,6 +1,6 @@
 # Frame zamčeno · demo2
 
-**Datum:** user lock · r20 · MOTIVE 2
+**Datum:** user lock · r21 · MOTIVE 2 (JEDNORUKÝ hádanka)
 
 ## Premisa · MOTIVE 2 — dluh-past
 Jan Žižka uvízl v **současném Táboře (dnes)**, **protože** nezaplacený dluh k **Rolandovi** ho drží, dokud není splatných **3416**. Hráči pomáhají splatit — pak se otevře cesta domů.
@@ -33,8 +33,11 @@ Jan Žižka uvízl v **současném Táboře (dnes)**, **protože** nezaplacený 
 ## Mechaniky beze změny
 Trasa a hádanky: kašna **3416**, nůžky **JEDNORUKÝ**, orloj Caesar, stanice 4–9 (sort finále). Měnit text kolem páteře dluh→platba→domů — ne mechaniku.
 
+## Link st2→st3 (r21)
+Po odpovědi **JEDNORUKÝ** jen **hádanka/nudge**: hledejte něco jednorukýho poblíž — hráči objeví orloj sami. **Nespoilerovat** jednu ručičku dřív, než dorazí. Caesar slider + ODESLI BRANOU až u orloje.
+
 ## Build
-`KEY=tabor-demo2-r20` · query `?v=r20`
+`KEY=tabor-demo2-r21` · query `?v=r21`
 
 ## Visual CANON (r18 assets)
 - Reference hero/splash: `assets/img/splash-r17.jpg` (Žižka surprised/standing at fountain / modern Tábor square).

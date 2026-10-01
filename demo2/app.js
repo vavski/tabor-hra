@@ -1,7 +1,7 @@
 "use strict";
-/* Ukázka: plná trasa 9 stanic. r20 — MOTIVE 2 dluh-past: Roland drží Žižku do splatky 3416 */
+/* Ukázka: plná trasa 9 stanic. r21 — JEDNORUKÝ jako hádanka k orloji (bez spoileru ručičky) */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r20";
+const KEY="tabor-demo2-r21";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={
@@ -56,15 +56,16 @@ const SCRIPT=[
  {task:"t2"},
  {unlock:2},
  {z:"Sázka s krejčím: kdo prohraje, přijde o rukáv. Prohrál jsem. Jednorukej. Aspoň že ne Bezrukej. 🫡"},
- {z:"Počkat. JEDNORUKÝ — není jen přezdívka. Hned vedle věž. Ciferník s jedinou ručičkou. Taky jednorukej. Tohle století má humor."},
- {z:"Jděte k němu. Klíč ke zprávě o truhle je na tom ciferníku."},
+ {z:"Počkat. JEDNORUKÝ — není jen přezdívka. Roland to nenechal náhodou. Hledejte tady na náměstí něco jinýho jednorukýho. Jednu ruku. Blízko."},
+ {z:"Až to najdete — jděte k tomu. Klíč ke zprávě o truhle je na něm."},
 
- // STANICE 3 — orloj Caesar
+ // STANICE 3 — orloj Caesar (objev: hráči najdou jednorukého sami)
  {sys:"Stanice 3 / 9"},
- {z:"Radniční věž. Zvedněte hlavu k jednorukému."},
- {z:"Ciferník má jedinou zlatou ručičku a slunce. Spočítejte dílky — 24 hodin, 24 nahoře. Normální to není."},
- {pic:IMG+"orloj-night.jpg",cap:"Radniční orloj · 24h · 1 ručička · jednoruký"},
- {quick:["Vidíme jednorukého"],id:"n3"},
+ {z:"Pořád na náměstí. Hned vedle Škocha. Koukejte kolem — a nahoru."},
+ {quick:["Našli jsme jednorukého"],id:"n3"},
+ {z:"Přesně on. Ciferník s jedinou zlatou ručičkou a sluncem. Taky jednorukej. Tohle století má humor."},
+ {pic:IMG+"orloj-night.jpg",cap:"Radniční orloj · 24h · 1 ručička"},
+ {z:"Spočítejte dílky — 24 hodin, 24 nahoře. Normální to není."},
  {z:"Rolandova stopa: zpráva posunutá o tolik, kolik čísel má jednoruký. V kapse ji mám od chvíle, co mi to prasklo."},
  {z:"Na posuvníku si abecedu posuňte, dokud nepřečtete text. Klíč jste spočítali na věži."},
  {task:"t3"},
@@ -567,7 +568,7 @@ function finaleCard(){
   <div class="lbl"><i class="dot"></i>Hotovo</div>
   <h3>Cesta zpátky<br>je otevřená</h3>
   <p class="finale-lead">9 okének. Truhla splatila 3416 Rolandovi. Past praskla, brána domů otevřená. Žižka jde zpátky. Vy zůstaňte.</p>
-  <p class="finale-note">Díky za playtest · demo2 r20</p>
+  <p class="finale-note">Díky za playtest · demo2 r21</p>
  </div>`);
  feed.appendChild(c);
  const b=el(`<button class="btn sec">Zahrát znovu</button>`);b.onclick=reset;feed.appendChild(b);lastWho=null;into(c,"start");
