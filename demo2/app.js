@@ -1,7 +1,7 @@
 "use strict";
-/* Ukázka: plná trasa 9 stanic. r22 — pryč spoiler 3416 z úvodu/splash */
+/* Ukázka: plná trasa 9 stanic. r23 — production pass · KEY tabor-demo2-r23 */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r22";
+const KEY="tabor-demo2-r23";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={
@@ -17,7 +17,7 @@ const NIGHT={
 };
 
 const SCRIPT=[
- // ÚVOD — MOTIVE 2: dluh-past. Roland drží Žižku dnes. ČÁSTKU (3416) NIKDY neříkat před řešením st1.
+ // ÚVOD — MOTIVE 2: dluh-past. Roland drží Žižku dnes. Částku NIKDY neříkat před řešením st1.
  {sys:"Čtvrtek · 6:40 · Tábor · dnes"},
  {pic:IMG+"zizka-hero-mobile.jpg",cap:"Žižka · Tábor · dnes"},
  {z:"Lidi. Jste online? Stojím u kašny — a tohle století není moje. A nemůžu pryč."},
@@ -26,10 +26,10 @@ const SCRIPT=[
  {z:"Pomozte mi splatit účet a jít domů. Nebo si vás přepočítám palcátem. Velitelsky. ⚔️"},
  {z:"Mám 9 okének — stopa k truhle s vyrovnáním. Viz nahoře ⬆️ Najdete je, než se past zavře napevno?"},
  {quick:["Jasně, jdeme do toho","Proč zrovna my?"],id:"q0"},
- {z:"Díky. Past je jasná: částka → platba → domů. Každá stopa = jedno okénko."},
+ {z:"Past je jasná: částka → platba → domů. Každá stopa = jedno okénko."},
  {z:"Až jich bude 9, truhla splatí Rolandovi — a otevře se cesta zpátky. Začneme u kašny. Tam je napsaná částka."},
 
- // STANICE 1 — Rolandův účet 1568+1848=3416 (Žižka dluží Rolandovi)
+ // STANICE 1 — Rolandův účet (součet dvou letopočtů = částka pastí)
  {sys:"Stanice 1 / 9"},
  {z:"Jděte doprostřed Žižkova náměstí. Velká kamenná kašna — uprostřed sloup, kolem ní lem, na který si lidi sedají."},
  {z:"Kousek od ní stojí velká socha mě s palcátem. Tou kašnu nepopletete."},
@@ -70,7 +70,7 @@ const SCRIPT=[
  {z:"Na posuvníku si abecedu posuňte, dokud nepřečtete text. Klíč jste spočítali na věži."},
  {task:"t3"},
  {unlock:3},
- {z:"„Odešli branou.“ Kudy dál k truhle s 3416. Množný číslo — buď mám rotu, nebo si lhžu do kapsy. 🔎"},
+ {z:"„Odešli branou.“ Kudy dál k truhle s 3416. Množné číslo — buď mám rotu, nebo si lhžu do kapsy. 🔎"},
  {z:"Tyhle hodiny sem kdysi přestěhovali z kostelní věže. Já se stěhoval stoletími. Remíza."},
  {z:"Brána. Dolů Klokotskou — to je ta hlavní ulice z rohu náměstí u radnice. Asi 6 minut z kopce."},
 
@@ -194,7 +194,7 @@ const TASKS={
    near:{
      "1568":"To je jen první řádek účtu. Najděte druhý letopočet.",
      "1848":"Oprava sama nestačí. Roland účtuje i stavbu.",
-     "3415":"1567 je začátek práce, ne letopočet na účtu.",
+     "3415":"Blízko. Zkontrolujte součet obou letopočtů.",
      "1567":"1567 je začátek práce, ne letopočet na účtu."
    },
    hints:[
@@ -568,7 +568,7 @@ function finaleCard(){
   <div class="lbl"><i class="dot"></i>Hotovo</div>
   <h3>Cesta zpátky<br>je otevřená</h3>
   <p class="finale-lead">9 okének. Truhla splatila 3416 Rolandovi. Past praskla, brána domů otevřená. Žižka jde zpátky. Vy zůstaňte.</p>
-  <p class="finale-note">Díky za playtest · demo2 r22</p>
+  <p class="finale-note">Díky za playtest · demo2 r23</p>
  </div>`);
  feed.appendChild(c);
  const b=el(`<button class="btn sec">Zahrát znovu</button>`);b.onclick=reset;feed.appendChild(b);lastWho=null;into(c,"start");

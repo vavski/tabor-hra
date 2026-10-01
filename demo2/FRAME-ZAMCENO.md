@@ -1,6 +1,6 @@
 # Frame zamčeno · demo2
 
-**Datum:** user lock · r22 · MOTIVE 2 (bez spoileru 3416 v úvodu)
+**Datum:** user lock · r23 · production pass (MOTIVE 2, anti-spoiler drží)
 
 ## Premisa · MOTIVE 2 — dluh-past
 Jan Žižka uvízl v **současném Táboře (dnes)**, **protože** nezaplacený dluh k **Rolandovi** ho drží, dokud není splatných **3416**. Hráči pomáhají splatit — pak se otevře cesta domů.
@@ -41,7 +41,11 @@ Po odpovědi **JEDNORUKÝ** jen **hádanka/nudge**: hledejte něco jednorukýho 
 Hráči ví jen: najít **dva letopočty** a **sečíst**. Číslo až **po vyřešení** st1, nebo jen ve validaci/`answers`.
 
 ## Build
-`KEY=tabor-demo2-r22` · query `?v=r22`
+`KEY=tabor-demo2-r23` · query `?v=r23`
+
+## Production pass (r23)
+Checklist: no 3416 in splash/intro; debt-trap coherent; JEDNORUKÝ nudge without ručička spoiler; no calendar year in UI; stations 1–9 playable; mobile viewport OK.
+Payments/legal = OUT OF SCOPE (no fake Stripe).
 
 ## Visual CANON (r18 assets)
 - Reference hero/splash: `assets/img/splash-r17.jpg` (Žižka surprised/standing at fountain / modern Tábor square).
