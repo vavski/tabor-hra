@@ -159,21 +159,40 @@ img{max-width:100%}
 
 /* r13: honor / choice / sort / cipher / finale */
 /* r14: caesar wheel / letter posuvník */
+/* r25: rotating 24h clock dial — NO live tajenka */
 .cipher-src{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:4px 0 6px;font:600 12px var(--mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
 .cipher-src b{font:800 15px/1.2 var(--mono);letter-spacing:.16em;color:#c9d4e6;text-transform:none}
-.cipher-live{margin-top:0}
 .wheel-lab{font:500 12.5px var(--sans);color:var(--muted);margin:4px 0 6px}
-.wheel{font:700 12.5px var(--mono);overflow-x:auto;-webkit-overflow-scrolling:touch;background:rgba(5,7,12,.65);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:0 0 8px}
-.wheel .r1,.wheel .r2{white-space:nowrap;letter-spacing:.28em;line-height:1.55}
-.wheel .r1{color:#8ea0b8}
-.wheel .r2{color:var(--orange)}
-.wheel-ctrl{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin:4px 0 2px}
+.wheel-ctrl{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin:8px 0 6px}
 .wheel-ctrl .btn.sec{margin:0;padding:12px;font-size:22px;line-height:1}
 .wheel-k{text-align:center;min-width:72px}
 .wheel-k .kk{display:block;font:900 28px/1 var(--mono);color:var(--cyan);text-shadow:0 0 16px rgba(34,211,238,.35)}
 .wheel-k small{display:block;margin-top:4px;font:600 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 
+.clock-dial{display:flex;justify-content:center;margin:8px 0 4px}
+.cd-face{position:relative;width:min(280px,86vw);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 45% 35%,#2a3344 0%,#121821 55%,#070a10 100%);border:2px solid rgba(255,196,77,.55);box-shadow:0 0 0 3px rgba(5,7,12,.9),0 0 28px rgba(255,154,60,.22),inset 0 0 40px rgba(0,0,0,.55)}
+.cd-ring-nums,.cd-ring-lets,.cd-rotor{position:absolute;inset:0}
+.cd-face{container-type:size;}
+.cd-num,.cd-let{position:absolute;left:50%;top:50%;width:1.5em;margin-left:-.75em;text-align:center;transform:rotate(var(--a)) translateY(calc(-1 * 42cqmin)) rotate(calc(-1*var(--a)));font:700 10.5px var(--mono);color:#e8c56a;pointer-events:none}
+.cd-let{transform:rotate(var(--a)) translateY(calc(-1 * 28cqmin)) rotate(calc(-1*var(--a)));font:800 11.5px var(--mono);color:#c9d4e6}
+.cd-rotor{transition:transform .22s ease}
+.cd-hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:72px;height:72px;border-radius:50%;background:rgba(5,7,12,.85);border:1px solid rgba(34,211,238,.35);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3;box-shadow:0 0 16px rgba(34,211,238,.2)}
+.cd-hub .cd-pos{font:900 22px/1 var(--mono);color:var(--cyan)}
+.cd-hub small{font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.cd-hand{position:absolute;left:50%;top:50%;width:3px;height:42%;margin-left:-1.5px;margin-top:-42%;transform-origin:50% 100%;background:linear-gradient(180deg,#ffd27a,#e89a2a 70%,#8a5010);border-radius:2px 2px 1px 1px;z-index:2;box-shadow:0 0 10px rgba(255,154,60,.45);transition:transform .22s ease}
+.cd-hand::after{content:"";position:absolute;left:50%;bottom:-6px;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:#ffc44d;box-shadow:0 0 10px rgba(255,196,77,.6)}
+.cd-mark{position:absolute;left:50%;top:10px;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px rgba(34,211,238,.7);z-index:4}
+
+.alpha-map{background:rgba(5,7,12,.65);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:0 0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.am-row{display:flex;align-items:baseline;gap:10px;white-space:nowrap;line-height:1.55}
+.am-row+.am-row{margin-top:2px}
+.am-lab{flex:0 0 42px;font:600 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.am-ciph,.am-plain{font:700 12.5px var(--mono);letter-spacing:.28em;color:#8ea0b8}
+.am-plain{color:var(--cyan)}
+
 .cipher{font:800 22px/1.3 var(--mono);letter-spacing:.18em;text-align:center;color:var(--orange);background:rgba(255,154,60,.08);border:1px dashed rgba(255,154,60,.45);border-radius:12px;padding:14px 12px;margin:8px 0 12px}
+.card.jumpflash{animation:jumpflash .7s ease}
+@keyframes jumpflash{0%,100%{box-shadow:0 0 0 1px rgba(255,154,60,.08),0 18px 40px -24px rgba(255,154,60,.45)}40%{box-shadow:0 0 0 2px rgba(34,211,238,.65),0 0 28px rgba(34,211,238,.35)}}
 .honor-btn{margin-top:8px}
 .choice-list{display:flex;flex-direction:column;gap:0;margin-top:4px}
 .choice-list .choice-btn{text-align:left;margin-top:8px}

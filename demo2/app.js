@@ -1,15 +1,15 @@
 "use strict";
-/* Ukázka: plná trasa 9 stanic. r24 — P0 tón + fotky/čest · KEY tabor-demo2-r24 */
+/* Ukázka: plná trasa 9 stanic. r25b — route A mid-loop · KEY tabor-demo2-r25b */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r24";
+const KEY="tabor-demo2-r25b";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={
  1:{img:IMG+"kasna-tabor-mobile.jpg",t:"Okénko 1 · 02:14 · Kašna"},
  2:{img:IMG+"skoch-fasada.jpg",t:"Okénko 2 · 02:47 · Škochův dům"},
- 3:{img:IMG+"orloj-night.jpg",t:"Okénko 3 · 03:05 · Orloj"},
- 4:{img:IMG+"bechynska-night.jpg",t:"Okénko 4 · 03:22 · Bechyňská brána"},
- 5:{img:IMG+"rozcestnik-night.jpg",t:"Okénko 5 · 03:41 · Okno u rozcestníku"},
+ 3:{img:IMG+"orloj-night.jpg",t:"Okénko 3 · 03:05 · Radniční hodiny"},
+ 4:{img:IMG+"portal-night.svg",t:"Okénko 4 · 03:22 · Radniční portál"},
+ 5:{img:IMG+"ulicka-night.svg",t:"Okénko 5 · 03:41 · Konzola v uličce"},
  6:{img:IMG+"marianska-night.jpg",t:"Okénko 6 · 03:55 · Mariánská brána"},
  7:{img:IMG+"trzni-night.jpg",t:"Okénko 7 · 04:18 · Tržní pítko"},
  8:{img:IMG+"hraz-night.jpg",t:"Okénko 8 · 04:40 · Hráz Jordánu"},
@@ -64,58 +64,42 @@ const SCRIPT=[
  {z:"Pořád na náměstí. Hned vedle Škocha. Koukejte kolem — a nahoru."},
  {quick:["Našli jsme jednorukého"],id:"n3"},
  {z:"Přesně on. Ciferník s jedinou zlatou ručičkou a sluncem. Taky jednorukej. Tohle století má humor."},
- {pic:IMG+"orloj-night.jpg",cap:"Radniční orloj · 24h · 1 ručička"},
+ {pic:IMG+"orloj-night.jpg",cap:"Radniční hodiny · 24h · 1 ručička · Tábor"},
  {z:"Spočítejte dílky — 24 hodin, 24 nahoře. Normální to není."},
  {z:"Rolandova stopa: zpráva posunutá o tolik, kolik čísel má jednoruký. V kapse ji mám od chvíle, co mi to prasklo."},
- {z:"Na posuvníku si abecedu posuňte, dokud nepřečtete text. Klíč jste spočítali na věži."},
+ {z:"Otočte ciferník — 24 dílků jako na věži. Srovnejte abecedu, přečtěte zprávu a napište ji sem. Klíč jste spočítali nahoře."},
  {task:"t3"},
  {unlock:3},
  {z:"„Odešli branou.“ Kudy dál k truhle s 3416. Množné číslo — buď mám rotu, nebo si lhžu do kapsy. 🔎"},
  {z:"Tyhle hodiny sem kdysi přestěhovali z kostelní věže. Já se stěhoval stoletími. Remíza."},
- {z:"Brána. Dolů Klokotskou — to je ta hlavní ulice z rohu náměstí u radnice. Asi 6 minut z kopce."},
+ {z:"Branou — ne z kopce na Kotnov. Hned tady: hlavní portál Staré radnice. Pod hodinami. Minuta."},
 
- // CESTOU 3→4
- {sys:"Cestou · Klokotská"},
- {z:"Cestou dolů si pamatuju kulatou věž. Obří. Chtěl jsem si ji odnést — aspoň by pokryla část dluhu."},
- {z:"Až ji uvidíte, vyfoťte ji tak, aby to vypadalo, že ji někdo z vás drží v dlani. 📸"},
- {task:"t3w"},
- {z:"Krásný. Roland by vám možná odpustil korunu. (Na účtu pořád 3416.)"},
- {z:"Teď až na konec Klokotské — gotická brána přilepená ke kulaté věži."},
-
- // STANICE 4
+ // STANICE 4 — radniční portál (šablona → KLICEM)
  {sys:"Stanice 4 / 9"},
- {z:"Projděte průjezdem ven a otočte se k bráně čelem. Stůjte na chodníku — jezdí tu auta."},
- {quick:["Stojíme za branou, čelem k ní"],id:"n4"},
- {z:"Tady řetězy. Strašnej rámus. Padací most — a moje ego, co chtělo zkratku k truhle."},
- {z:"Nakreslil jsem si, jak se tu spouštěl padací most. Tři verze. Jedna sedí se skutečností — a s mou dobou."},
+ {z:"Stůjte před hlavním vchodem radnice. Kamenný portál s obloukem — znak v tympanonu nahoře."},
+ {pic:IMG+"portal-night.svg",cap:"Stará radnice · portál"},
+ {quick:["Jsme u portálu"],id:"n4"},
+ {z:"Tudy jsem měl odejít k truhle. Roland mi nechal šablonu — dvě svislé škvíry jak ostění. Přiložte ji k portálu."},
+ {z:"Horní oblouk šablony = oblouk kamene. Znak nahoře. Pak přečtěte, co je v průzorech."},
  {task:"t4"},
  {unlock:4},
- {z:"Dvě štěrbiny, dvě páky — u každý jeden chlap. Já byl sám. Velitel bez směny. 🔎"},
- {z:"Těma škvírama šly páky, co zvedaly padací most."},
- {z:"Most se zasek. Šli jsme zpátky jinudy — uličkama nahoru. K platbě to zatím nevedlo."},
+ {z:"Klíčem. Doslova. K truhle i k účtu. Roland má humor jak kovář po směně. 🔑"},
+ {z:"Další půlka stopy je pár kroků — ne přes město. Ulička hned u radnice."},
 
- // CESTOU 4→5
- {sys:"Cestou · Růžová → Filipovská"},
- {z:"Vraťte se průjezdem do města a hned zahněte do uliček — Růžová, pak Filipovská. Parkem ne. Asi 6 minut do kopce."},
- {z:"Mapa se mi teď rozmazala. Navigujte podle toho, co si pamatuju: úzká ulička mezi zdmi, pak schody, pak růžový dům na rohu."},
- {quick:["Jsme na schodech"],id:"n4s"},
- {z:"🎙️ Tudy zpátky k účtu. Někdo zpomalil, já nesl. Nevím, kdo koho… Asi já tebe. Velitel má břemena. 🔎"},
- {z:"Nahoru na náměstí s kostelem se zelenou věží. Před růžovým domem č. 41 stojí hnědý rozcestník s truhlíkem."},
-
- // STANICE 5
+ // STANICE 5 — split-clue konzola → PLATBA
  {sys:"Stanice 5 / 9"},
- {quick:["Stojíme u rozcestníku"],id:"n5"},
- {z:"Tady to okno! Serenáda. Paní odpověděla kýblem. Recenze: mokrá. Dluh to nesplatilo."},
- {z:"🎙️ Boží bojovníci… *šplouch* — OK, tohle století nemá respekt k hymně."},
- {z:"Divný. Na fotce odraz blesku z mobilu. Já mobil nemám. Mám palcát. 🔎"},
- {z:"Po kýblu jsem šel tam, kam ukazuje ta cedule. Jenže nevím, která šipka."},
- {z:"Vzpomínám si jen, kam jsem NEšel. Srovnejte to s rozcestníkem a vyberte."},
+ {z:"Obejdete radnici do úzké uličky (strana od náměstí k Pražské). Hledejte dům naproti boční fasádě — kovaná konzola pod oknem v 1. patře."},
+ {pic:IMG+"ulicka-night.svg",cap:"Ulička u radnice · konzola"},
+ {quick:["Vidíme konzolu"],id:"n5"},
+ {z:"Na lístku od Rolanda mám jen kraj. Prostředek schválně vytrhl — prý „ať se nenudíte“."},
+ {receipt:`<h4>ÚTRŽEK · ROLAND</h4><div style="font:800 22px/1.3 ui-monospace,monospace;letter-spacing:6px;text-align:center">P L&nbsp;&nbsp;·&nbsp;&nbsp;·&nbsp;&nbsp;·&nbsp;&nbsp;A</div><div class="scr">prostředek = konzola · strana k náměstí</div>`},
+ {z:"Na konzole jsou tři znaky. Platí jen ta strana, co hledí směrem na náměstí — ne do dvora. Složte s útržkem."},
  {task:"t5"},
  {unlock:5},
- {z:"Sady. Hledal jsem klíč k platbě dvě hodiny. Myslel jsem, že jste moje rota. Pořád myslím."},
- {z:"Dovnitř nejdeme. Stačí mi brána, pod kterou jsem se vyfotil. Najděte ji — po šipce Holečkovy sady, asi minuta."},
+ {z:"Platba. Celé slovo. Účet 3416 pořád čeká — ale stopa sedí. 🔎"},
+ {z:"Výběrčí mě fotil u oblouku s vázou. Krátká odbočka: z náměstí k Mariánské bráně — uličkou kolem kostela, asi 4 minuty. Ne Klokotskou. Ne na Kotnov."},
 
- // STANICE 6 — zvrat: výběrčí drží truhlu / páku na 3416
+ // STANICE 6 — Mariánská (zvrat výběrčí)
  {sys:"Stanice 6 / 9"},
  {z:"Světlý oblouk porostlý břečťanem, nahoře kamenná váza jak kopeček zmrzliny. Za ním zeleň."},
  {pic:IMG+"marianska-night.jpg",cap:"Mariánská brána · váza nahoře"},
@@ -129,7 +113,7 @@ const SCRIPT=[
  {z:"Tohle je past, ne honička. Výběrčí drží truhlu s 3416. Roland dostane peníze — já jdu domů. Tečka."},
  {z:"A díra v kašně? Ne já. Ta kašna stála na hlavním, praskla, přestěhovali ji sem. Kašny v Táboře praskaj samy. Já praskám jen století."},
  {fwd:{h:"Výběrčí",b:"Chcete truhlu? Vsadili jste se, že v Táboře teče voda do kopce. Dokažte to — beru to jako zálohu na 3416. Jsem na Tržním."}},
- {z:"Z rohu u růžového domu Převrátilskou a pak rovně Dlouhou na Tržní. Asi 6 minut. V Dlouhé míjíte kašnu ve zdi — podle ní poznáte, že jdete dobře."},
+ {z:"Zpátky k náměstí a na Tržní: Převrátilskou a Dlouhou. Asi 6 minut. V Dlouhé míjíte kašnu ve zdi — podle ní poznáte, že jdete dobře."},
 
  // STANICE 7
  {sys:"Stanice 7 / 9"},
@@ -211,49 +195,41 @@ const TASKS={
    hints:["Nůžky jsou namalované, ne kovové. Najdete je nad vchodem do restaurace, v 1. patře.","Očka mají nahoře, hroty dole. Dejte „očka nahoře“ a čtěte po zlatých čarách.","Levá čepel: J-E-D-N-O. Pravá: R-U-(D)-K-Y."]
  },
  t3:{title:"Posunutá zpráva",lbl:"Stopa cesty",
-   brief:"Jednoruký ciferník = klíč. Spočítejte čísla na věži. Posuňte abecedu o tolik míst a na posuvníku přečtěte zprávu.",
-   ask:"Šifra z kapsy — posouvejte, dokud nepřečtete text",
+   brief:"Jednoruký ciferník = klíč. Spočítejte čísla na věži (24 nahoře). Otočte ciferník na stejný dílek, srovnejte abecedu a přečtěte šifru — výsledek napište sem.",
+   ask:"Šifra z kapsy — otočte ciferník a přepište rozluštěný text",
    cipher:"MBCQJG ZPYLMS",
    kind:"wheel",answers:["ODESLIBRANOU"],
-   near:{ODESLI:"První slovo máte. Kudy?",BRANOU:"Druhé sedí. Co bylo předtím?",MBCQJG:"To je ještě šifra. Posuňte posuvník.",ZPYLMS:"To je druhá půlka šifry. Rozluštěte celou zprávu.",24:"Klíč sedí. Teď posuňte posuvník a přečtěte text.",12:"Na normálních hodinách jo. Tenhle jednoruký jich má víc.",2:"Posun o 2 zpátky sedí. Ale kolik čísel má jednoruký?"},
-   hints:["Jednoruký má 24 hodin, ne 12. Kolik je dílků, o tolik se posouvá abeceda.","Na posuvníku nastavte 24 (nebo −2). Horní řádek = šifra, spodní = text. Živý řádek nahoře ukáže zprávu.","První slovo je sloveso v minulém čase, druhé říká, kudy."]
+   near:{ODESLI:"První slovo máte. Kudy?",BRANOU:"Druhé sedí. Co bylo předtím?",MBCQJG:"To je ještě šifra. Otočte ciferník a přečtěte sami.",ZPYLMS:"To je druhá půlka šifry. Rozluštěte celou zprávu.",24:"Klíč sedí. Teď podle abecedy na ciferníku přepište šifru.",12:"Na normálních hodinách jo. Tenhle jednoruký jich má víc.",2:"Posun o 2 zpátky sedí. Ale kolik čísel má jednoruký?"},
+   hints:["Jednoruký má 24 hodin, ne 12. Kolik je dílků, o tolik se posouvá abeceda.","Nastavte ciferník na 24 (stejně jako nahoře na věži). Vnější písmena = šifra, vnitřní = text. Tajenku sem napište sami.","První slovo je sloveso v minulém čase, druhé říká, kudy."]
  },
- t3w:{title:"Věž v dlani",lbl:"Úkol cestou",
-   brief:"Vyfoťte kulatou věž Kotnov tak, aby to vypadalo, že ji někdo z vás drží v dlani. Perspektiva. Dokonalost se nehodnotí.",
-   kind:"honor",confirm:"Máme ji v dlani ✓",
-   hints:["Pokračujte Klokotskou dolů, věž se objeví sama.","Jeden stojí blíž k mobilu s nataženou dlaní, věž je v dálce za ním.","Stačí, aby věž „seděla“ nad dlaní."]
+ t4:{title:"Šablona portálu",lbl:"Stopa cesty",
+   brief:"Hlavní portál Staré radnice (pod hodinami). Šablona má dva svislé průzory = ostění. Přiložte k kameni — nehádejte z gauče.",
+   howto:"Horní oblouk šablony = oblouk portálu. Znak v tympanonu = nahoře. Čtěte levý průzor shora dolů, pak pravý. Písmena v průzorech složí slovo.",
+   kind:"grid",overlay:"portal",okOri:"up",
+   segs:[["up","znak nahoře"],["down","znak dole"],["left","znak vlevo"],["right","znak vpravo"]],
+   grid:["PKRCT","ULAEV","WIBMX","YODFG","HNSZQ"],
+   answers:["KLICEM"],
+   near:{KLIC:"Skoro — dočtěte i pravý průzor.",KLICEMR:"To je moc. Jen průzory, nic kolem.",PORTAL:"Portál je klíč, ne odpověď. Čtěte písmena v šabloně.",KLICE:"Chybí poslední písmeno z pravého průzoru."},
+   hints:["Stůjte čelem k hlavnímu vchodu radnice, ne k věži z boku.","Znak musí být nahoře — jinak čtete blbost.","Levý průzor: K-L-I. Pravý: C-E-M."]
  },
- t4:{title:"Náčrty brány",lbl:"Porovnej s realitou",
-   brief:"Stojíte venku a díváte se na bránu? Porovnejte ji s náčrty. Který sedí? (Správný má nad obloukem dvě svislé štěrbiny a znak.)",
-   kind:"choice",
-   opts:[
-     {k:"a",label:"A · jedna svislá štěrbina nad obloukem",svg:IMG+"brana-sketch-a.svg"},
-     {k:"b",label:"B · dvě svislé štěrbiny + znak nad obloukem",svg:IMG+"brana-sketch-b.svg"},
-     {k:"c",label:"C · střílny po stranách průjezdu",svg:IMG+"brana-sketch-c.svg"}
-   ],
-   ok:"b",
-   bad:{a:"To jsem kreslil ve spěchu. Spočítejte svislé škvíry nad průjezdem.",c:"Střílny bokem jsou jinde. Dívejte se nad oblouk průjezdu, ne na boky."},
-   hints:["Musíte stát venku, za branou, a dívat se na ni.","Dívejte se nad oblouk průjezdu, ne na věž.","Nad průjezdem jsou dvě úzké svislé škvíry. Náčrt B."]
- },
- t5:{title:"Která šipka?",lbl:"Vylučovačka",
-   brief:"Šipky na rozcestníku. Žižka vylučuje Bašty, Kotnov/bránu (už byli), kostely, muzeum/podzemí (zavřeno) a WC. Zůstalo: zelený, lavičky, klid — park.",
-   kind:"choice",
-   opts:[
-     {k:"sady",label:"Holečkovy sady"},
-     {k:"basty",label:"Bašty (Žižkova / Soukenická)"},
-     {k:"kotnov",label:"Kotnov / Bechyňská brána"},
-     {k:"kostel",label:"Kostely"},
-     {k:"muzeum",label:"Muzeum / podzemí"},
-     {k:"wc",label:"WC"}
-   ],
-   ok:"sady",
-   bad:{basty:"Bašty ne. V noci jsem žádnou nedobyl.",kotnov:"Tam už jsme byli.",kostel:"Kostely ne, to až ráno.",muzeum:"Muzeum a podzemí v noci zavřeno.",wc:"Tam jsem byl čtyřikrát. Stačilo."},
-   hints:["Odškrtávejte šipky, co Žižka vyloučil. Zbyde jedna.","Zelená, lavičky, klid = park.","Holečkovy sady."]
+ t5:{title:"Útržek + konzola",lbl:"Stopa cesty",
+   brief:"Útržek v chatu má kraje P L · · · A. Prostřední tři znaky jsou na kované konzole v uličce u radnice — jen na straně, která hledí k náměstí.",
+   ask:"Jaké slovo vznikne?",
+   ph:"Slovo z útržku",
+   kind:"word",answers:["PLATBA"],
+   near:{
+     PLATA:"Chybí prostředek z konzoly.",
+     ATB:"To je jen prostředek. Spojte s útržkem.",
+     PLA:"Málo. Celé slovo z kraje + konzoly.",
+     PLATBY:"Číslo účtu je 3416 — tady chceme slovo v 1. pádě.",
+     PLATBAH:"Bez háčků a bez ocásků. Šest písmen."
+   },
+   hints:["Konzola pod oknem 1. patra, ulička u radnice (k Pražské).","Hleďte na stranu ke náměstí — ne do dvora.","Útržek P L _ _ _ A + tři znaky z konzoly = platba."]
  },
  t6:{title:"Svatozář z vázy",lbl:"Pozice + čest",
    brief:"Postavte se do oblouku tak, aby kamenná váza na střeše byla přesně nad hlavou jednoho z vás. Jako svatozář. Vyfoťte. Potvrzuje se na čest.",
    kind:"honor",confirm:"Stojíme pod vázou ✓",
-   hints:["Jděte po šipce „Holečkovy sady“.","Hledejte oblouk, za kterým je vidět zeleň.","Je to vstup do parku přímo z tohohle náměstí, pár kroků od rozcestníku."]
+   hints:["Z Žižkova náměstí k Mariánské — uličkou kolem kostela, ne Klokotskou.","Hledejte světlý oblouk s břečťanem a vázou nahoře.","Vstup do zeleně / parku — váza jak kopeček zmrzliny."]
  },
  t7:{title:"Voda do kopce",lbl:"Nález + čest",
    brief:"Najděte pítko — místo, odkud stříká voda vzhůru. Jeden se napije, ostatní ho vyfotí jako důkaz pro výběrčího (záloha na 3416).",
@@ -291,14 +267,14 @@ const TASKS={
    cards:[
      {k:"nuzky",t:"Sázka o rukáv",e:"✂️"},
      {k:"orloj",t:"Posunutý čas",e:"🕛"},
-     {k:"brana",t:"Zaseklý most",e:"🏰"},
-     {k:"schody",t:"Kdo koho nesl",e:"🧗"},
-     {k:"okno",t:"Serenáda pod oknem",e:"🎶"},
+     {k:"portal",t:"Klíčem u portálu",e:"🔑"},
+     {k:"platba",t:"Útržek + konzola",e:"🧾"},
+     {k:"vaza",t:"Svatozář z vázy",e:"👑"},
      {k:"pitko",t:"Voda do kopce",e:"⛲"},
      {k:"hraz",t:"Ryby na palcát",e:"🎣"}
    ],
-   order:["nuzky","orloj","brana","schody","okno","pitko","hraz"],
-   hints:["Pořadí cesty = pořadí, v jakém jste dneska chodili.","Začíná se u nůžek a končí u vody.","Po bráně jsou schody, po schodech okno."]
+   order:["nuzky","orloj","portal","platba","vaza","pitko","hraz"],
+   hints:["Pořadí cesty = pořadí, v jakém jste dneska chodili.","Začíná se u nůžek a končí u vody.","Po hodinách je portál, po portálu konzola, pak váza."]
  },
  t9s:{title:"Selfie KUMPÁNI",lbl:"Jediná fotka ven",
    brief:"Všichni do záběru. Rámeček: KUMPÁNI · Cesta zpátky · Tábor · dnes",
@@ -320,15 +296,29 @@ const wait=ms=>new Promise(r=>setTimeout(r,TEST?15:ms));
 const into=(e,block)=>{if(e&&e.scrollIntoView)e.scrollIntoView({block:block||"end",behavior:TEST?"auto":"smooth"})};
 let lastWho=null;
 
+const WIN_TASK={1:"t1",2:"t2",3:"t3",4:"t4",5:"t5",6:"t6",7:"t7",8:"t8",9:"t9"};
+function jumpToStation(n){
+ const tid=WIN_TASK[n];
+ const card=tid&&document.getElementById("card-"+tid);
+ if(card){
+  into(card,"start");
+  card.classList.remove("jumpflash");void card.offsetWidth;card.classList.add("jumpflash");
+  return true;
+ }
+ const info=NIGHT[n];
+ if(info&&info.img)openModal(info.img,info.t);
+ else if(info)openModal("",info.t);
+ return false;
+}
 function renderWindows(pop){
  const w=$("#windows");let h="";
  for(let i=1;i<=9;i++){
   const on=st.won.includes(i),n=NIGHT[i],has=n&&n.img;
-  h+=on?(has?`<button class="win on${pop===i?" new":""}" data-n="${i}" aria-label="Okénko ${i}"><img src="${n.img}" alt=""></button>`:`<button class="win on lit${pop===i?" new":""}" data-n="${i}" aria-label="Okénko ${i}">${i}</button>`):`<div class="win">${i}</div>`}
+  h+=on?(has?`<button class="win on${pop===i?" new":""}" data-n="${i}" aria-label="Okénko ${i} — skok na úkol"><img src="${n.img}" alt=""></button>`:`<button class="win on lit${pop===i?" new":""}" data-n="${i}" aria-label="Okénko ${i} — skok na úkol">${i}</button>`):`<div class="win">${i}</div>`}
  const done=st.won.includes(9);
  h+=done?`<div class="win fin open" title="Finále">✓</div>`:`<div class="win fin" title="Finále"><i class="lock"></i></div>`;
  w.innerHTML=h;$("#count").textContent=st.won.length;
- w.querySelectorAll(".win.on").forEach(b=>b.onclick=()=>{const n=NIGHT[b.dataset.n];if(n&&n.img)openModal(n.img,n.t);else if(n)openModal("",n.t)});
+ w.querySelectorAll(".win.on").forEach(b=>b.onclick=()=>jumpToStation(+b.dataset.n));
  const nw=w.querySelector(".win.new");if(nw){void nw.offsetWidth;requestAnimationFrame(()=>requestAnimationFrame(()=>nw.classList.remove("new")))}
 }
 function openModal(src,txt){
@@ -433,27 +423,58 @@ function word(body,t,H){
 function wheel(body,t,H){
  const A="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
  const cipher=t.cipher||"";
- let k=0;
+ /* Clock positions 1–24; Caesar shift = position (key 24). Start at 12 so player must turn. */
+ let pos=12;
+ const ticks=Array.from({length:24},(_,i)=>{
+  const n=i===0?24:i; // i=0 → top = 24
+  const ang=i*15; // degrees from top
+  return `<span class="cd-num" style="--a:${ang}deg">${n}</span>`;
+ }).join("");
+ const letters=Array.from(A).map((ch,i)=>{
+  const ang=(i/26)*360;
+  return `<span class="cd-let" style="--a:${ang}deg">${ch}</span>`;
+ }).join("");
  body.innerHTML=`<div class="cipher-src"><span>Šifra</span><b>${esc(cipher)}</b></div>
-  <div class="cipher cipher-live" aria-live="polite">${esc(cipher)}</div>
-  <p class="wheel-lab">Posuvník · horní řádek = šifra → spodní = text</p>
-  <div class="wheel"><div class="r1">${A}</div><div class="r2"></div></div>
-  <div class="wheel-ctrl"><button type="button" class="btn sec wheel-m" aria-label="Posun minus">−</button><div class="wheel-k"><span class="kk">0</span><small>posun</small></div><button type="button" class="btn sec wheel-p" aria-label="Posun plus">+</button></div>
+  <p class="wheel-lab">Otočte ciferník (24 dílků). Vnější písmeno = šifra → vnitřní = text. Tajenku sem napište — nikam se sama nevypíše.</p>
+  <div class="clock-dial" aria-label="Ciferník 24 hodin">
+   <div class="cd-face">
+    <div class="cd-ring-nums">${ticks}</div>
+    <div class="cd-rotor" style="transform:rotate(0deg)">
+     <div class="cd-ring-lets">${letters}</div>
+    </div>
+    <div class="cd-hub"><span class="cd-pos">12</span><small>dílek</small></div>
+    <div class="cd-hand" style="transform:rotate(180deg)"></div>
+    <div class="cd-mark" title="čti zde"></div>
+   </div>
+  </div>
+  <div class="wheel-ctrl"><button type="button" class="btn sec wheel-m" aria-label="Otočit proti směru">↺</button><div class="wheel-k"><span class="kk">12</span><small>dílek / posun</small></div><button type="button" class="btn sec wheel-p" aria-label="Otočit po směru">↻</button></div>
+  <div class="alpha-map"><div class="am-row"><span class="am-lab">šifra</span><b class="am-ciph">${A}</b></div><div class="am-row"><span class="am-lab">text</span><b class="am-plain"></b></div></div>
   <div class="inrow"><input type="text" placeholder="Rozluštěný text" autocomplete="off" autocapitalize="characters" spellcheck="false"><button class="btn">Zadat</button></div>`;
- const live=body.querySelector(".cipher-live"),r2=body.querySelector(".r2"),kk=body.querySelector(".kk");
+ const rotor=body.querySelector(".cd-rotor");
+ const hand=body.querySelector(".cd-hand");
+ const kk=body.querySelector(".kk");
+ const cdPos=body.querySelector(".cd-pos");
+ const plain=body.querySelector(".am-plain");
  const draw=()=>{
-  live.textContent=[...cipher].map(c=>{const i=A.indexOf(c);return i<0?c:A[(i-k+260)%26]}).join("");
-  r2.textContent=[...A].map((_,i)=>A[(i-k+260)%26]).join("");
-  kk.textContent=String(k);
+  /* Hand: 24 at top. pos 24 → 0deg, pos 1 → 15deg, … pos 12 → 180deg */
+  const handDeg=pos===24?0:pos*15;
+  hand.style.transform=`rotate(${handDeg}deg)`;
+  /* Rotor turns with Caesar key=pos (letters on rim) */
+  const rotDeg=-(pos/26)*360;
+  rotor.style.transform=`rotate(${rotDeg}deg)`;
+  /* Alphabet map ONLY — never apply to cipher string (no live tajenka) */
+  plain.textContent=[...A].map((_,i)=>A[(i-pos+260)%26]).join("");
+  kk.textContent=String(pos);
+  cdPos.textContent=String(pos);
  };
- body.querySelector(".wheel-m").onclick=()=>{k=(k+25)%26;draw()};
- body.querySelector(".wheel-p").onclick=()=>{k=(k+1)%26;draw()};
+ body.querySelector(".wheel-m").onclick=()=>{pos=pos<=1?24:pos-1;draw()};
+ body.querySelector(".wheel-p").onclick=()=>{pos=pos>=24?1:pos+1;draw()};
  draw();
  const inp=body.querySelector("input");
  const send=()=>{const raw=inp.value.trim();if(!raw)return;const n=norm(raw);meSay(raw.toUpperCase());inp.value="";
   if(t.answers.includes(n))return H.solved();
   if(t.near&&t.near[n])return H.bad(t.near[n]);
-  H.bad("Tohle neznám. Posuňte posuvník a přečtěte živý řádek.")};
+  H.bad("Tohle neznám. Otočte ciferník podle věže a přepište šifru sami.")};
  body.querySelector(".inrow .btn").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};
 }
 function honor(body,t,H,card,hb){
@@ -520,15 +541,40 @@ function sortUI(body,t,H){
  };
 }
 function grid(body,t,H){
+ const segs=t.segs||[["up","očka nahoře"],["down","očka dole"],["left","očka vlevo"],["right","očka vpravo"]];
+ const okOri=t.okOri||"up";
+ const overlay=t.overlay||"scissors";
  body.innerHTML=`<p class="howto">${esc(t.howto)}</p><div class="gridwrap"><video class="hide" muted playsinline></video><svg viewBox="0 0 250 250"></svg></div>
-  <div class="segs">${[["up","očka nahoře"],["down","očka dole"],["left","očka vlevo"],["right","očka vpravo"]].map(([k,l])=>`<button data-o="${k}">${l}</button>`).join("")}</div>
-  <button class="btn sec sm cam">Položit mřížku přes kameru</button>
+  <div class="segs">${segs.map(([k,l])=>`<button data-o="${k}">${esc(l)}</button>`).join("")}</div>
+  <button class="btn sec sm cam">Položit šablonu přes kameru</button>
   <div class="inrow"><input type="text" placeholder="Slovo" autocomplete="off" autocapitalize="characters" spellcheck="false"><button class="btn">Zadat</button></div>`;
  const svg=body.querySelector("svg"),v=body.querySelector("video");let o=null,cam=false;
+ const drawOverlay=()=>{
+  if(!o)return"";
+  if(overlay==="portal"){
+   const flip=o==="down",side=o==="left"||o==="right";
+   let g=`<g stroke="#ff9a3c" stroke-width="5" fill="none" opacity=".75">`;
+   if(!side){
+    const yArc=flip?180:70,ySlot=flip?40:115,sgn=flip?1:-1;
+    g+=`<path d="M40 ${flip?90:210} V${yArc+40} Q125 ${yArc} 210 ${yArc+40} V${flip?90:210}"/>`;
+    g+=`<circle cx="125" cy="${flip?200:70}" r="12"/>`;
+    g+=`<rect x="55" y="${ySlot}" width="40" height="100" fill="rgba(34,211,238,.12)" stroke="#22d3ee" stroke-width="3"/>`;
+    g+=`<rect x="155" y="${ySlot}" width="40" height="100" fill="rgba(34,211,238,.12)" stroke="#22d3ee" stroke-width="3"/>`;
+   }else{
+    /* wrong side: rotate slots visually to hint mismatch */
+    g+=`<rect x="20" y="55" width="100" height="40" fill="rgba(34,211,238,.12)" stroke="#22d3ee" stroke-width="3"/>`;
+    g+=`<rect x="20" y="155" width="100" height="40" fill="rgba(34,211,238,.12)" stroke="#22d3ee" stroke-width="3"/>`;
+    g+=`<path d="M140 40 H210 Q230 125 210 210 H140"/>`;
+   }
+   return g+`</g>`;
+  }
+  const P={TL:[25,25],TR:[225,25],BL:[25,225],BR:[225,225]},rings={up:["TL","TR"],down:["BL","BR"],left:["TL","BL"],right:["TR","BR"]}[o];
+  let s=`<g stroke="#ff9a3c" stroke-width="9" stroke-linecap="round" opacity=".45"><line x1="25" y1="25" x2="225" y2="225"/><line x1="225" y1="25" x2="25" y2="225"/></g>`;
+  rings.forEach(k=>{const [a,b]=P[k];s+=`<circle cx="${a}" cy="${b}" r="22" fill="none" stroke="#ff9a3c" stroke-width="5"/>`});
+  return s;
+ };
  const draw=()=>{let s=cam?`<rect width="250" height="250" fill="rgba(0,0,0,.25)"/>`:"";
-  if(o){const P={TL:[25,25],TR:[225,25],BL:[25,225],BR:[225,225]},rings={up:["TL","TR"],down:["BL","BR"],left:["TL","BL"],right:["TR","BR"]}[o];
-   s+=`<g stroke="#ff9a3c" stroke-width="9" stroke-linecap="round" opacity=".45"><line x1="25" y1="25" x2="225" y2="225"/><line x1="225" y1="25" x2="25" y2="225"/></g>`;
-   rings.forEach(k=>{const [a,b]=P[k];s+=`<circle cx="${a}" cy="${b}" r="22" fill="none" stroke="#ff9a3c" stroke-width="5"/>`})}
+  s+=drawOverlay();
   for(let r=0;r<5;r++)for(let k=0;k<5;k++)s+=`<text x="${25+k*50}" y="${34+r*50}" text-anchor="middle" font-family="JetBrains Mono,ui-monospace,monospace" font-weight="700" font-size="25" fill="#e8fbff" stroke="#000" stroke-width="${cam?2.5:0}" paint-order="stroke">${t.grid[r][k]}</text>`;
   svg.innerHTML=s};
  draw();
@@ -536,9 +582,15 @@ function grid(body,t,H){
  body.querySelector(".cam").onclick=async e=>{
   try{if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error("x");
    v.srcObject=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false});await v.play();v.classList.remove("hide");cam=true;draw();e.target.remove()}
-  catch(err){e.target.textContent="Kamera nejde, stačí mřížka nahoře";e.target.disabled=true}};
+  catch(err){e.target.textContent="Kamera nejde, stačí šablona nahoře";e.target.disabled=true}};
+ const badDefault=overlay==="portal"
+  ?"Tohle slovo neznám. Čtěte levý průzor shora dolů, pak pravý."
+  :"Tohle slovo neznám. Čtěte po čepelích od oček ke hrotům.";
+ const badOriMsg=overlay==="portal"
+  ?"Nesedí. Znak v tympanonu má být nahoře — otočte šablonu."
+  :"Nesedí. Podívejte se znovu, kde mají nůžky na zdi očka.";
  const inp=body.querySelector("input"),send=()=>{const n=norm(inp.value);if(!n)return;meSay(inp.value.trim().toUpperCase());inp.value="";
-  if(t.answers.includes(n))return H.solved();if(t.near[n])return H.bad(t.near[n]);H.bad(o&&o!=="up"?"Nesedí. Podívejte se znovu, kde mají nůžky na zdi očka.":"Tohle slovo neznám. Čtěte po čepelích od oček ke hrotům.")};
+  if(t.answers.includes(n))return H.solved();if(t.near&&t.near[n])return H.bad(t.near[n]);H.bad(o&&o!==okOri?badOriMsg:badDefault)};
  body.querySelector(".inrow .btn").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};
 }
 async function unlock(n,instant){
@@ -568,7 +620,7 @@ function finaleCard(){
   <div class="lbl"><i class="dot"></i>Hotovo</div>
   <h3>Cesta zpátky<br>je otevřená</h3>
   <p class="finale-lead">9 okének. Truhla splatila 3416 Rolandovi. Past praskla, brána domů otevřená. Žižka jde zpátky. Vy zůstaňte.</p>
-  <p class="finale-note">Díky za playtest · demo2 r23</p>
+  <p class="finale-note">Díky za playtest · demo2 r25b</p>
  </div>`);
  feed.appendChild(c);
  const b=el(`<button class="btn sec">Zahrát znovu</button>`);b.onclick=reset;feed.appendChild(b);lastWho=null;into(c,"start");

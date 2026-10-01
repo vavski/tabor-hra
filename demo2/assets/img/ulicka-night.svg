@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" fill="none">
+<rect width="400" height="500" fill="#05070c"/>
+<rect x="0" y="0" width="140" height="500" fill="#141c28"/>
+<rect x="260" y="0" width="140" height="500" fill="#121a24"/>
+<path d="M140 0 L260 40 L260 500 L140 500 Z" fill="#0c121a"/>
+<!-- iron bracket -->
+<path d="M268 180 H330 Q345 180 345 200 V240" stroke="#c9a227" stroke-width="5" fill="none"/>
+<path d="M268 240 H345" stroke="#c9a227" stroke-width="4"/>
+<text x="300" y="225" text-anchor="middle" fill="#22d3ee" font-family="ui-monospace,monospace" font-size="16" font-weight="700">ATB</text>
+<circle cx="200" cy="420" r="40" fill="none" stroke="#ff9a3c" stroke-width="2" opacity=".4"/>
+<text x="200" y="470" text-anchor="middle" fill="#8ea0b8" font-family="ui-monospace,monospace" font-size="13" letter-spacing="2">ULIČKA · KONZOLA</text>
+</svg>

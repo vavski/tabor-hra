@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 250">
+<rect width="250" height="250" fill="rgba(5,7,12,.2)"/>
+<!-- arch -->
+<path d="M40 210 V110 Q125 35 210 110 V210" stroke="#ff9a3c" stroke-width="6" fill="none" opacity=".7"/>
+<!-- coat mark top -->
+<circle cx="125" cy="70" r="12" fill="none" stroke="#ff9a3c" stroke-width="3"/>
+<!-- two vertical slots -->
+<rect x="70" y="115" width="28" height="95" fill="rgba(34,211,238,.12)" stroke="#22d3ee" stroke-width="3"/>
+<rect x="152" y="115" width="28" height="95" fill="rgba(34,211,238,.12)" stroke="#22d3ee" stroke-width="3"/>
+</svg>
