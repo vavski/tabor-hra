@@ -1,8 +1,8 @@
 "use strict";
-/* Ukázka: plná trasa 9 stanic. r25d — letter-ring cipher + sticky šifra · KEY tabor-demo2-r25d */
+/* Ukázka: plná trasa 9 stanic. r25e — dual concentric rings · KEY tabor-demo2-r25e */
 const TEST=/[?&]test=1/.test(location.search);
 const DEV=/[?&]dev=1/.test(location.search);
-const KEY="tabor-demo2-r25d";
+const KEY="tabor-demo2-r25e";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={
@@ -196,12 +196,12 @@ const TASKS={
    hints:["Nůžky jsou namalované, ne kovové. Najdete je nad vchodem do restaurace, v 1. patře.","Očka mají nahoře, hroty dole. Dejte „očka nahoře“ a čtěte po zlatých čarách.","Levá čepel: J-E-D-N-O. Pravá: R-U-(D)-K-Y."]
  },
  t3:{title:"Posunutá zpráva",lbl:"Stopa cesty",
-   brief:"Jednoruký na věži = klíč. Spočítejte čísla (24 nahoře). Otočte prstenec písmen o tolik míst, srovnejte abecedu a přepište šifru sem.",
-   ask:"Šifra z kapsy — otočte prstenec a přepište rozluštěný text",
+   brief:"Jednoruký na věži = klíč. Spočítejte čísla (24 nahoře). Otočte vnitřní prstenec (text) proti vnějšímu (šifra) o tolik míst a přepište šifru sem.",
+   ask:"Šifra z kapsy — srovnejte prstence a přepište rozluštěný text",
    cipher:"MBCQJG ZPYLMS",
    kind:"wheel",answers:["ODESLIBRANOU"],
    near:{ODESLI:"První slovo máte. Kudy?",BRANOU:"Druhé sedí. Co bylo předtím?",MBCQJG:"To je ještě šifra. Otočte prstenec a přečtěte sami.",ZPYLMS:"To je druhá půlka šifry. Rozluštěte celou zprávu.",24:"Klíč sedí. Teď podle abecedy přepište šifru.",12:"Na normálních hodinách jo. Tenhle jednoruký jich má víc.",2:"Posun o 2 zpátky sedí. Ale kolik čísel má jednoruký?"},
-   hints:["Jednoruký má 24 hodin, ne 12. O tolik posuňte abecedu.","Nastavte posun na 24. Řádek šifra → text. Tajenku sem napište sami.","První slovo je sloveso v minulém čase, druhé říká, kudy."]
+   hints:["Jednoruký má 24 hodin, ne 12. O tolik otočte vnitřní prstenec.","Nastavte posun na 24. U značky nahoře: vnější = šifra, vnitřní = text. Tajenku sem napište sami.","První slovo je sloveso v minulém čase, druhé říká, kudy."]
  },
  t4:{title:"Šablona portálu",lbl:"Stopa cesty",
    brief:"Hlavní portál Staré radnice (pod hodinami). Šablona má dva svislé průzory = ostění. Přiložte k kameni — nehádejte z gauče.",
@@ -461,38 +461,38 @@ function wheel(body,t,H){
  const A="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
  const cipher=t.cipher||"";
  const STEP=360/26;
- /* Caesar 0–25; key = 24. Start at 0. */
+ /* Dual rings: outer šifra FIXED, inner text ROTATES. Caesar k 0–25; key = 24. */
  let k=0,angle=0;
- const letters=Array.from(A).map((ch,i)=>`<span class="lr-let" style="--a:${(i/26)*360}deg">${ch}</span>`).join("");
+ const mkRing=(cls)=>Array.from(A).map((ch,i)=>`<span class="${cls}" style="--a:${(i/26)*360}deg">${ch}</span>`).join("");
  body.innerHTML=`<div class="wheel-sticky">
   <div class="cipher-src"><span>Šifra</span><b>${esc(cipher)}</b></div>
-  <p class="wheel-lab">Potáhněte prstenec písmen (nebo ↺↻). Posun = číslo z věže. Tajenku napište sem — nikam se sama nevypíše.</p>
+  <p class="wheel-lab">Vnější prstenec = šifra (pevný). Vnitřní = text — potáhněte nebo ↺↻. Srovnejte u značky nahoře. Tajenku napište sem.</p>
  </div>
-  <div class="letter-ring" aria-label="Prstenec písmen A–Z">
+  <div class="letter-ring" aria-label="Dva prstence písmen — šifra a text">
    <div class="lr-face" tabindex="0">
-    <div class="lr-mark" title="čti zde"></div>
-    <div class="lr-rotor" style="transform:rotate(0deg)">${letters}</div>
+    <div class="lr-mark" title="srovnej zde"></div>
+    <div class="lr-outer" aria-hidden="true">${mkRing("lr-let lr-out")}</div>
+    <div class="lr-rotor" style="transform:rotate(0deg)" aria-hidden="true">${mkRing("lr-let lr-in")}</div>
     <div class="lr-hub"><span class="kk">0</span><small>posun</small></div>
+    <div class="lr-labs"><span class="lr-lab-out">šifra</span><span class="lr-lab-in">text</span></div>
    </div>
   </div>
   <div class="wheel-ctrl"><button type="button" class="btn sec wheel-m" aria-label="Otočit proti směru">↺</button><div class="wheel-k"><span class="kk2">0</span><small>posun</small></div><button type="button" class="btn sec wheel-p" aria-label="Otočit po směru">↻</button></div>
-  <div class="alpha-map"><div class="am-row"><span class="am-lab">šifra</span><b class="am-ciph">${A}</b></div><div class="am-row"><span class="am-lab">text</span><b class="am-plain"></b></div></div>
   <div class="inrow wheel-answer"><input type="text" placeholder="Rozluštěný text" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="done"><button class="btn">Zadat</button></div>`;
  const face=body.querySelector(".lr-face");
  const rotor=body.querySelector(".lr-rotor");
  const kk=body.querySelector(".lr-hub .kk");
  const kk2=body.querySelector(".kk2");
- const plain=body.querySelector(".am-plain");
  const sticky=body.querySelector(".wheel-sticky");
  const card=body.closest(".card.task");
- const applyMap=nk=>{
-  plain.textContent=[...A].map((_,i)=>A[(i-nk+260)%26]).join("");
-  kk.textContent=String(nk);kk2.textContent=String(nk);
- };
+ const showK=nk=>{kk.textContent=String(nk);kk2.textContent=String(nk)};
  const setK=(nk,animate)=>{
-  k=((nk%26)+26)%26;angle=-k*STEP;
+  k=((nk%26)+26)%26;
+  /* +k*STEP: under outer A[i] sits inner A[(i-k) mod 26] — decode map */
+  angle=k*STEP;
   rotor.style.transition=animate?"transform .18s ease":"none";
-  rotor.style.transform=`rotate(${angle}deg)`;applyMap(k);
+  rotor.style.transform=`rotate(${angle}deg)`;
+  showK(k);
  };
  const angOf=e=>{
   const r=face.getBoundingClientRect();
@@ -512,10 +512,10 @@ function wheel(body,t,H){
   while(d>180)d-=360;while(d<-180)d+=360;
   lastAng=a;baseAngle+=d;angle=baseAngle;
   rotor.style.transform=`rotate(${angle}deg)`;
-  applyMap(((Math.round(-angle/STEP)%26)+26)%26);
+  showK(((Math.round(angle/STEP)%26)+26)%26);
   e.preventDefault();
  };
- const onUp=()=>{if(!dragging)return;dragging=false;setK(Math.round(-angle/STEP),true)};
+ const onUp=()=>{if(!dragging)return;dragging=false;setK(Math.round(angle/STEP),true)};
  face.addEventListener("pointerdown",onDown,{passive:false});
  face.addEventListener("pointermove",onMove,{passive:false});
  face.addEventListener("pointerup",onUp);
@@ -528,14 +528,12 @@ function wheel(body,t,H){
  body.querySelector(".wheel-p").onclick=()=>setK(k+1,true);
  setK(0,false);
  const inp=body.querySelector(".wheel-answer input");
- /* Keep šifra visible above keyboard: sticky + scroll card so sticky sits under header */
  const pinCipher=()=>{
   if(card)card.classList.add("cipher-focus");
   sticky.classList.add("pinned");
   requestAnimationFrame(()=>{
    const nb=$(".top");
-   const top=(nb?nb.getBoundingClientRect().bottom:0)+6;
-   sticky.style.top=top+"px";
+   sticky.style.top=((nb?nb.getBoundingClientRect().bottom:0)+6)+"px";
    sticky.scrollIntoView({block:"start",behavior:TEST?"auto":"smooth"});
   });
  };
@@ -549,7 +547,7 @@ function wheel(body,t,H){
  const send=()=>{const raw=inp.value.trim();if(!raw)return;const n=norm(raw);meSay(raw.toUpperCase());inp.value="";
   if(t.answers.includes(n))return H.solved();
   if(t.near&&t.near[n])return H.bad(t.near[n]);
-  H.bad("Tohle neznám. Otočte prstenec podle věže a přepište šifru sami.")};
+  H.bad("Tohle neznám. Srovnejte prstence podle věže a přepište šifru sami.")};
  body.querySelector(".wheel-answer .btn").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};
 }
 
@@ -696,7 +694,7 @@ function finaleCard(){
   <div class="lbl"><i class="dot"></i>Hotovo</div>
   <h3>Cesta zpátky<br>je otevřená</h3>
   <p class="finale-lead">9 okének. Truhla splatila 3416 Rolandovi. Past praskla, brána domů otevřená. Žižka jde zpátky. Vy zůstaňte.</p>
-  <p class="finale-note">Díky za playtest · demo2 r25d</p>
+  <p class="finale-note">Díky za playtest · demo2 r25e</p>
  </div>`);
  feed.appendChild(c);
  const b=el(`<button class="btn sec">Zahrát znovu</button>`);b.onclick=reset;feed.appendChild(b);lastWho=null;into(c,"start");
