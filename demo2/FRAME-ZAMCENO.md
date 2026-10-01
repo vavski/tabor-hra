@@ -7,7 +7,7 @@ Jan Žižka uvízl v **současném Táboře (2026)**. Hráči mu pomáhají naj�
 
 ## Co platí
 - Místa jsou **reálná dnes** (kašna, Škoch, orloj, Bechyňská, Mariánská, Tržní, Jordán, podzemí…).
-- Žižka píše v chatu: mix **dnešního SMS** + **starý slang / velitelský tón**.
+- Žižka píše v chatu: **moderní čeština** (všichni rozumí), lehký slang OK, **žádná staročeskina**; zmatený mimočasový velitel, vtipný + drzejší; vtipy o střetu století OK.
 - „**Já jsem tady velitel / vás dám popravit**“ sedí (volba *Proč zrovna my?*).
 - 9 okének = stopy po bloudění → po 9. se otevře **brána / cesta domů** (prázdná truhla).
 
