@@ -1,7 +1,7 @@
 "use strict";
-/* Ukázka: plná trasa 9 stanic. r21 — JEDNORUKÝ jako hádanka k orloji (bez spoileru ručičky) */
+/* Ukázka: plná trasa 9 stanic. r22 — pryč spoiler 3416 z úvodu/splash */
 const TEST=/[?&]test=1/.test(location.search);
-const KEY="tabor-demo2-r21";
+const KEY="tabor-demo2-r22";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={
@@ -17,7 +17,7 @@ const NIGHT={
 };
 
 const SCRIPT=[
- // ÚVOD — MOTIVE 2: dluh-past. Roland drží Žižku dnes, dokud 3416 není zaplaceno
+ // ÚVOD — MOTIVE 2: dluh-past. Roland drží Žižku dnes. ČÁSTKU (3416) NIKDY neříkat před řešením st1.
  {sys:"Čtvrtek · 6:40 · Tábor · dnes"},
  {pic:IMG+"zizka-hero-mobile.jpg",cap:"Žižka · Tábor · dnes"},
  {z:"Lidi. Jste online? Stojím u kašny — a tohle století není moje. A nemůžu pryč."},
@@ -568,7 +568,7 @@ function finaleCard(){
   <div class="lbl"><i class="dot"></i>Hotovo</div>
   <h3>Cesta zpátky<br>je otevřená</h3>
   <p class="finale-lead">9 okének. Truhla splatila 3416 Rolandovi. Past praskla, brána domů otevřená. Žižka jde zpátky. Vy zůstaňte.</p>
-  <p class="finale-note">Díky za playtest · demo2 r21</p>
+  <p class="finale-note">Díky za playtest · demo2 r22</p>
  </div>`);
  feed.appendChild(c);
  const b=el(`<button class="btn sec">Zahrát znovu</button>`);b.onclick=reset;feed.appendChild(b);lastWho=null;into(c,"start");
