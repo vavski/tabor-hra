@@ -1,8 +1,8 @@
 "use strict";
-/* Ukázka: plná trasa 9 stanic. r25c — DEV okénka jump · KEY tabor-demo2-r25c */
+/* Ukázka: plná trasa 9 stanic. r25d — letter-ring cipher + sticky šifra · KEY tabor-demo2-r25d */
 const TEST=/[?&]test=1/.test(location.search);
 const DEV=/[?&]dev=1/.test(location.search);
-const KEY="tabor-demo2-r25c";
+const KEY="tabor-demo2-r25d";
 const IMG="assets/img/";
 const AV_MARK=`<img class="av" src="assets/img/zizka-avatar.jpg" alt="" width="28" height="28">`;
 const NIGHT={
@@ -68,7 +68,7 @@ const SCRIPT=[
  {pic:IMG+"orloj-night.jpg",cap:"Radniční hodiny · 24h · 1 ručička · Tábor"},
  {z:"Spočítejte dílky — 24 hodin, 24 nahoře. Normální to není."},
  {z:"Rolandova stopa: zpráva posunutá o tolik, kolik čísel má jednoruký. V kapse ji mám od chvíle, co mi to prasklo."},
- {z:"Otočte ciferník — 24 dílků jako na věži. Srovnejte abecedu, přečtěte zprávu a napište ji sem. Klíč jste spočítali nahoře."},
+ {z:"Otočte prstenec písmen — posun = kolik čísel má jednoruký na věži. Srovnejte abecedu, přečtěte zprávu a napište ji sem."},
  {task:"t3"},
  {unlock:3},
  {z:"„Odešli branou.“ Kudy dál k truhle s 3416. Množné číslo — buď mám rotu, nebo si lhžu do kapsy. 🔎"},
@@ -196,12 +196,12 @@ const TASKS={
    hints:["Nůžky jsou namalované, ne kovové. Najdete je nad vchodem do restaurace, v 1. patře.","Očka mají nahoře, hroty dole. Dejte „očka nahoře“ a čtěte po zlatých čarách.","Levá čepel: J-E-D-N-O. Pravá: R-U-(D)-K-Y."]
  },
  t3:{title:"Posunutá zpráva",lbl:"Stopa cesty",
-   brief:"Jednoruký ciferník = klíč. Spočítejte čísla na věži (24 nahoře). Otočte ciferník na stejný dílek, srovnejte abecedu a přečtěte šifru — výsledek napište sem.",
-   ask:"Šifra z kapsy — otočte ciferník a přepište rozluštěný text",
+   brief:"Jednoruký na věži = klíč. Spočítejte čísla (24 nahoře). Otočte prstenec písmen o tolik míst, srovnejte abecedu a přepište šifru sem.",
+   ask:"Šifra z kapsy — otočte prstenec a přepište rozluštěný text",
    cipher:"MBCQJG ZPYLMS",
    kind:"wheel",answers:["ODESLIBRANOU"],
-   near:{ODESLI:"První slovo máte. Kudy?",BRANOU:"Druhé sedí. Co bylo předtím?",MBCQJG:"To je ještě šifra. Otočte ciferník a přečtěte sami.",ZPYLMS:"To je druhá půlka šifry. Rozluštěte celou zprávu.",24:"Klíč sedí. Teď podle abecedy na ciferníku přepište šifru.",12:"Na normálních hodinách jo. Tenhle jednoruký jich má víc.",2:"Posun o 2 zpátky sedí. Ale kolik čísel má jednoruký?"},
-   hints:["Jednoruký má 24 hodin, ne 12. Kolik je dílků, o tolik se posouvá abeceda.","Nastavte ciferník na 24 (stejně jako nahoře na věži). Vnější písmena = šifra, vnitřní = text. Tajenku sem napište sami.","První slovo je sloveso v minulém čase, druhé říká, kudy."]
+   near:{ODESLI:"První slovo máte. Kudy?",BRANOU:"Druhé sedí. Co bylo předtím?",MBCQJG:"To je ještě šifra. Otočte prstenec a přečtěte sami.",ZPYLMS:"To je druhá půlka šifry. Rozluštěte celou zprávu.",24:"Klíč sedí. Teď podle abecedy přepište šifru.",12:"Na normálních hodinách jo. Tenhle jednoruký jich má víc.",2:"Posun o 2 zpátky sedí. Ale kolik čísel má jednoruký?"},
+   hints:["Jednoruký má 24 hodin, ne 12. O tolik posuňte abecedu.","Nastavte posun na 24. Řádek šifra → text. Tajenku sem napište sami.","První slovo je sloveso v minulém čase, druhé říká, kudy."]
  },
  t4:{title:"Šablona portálu",lbl:"Stopa cesty",
    brief:"Hlavní portál Staré radnice (pod hodinami). Šablona má dva svislé průzory = ostění. Přiložte k kameni — nehádejte z gauče.",
@@ -460,60 +460,99 @@ function word(body,t,H){
 function wheel(body,t,H){
  const A="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
  const cipher=t.cipher||"";
- /* Clock positions 1–24; Caesar shift = position (key 24). Start at 12 so player must turn. */
- let pos=12;
- const ticks=Array.from({length:24},(_,i)=>{
-  const n=i===0?24:i; // i=0 → top = 24
-  const ang=i*15; // degrees from top
-  return `<span class="cd-num" style="--a:${ang}deg">${n}</span>`;
- }).join("");
- const letters=Array.from(A).map((ch,i)=>{
-  const ang=(i/26)*360;
-  return `<span class="cd-let" style="--a:${ang}deg">${ch}</span>`;
- }).join("");
- body.innerHTML=`<div class="cipher-src"><span>Šifra</span><b>${esc(cipher)}</b></div>
-  <p class="wheel-lab">Otočte ciferník (24 dílků). Vnější písmeno = šifra → vnitřní = text. Tajenku sem napište — nikam se sama nevypíše.</p>
-  <div class="clock-dial" aria-label="Ciferník 24 hodin">
-   <div class="cd-face">
-    <div class="cd-ring-nums">${ticks}</div>
-    <div class="cd-rotor" style="transform:rotate(0deg)">
-     <div class="cd-ring-lets">${letters}</div>
-    </div>
-    <div class="cd-hub"><span class="cd-pos">12</span><small>dílek</small></div>
-    <div class="cd-hand" style="transform:rotate(180deg)"></div>
-    <div class="cd-mark" title="čti zde"></div>
+ const STEP=360/26;
+ /* Caesar 0–25; key = 24. Start at 0. */
+ let k=0,angle=0;
+ const letters=Array.from(A).map((ch,i)=>`<span class="lr-let" style="--a:${(i/26)*360}deg">${ch}</span>`).join("");
+ body.innerHTML=`<div class="wheel-sticky">
+  <div class="cipher-src"><span>Šifra</span><b>${esc(cipher)}</b></div>
+  <p class="wheel-lab">Potáhněte prstenec písmen (nebo ↺↻). Posun = číslo z věže. Tajenku napište sem — nikam se sama nevypíše.</p>
+ </div>
+  <div class="letter-ring" aria-label="Prstenec písmen A–Z">
+   <div class="lr-face" tabindex="0">
+    <div class="lr-mark" title="čti zde"></div>
+    <div class="lr-rotor" style="transform:rotate(0deg)">${letters}</div>
+    <div class="lr-hub"><span class="kk">0</span><small>posun</small></div>
    </div>
   </div>
-  <div class="wheel-ctrl"><button type="button" class="btn sec wheel-m" aria-label="Otočit proti směru">↺</button><div class="wheel-k"><span class="kk">12</span><small>dílek / posun</small></div><button type="button" class="btn sec wheel-p" aria-label="Otočit po směru">↻</button></div>
+  <div class="wheel-ctrl"><button type="button" class="btn sec wheel-m" aria-label="Otočit proti směru">↺</button><div class="wheel-k"><span class="kk2">0</span><small>posun</small></div><button type="button" class="btn sec wheel-p" aria-label="Otočit po směru">↻</button></div>
   <div class="alpha-map"><div class="am-row"><span class="am-lab">šifra</span><b class="am-ciph">${A}</b></div><div class="am-row"><span class="am-lab">text</span><b class="am-plain"></b></div></div>
-  <div class="inrow"><input type="text" placeholder="Rozluštěný text" autocomplete="off" autocapitalize="characters" spellcheck="false"><button class="btn">Zadat</button></div>`;
- const rotor=body.querySelector(".cd-rotor");
- const hand=body.querySelector(".cd-hand");
- const kk=body.querySelector(".kk");
- const cdPos=body.querySelector(".cd-pos");
+  <div class="inrow wheel-answer"><input type="text" placeholder="Rozluštěný text" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="done"><button class="btn">Zadat</button></div>`;
+ const face=body.querySelector(".lr-face");
+ const rotor=body.querySelector(".lr-rotor");
+ const kk=body.querySelector(".lr-hub .kk");
+ const kk2=body.querySelector(".kk2");
  const plain=body.querySelector(".am-plain");
- const draw=()=>{
-  /* Hand: 24 at top. pos 24 → 0deg, pos 1 → 15deg, … pos 12 → 180deg */
-  const handDeg=pos===24?0:pos*15;
-  hand.style.transform=`rotate(${handDeg}deg)`;
-  /* Rotor turns with Caesar key=pos (letters on rim) */
-  const rotDeg=-(pos/26)*360;
-  rotor.style.transform=`rotate(${rotDeg}deg)`;
-  /* Alphabet map ONLY — never apply to cipher string (no live tajenka) */
-  plain.textContent=[...A].map((_,i)=>A[(i-pos+260)%26]).join("");
-  kk.textContent=String(pos);
-  cdPos.textContent=String(pos);
+ const sticky=body.querySelector(".wheel-sticky");
+ const card=body.closest(".card.task");
+ const applyMap=nk=>{
+  plain.textContent=[...A].map((_,i)=>A[(i-nk+260)%26]).join("");
+  kk.textContent=String(nk);kk2.textContent=String(nk);
  };
- body.querySelector(".wheel-m").onclick=()=>{pos=pos<=1?24:pos-1;draw()};
- body.querySelector(".wheel-p").onclick=()=>{pos=pos>=24?1:pos+1;draw()};
- draw();
- const inp=body.querySelector("input");
+ const setK=(nk,animate)=>{
+  k=((nk%26)+26)%26;angle=-k*STEP;
+  rotor.style.transition=animate?"transform .18s ease":"none";
+  rotor.style.transform=`rotate(${angle}deg)`;applyMap(k);
+ };
+ const angOf=e=>{
+  const r=face.getBoundingClientRect();
+  const cx=r.left+r.width/2,cy=r.top+r.height/2;
+  const pt=(e.touches&&e.touches[0])||(e.changedTouches&&e.changedTouches[0])||e;
+  return Math.atan2(pt.clientY-cy,pt.clientX-cx)*180/Math.PI;
+ };
+ let dragging=false,lastAng=0,baseAngle=0;
+ const onDown=e=>{
+  dragging=true;
+  if(face.setPointerCapture&&e.pointerId!=null){try{face.setPointerCapture(e.pointerId)}catch(_){}}
+  lastAng=angOf(e);baseAngle=angle;rotor.style.transition="none";e.preventDefault();
+ };
+ const onMove=e=>{
+  if(!dragging)return;
+  let a=angOf(e),d=a-lastAng;
+  while(d>180)d-=360;while(d<-180)d+=360;
+  lastAng=a;baseAngle+=d;angle=baseAngle;
+  rotor.style.transform=`rotate(${angle}deg)`;
+  applyMap(((Math.round(-angle/STEP)%26)+26)%26);
+  e.preventDefault();
+ };
+ const onUp=()=>{if(!dragging)return;dragging=false;setK(Math.round(-angle/STEP),true)};
+ face.addEventListener("pointerdown",onDown,{passive:false});
+ face.addEventListener("pointermove",onMove,{passive:false});
+ face.addEventListener("pointerup",onUp);
+ face.addEventListener("pointercancel",onUp);
+ face.addEventListener("touchstart",onDown,{passive:false});
+ face.addEventListener("touchmove",onMove,{passive:false});
+ face.addEventListener("touchend",onUp);
+ face.addEventListener("touchcancel",onUp);
+ body.querySelector(".wheel-m").onclick=()=>setK(k-1,true);
+ body.querySelector(".wheel-p").onclick=()=>setK(k+1,true);
+ setK(0,false);
+ const inp=body.querySelector(".wheel-answer input");
+ /* Keep šifra visible above keyboard: sticky + scroll card so sticky sits under header */
+ const pinCipher=()=>{
+  if(card)card.classList.add("cipher-focus");
+  sticky.classList.add("pinned");
+  requestAnimationFrame(()=>{
+   const nb=$(".top");
+   const top=(nb?nb.getBoundingClientRect().bottom:0)+6;
+   sticky.style.top=top+"px";
+   sticky.scrollIntoView({block:"start",behavior:TEST?"auto":"smooth"});
+  });
+ };
+ const unpinCipher=()=>{
+  if(card)card.classList.remove("cipher-focus");
+  sticky.classList.remove("pinned");
+  sticky.style.top="";
+ };
+ inp.addEventListener("focus",pinCipher);
+ inp.addEventListener("blur",()=>setTimeout(unpinCipher,150));
  const send=()=>{const raw=inp.value.trim();if(!raw)return;const n=norm(raw);meSay(raw.toUpperCase());inp.value="";
   if(t.answers.includes(n))return H.solved();
   if(t.near&&t.near[n])return H.bad(t.near[n]);
-  H.bad("Tohle neznám. Otočte ciferník podle věže a přepište šifru sami.")};
- body.querySelector(".inrow .btn").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};
+  H.bad("Tohle neznám. Otočte prstenec podle věže a přepište šifru sami.")};
+ body.querySelector(".wheel-answer .btn").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};
 }
+
 function honor(body,t,H,card,hb){
  let html=`<button class="btn honor-btn">${esc(t.confirm||"Potvrdit na čest ✓")}</button>`;
  if(t.secondary)html+=`<button class="btn ghost sm sec-fallback">${esc(t.secondary.label)}</button>`;
@@ -657,7 +696,7 @@ function finaleCard(){
   <div class="lbl"><i class="dot"></i>Hotovo</div>
   <h3>Cesta zpátky<br>je otevřená</h3>
   <p class="finale-lead">9 okének. Truhla splatila 3416 Rolandovi. Past praskla, brána domů otevřená. Žižka jde zpátky. Vy zůstaňte.</p>
-  <p class="finale-note">Díky za playtest · demo2 r25c</p>
+  <p class="finale-note">Díky za playtest · demo2 r25d</p>
  </div>`);
  feed.appendChild(c);
  const b=el(`<button class="btn sec">Zahrát znovu</button>`);b.onclick=reset;feed.appendChild(b);lastWho=null;into(c,"start");
