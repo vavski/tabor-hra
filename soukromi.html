@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ochrana soukromí – Žižkova rozlučka</title>
+<meta name="description" content="Jaké údaje zpracovává web a hra Žižkova rozlučka a co s nimi děláme.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="web/style.css">
+<script src="web/config.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Přeskočit na obsah</a>
+<header class="top"><div class="wrap"><a class="logo" href="./">Žižkova <span>rozlučka</span></a><nav class="nav" aria-label="Hlavní"><a href="./">Zpět na web</a><a href="podminky.html">Obchodní podmínky</a></nav></div></header>
+<main id="main" class="doc"><div class="wrap">
+<h1>Ochrana <span style="color:var(--ember)">soukromí</span></h1>
+<p class="date">Platí od 22. 10. 2026. Jsme malý projekt a sbíráme co nejméně. Tady je přesně co.</p>
+
+<h2>Kdo údaje zpracovává</h2>
+<p id="seller-p"></p>
+
+<h2>Web (tahle stránka)</h2>
+<ul>
+  <li><strong>Žádné cookies, žádné sledování.</strong> Nepoužíváme Google Analytics, Facebook Pixel ani jiné měření. Proto tu není ani lišta se souhlasem, není k čemu.</li>
+  <li>Písma a obrázky se načítají z našeho webu, ne od třetích stran.</li>
+  <li>Web hostuje GitHub Pages (GitHub, Inc.). Jako každý webový server může krátkodobě zaznamenat vaši IP adresu v technických protokolech. Více v <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">zásadách GitHubu</a>.</li>
+</ul>
+
+<h2>Hra</h2>
+<ul>
+  <li>Hra běží celá ve vašem prohlížeči. <strong>Nic neposílá na náš server</strong>: ani odpovědi, ani postup, ani polohu.</li>
+  <li>Postup, groše a zvolený konec si ukládá do úložiště prohlížeče ve vašem telefonu (localStorage), abyste mohli pokračovat po přerušení. Smažete je tlačítkem „Začít znovu“ nebo vymazáním dat webu v prohlížeči.</li>
+  <li>Hra <strong>nepoužívá GPS</strong>. Tlačítko „Ukázat cestu na mapě“ otevře Mapy Google v novém okně; tam už platí pravidla Googlu.</li>
+</ul>
+
+<h2 data-only="prodej">Platba</h2>
+<ul data-only="prodej">
+  <li>Platbu zpracovává platební brána (Stripe Payments Europe, Ltd.). Jí zadáváte e-mail a údaje o kartě. My kartu nikdy nevidíme.</li>
+  <li>Od brány dostaneme váš <strong>e-mail, částku a čas platby</strong>. Používáme je k tomu, abychom vám poslali přístup ke hře, vyřídili vrácení peněz nebo reklamaci a splnili účetní povinnosti. Účetní doklady musíme uchovávat 10 let, jinak údaje mažeme do 2 let od koupě.</li>
+  <li>Právní základ: plnění smlouvy a zákonná povinnost. Nic vám bez vašeho souhlasu neposíláme.</li>
+</ul>
+
+<h2>E-mail</h2>
+<p>Když nám napíšete, uchováme si zprávu, dokud věc nevyřídíme, nejdéle 2 roky. Nikomu ji nepředáváme.</p>
+
+<h2>Vaše práva</h2>
+<p>Můžete chtít vědět, co o vás máme, nechat to opravit nebo smazat, omezit zpracování nebo podat stížnost u Úřadu pro ochranu osobních údajů (<a href="https://www.uoou.cz" rel="noopener">uoou.cz</a>). Stačí napsat na náš e-mail.</p>
+
+<h2>Fotky lidí na webu</h2>
+<p>Lidé na fotkách na tomhle webu dali ke zveřejnění souhlas. Fotky z vašeho hraní nikde nezveřejňujeme, pokud nám je sami nepošlete s tím, že můžeme.</p>
+</div></main>
+<footer><div class="wrap">Žižkova rozlučka · <a href="./">zpět na web</a> · <a href="podminky.html">obchodní podmínky</a></div></footer>
+<script>
+(function(){var K=window.KONFIG||{};var r=["zdarma","prodej","brzy"].indexOf(K.REZIM)>=0?K.REZIM:"zdarma";
+document.querySelectorAll("[data-only]").forEach(function(e){e.classList.toggle("hide",e.getAttribute("data-only")!==r)});
+document.getElementById("seller-p").textContent=[K.SELLER_NAME,K.SELLER_ICO?"IČO "+K.SELLER_ICO:"",K.SELLER_ADDRESS,K.CONTACT_EMAIL?"e-mail "+K.CONTACT_EMAIL:""].filter(Boolean).join(", ")+".";})();
+</script>
+</body>
+</html>

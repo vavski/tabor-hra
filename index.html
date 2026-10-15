@@ -3,37 +3,328 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#05070c">
-<title>Co se stalo v Táboře</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%2305070c'/%3E%3Crect x='3' y='3' width='10' height='10' rx='1' fill='none' stroke='%2322d3ee' stroke-width='2'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#05070c;--cyan:#22d3ee;--orange:#ff9a3c;--txt:#eef3ff;--muted:#8ea0b8;--head:"Bebas Neue",Impact,sans-serif;--sans:Inter,system-ui,sans-serif}
-*{box-sizing:border-box;margin:0}
-html,body{min-height:100%;background:var(--bg);color:var(--txt);font:16px/1.5 var(--sans)}
-body{background:radial-gradient(700px 420px at 110% -5%,rgba(34,211,238,.16),transparent 60%),radial-gradient(600px 380px at -20% 40%,rgba(255,154,60,.08),transparent 60%),var(--bg);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px 20px}
-.wrap{max-width:480px;width:100%}
-.kicker{font:700 12px var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:12px;display:flex;align-items:center;gap:10px}
-.kicker::before{content:"";width:22px;height:2px;background:var(--orange)}
-h1{font:400 56px/.9 var(--head);letter-spacing:.01em;text-transform:uppercase;margin-bottom:14px}
-h1 span{color:var(--cyan);text-shadow:0 0 28px rgba(34,211,238,.45)}
-.tag{color:#c9d4e6;margin-bottom:28px;font-size:15px}
-.btn{display:block;width:100%;text-align:center;text-decoration:none;border-radius:12px;padding:16px;font:700 16px var(--sans);margin-top:10px}
-.btn.main{background:var(--orange);color:#1a0b00;box-shadow:0 8px 28px -8px rgba(255,154,60,.7)}
-.btn.sec{background:rgba(255,255,255,.05);color:var(--txt);border:1px solid rgba(94,225,255,.22)}
-.note{color:var(--muted);font:500 11px ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;margin-top:18px;text-align:center}
-</style>
+<title>Žižkova rozlučka – venkovní úniková hra v Táboře | CIKÁDA</title>
+<meta name="description" content="Žižka se v poledne žení. A je pryč. Venkovní úniková hra pro partu 1–6 lidí v centru Tábora: 9 míst, 90 minut, jeden mobil, žádná aplikace. Hrajte kdykoli.">
+<meta name="theme-color" content="#0B0D10">
+<link rel="canonical" href="https://vavski.github.io/tabor-hra/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Žižkova rozlučka – venkovní úniková hra v Táboře">
+<meta property="og:description" content="Žižka se v poledne žení. A je pryč. Najděte ho do poledne. 9 míst, 90 minut, jeden mobil, žádná aplikace.">
+<meta property="og:image" content="https://vavski.github.io/tabor-hra/img/og.jpg">
+<meta property="og:locale" content="cs_CZ">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230B0D10'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' font-family='Impact,sans-serif' fill='%23E85A2A'%3EŽ%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="web/style.css">
+<script src="web/config.js"></script>
 </head>
 <body>
-<div class="wrap">
-  <div class="kicker">Tábor · městská mise</div>
-  <h1>Co se stalo<br><span>v Táboře</span></h1>
-  <p class="tag">Dluh k Rolandovi drží Žižku v tomhle století.<br>Splatíte účet — otevře se cesta domů. · ~90&nbsp;min · 9 stanic.</p>
-  <a class="btn main" href="demo2/?v=r24">Hrát demo · plná trasa (9 stanic)</a>
-  <a class="btn sec" href="play/">Starý experimentální build</a>
-  <p class="note">Demo · r24 · P0 tón + fotky/čest</p>
+<a class="skip" href="#main">Přeskočit na obsah</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#" aria-label="Žižkova rozlučka, začátek stránky"><b>Žižkova <span>rozlučka</span></b><small>CIKÁDA · venkovní únikové hry</small></a>
+    <nav class="nav" aria-label="Hlavní">
+      <a href="#co">Co to je</a>
+      <a href="#jak">Jak to probíhá</a>
+      <a href="#zebricek">Žebříček</a>
+      <a href="#o-nas">O nás</a>
+      <a href="#faq">Otázky</a>
+    </nav>
+    <a class="btn" href="#koupit" data-cta-label>Hrát</a>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="hero" aria-labelledby="h1">
+  <div class="bg"><img src="img/hero.jpg" width="1008" height="1792" alt="Komiksová ilustrace: Jan Žižka s páskou přes oko a kyticí odchází potichu z rozlučky, zatímco jeho rota spí mezi pizzou a balónky." fetchpriority="high"></div>
+  <div class="in">
+    <div class="pill"><i></i><span id="pill-text">Tábor · venkovní úniková hra · 1. díl</span></div>
+    <h1 id="h1">Žižkova <span>rozlučka</span></h1>
+    <p class="tag">Žižka se v poledne žení.<br><b>A je pryč.</b></p>
+    <p class="sub">Úniková hra bez místnosti: hraje se v ulicích Tábora, vede vás chat v mobilu. Parta 1–6 lidí, 9 míst, zhruba 90 minut.</p>
+    <div class="cta"><a class="btn big" href="#koupit" data-cta data-cta-label>Hrát</a></div>
+    <div class="trust"><span>bez aplikace</span><span>kdykoli, ve dne i večer</span><span>jeden mobil na partu</span><span data-only="prodej">peníze zpět, když nefunguje</span></div>
+  </div>
+  <div class="scroll" aria-hidden="true"></div>
+</section>
+
+<section id="co" aria-labelledby="co-t">
+  <div class="wrap">
+    <div class="kicker reveal">01 / Co to je</div>
+    <h2 id="co-t" class="reveal">Úniková hra, <span>kde místností je město</span></h2>
+    <p class="lead reveal d1">Žádná rezervace, žádný herec, žádný zámek na dveřích. Hádanky jsou schované tam, kde je Žižka v noci nechal: na kašně, na fasádě, v dlažbě. Mobil vám říká, kam jít a co hledat. Odpovědi najdete očima.</p>
+    <div class="cards3">
+      <div class="kc reveal"><img src="img/k/mesto.jpg" alt="" loading="lazy"><div class="t"><div class="no">MĚSTO</div><h3>Herní deska je Tábor</h3><p>Devět skutečných míst v centru. Každé skrývá jednu hádanku, kterou vyřešíte jen na místě.</p></div></div>
+      <div class="kc reveal d1"><img src="img/k/chat.jpg" alt="" loading="lazy"><div class="t"><div class="no">CHAT</div><h3>Vede vás nevěsta</h3><p>Píše vám do chatu, jako by to bylo doopravdy. Žižkovy zprávy z noci chodí se zpožděním, jak jdete po jeho stopách.</p></div></div>
+      <div class="kc reveal d2"><img src="img/k/rota.jpg" alt="" loading="lazy"><div class="t"><div class="no">VY</div><h3>Jste jeho rota</h3><p>Ztratili jste ženicha a máte ho do poledne najít. Co s ním uděláte, až ho najdete, je na vás. Konce jsou tři.</p></div></div>
+    </div>
+    <div class="explain reveal"><b>Pro koho to je poprvé:</b> funguje to jako úniková místnost, jen venku a bez časového limitu. Koupíte přístup, přijdete na start, otevřete v mobilu chat a hra vás vede. Nic se nestahuje, nikde se neregistrujete, nikdo na vás nečeká. Kdykoli můžete zastavit a pokračovat.</div>
+  </div>
+</section>
+
+<section id="jak" aria-labelledby="jak-t">
+  <div class="wrap">
+    <div class="kicker reveal">02 / Jak to probíhá</div>
+    <h2 id="jak-t" class="reveal">Od tlačítka <span>k oltáři</span></h2>
+    <p class="lead reveal d1">Šest kroků. Posuňte prstem.</p>
+    <div class="stepnav" aria-hidden="true"><button type="button" data-prev title="Předchozí">‹</button><button type="button" data-next title="Další">›</button></div>
+    <div class="steps-wrap">
+      <div class="steps" id="steps" aria-label="Kroky hry">
+        <article class="step"><img src="img/k/chat.jpg" alt="" loading="lazy"><div class="t"><div class="no">1</div><h3 data-step1-h>Otevřete hru</h3><p data-step1>Na tomhle webu, v mobilu. Nic se neinstaluje. Jeden telefon na partu stačí, ostatní hledají a radí.</p></div></article>
+        <article class="step"><img src="img/k/kasna.jpg" alt="" loading="lazy"><div class="t"><div class="no">2</div><h3>Dojdete ke kašně</h3><p>Start je u kašny s Rolandem na Žižkově náměstí. Kdykoli ve dne, v každém ročním období.</p></div></article>
+        <article class="step"><img src="img/av-nevesta.jpg" alt="" loading="lazy"><div class="t"><div class="no">3</div><h3>Generálka se ozve</h3><p>Nevěsta vám napíše do chatu: ženich zmizel, rozlučka byla vaše akce, tak ho najděte. Do poledne.</p></div></article>
+        <article class="step"><img src="img/k/mesto.jpg" alt="" loading="lazy"><div class="t"><div class="no">4</div><h3>Jdete po stopách</h3><p>Devět míst, devět hádanek, nápovědy na každém. Za vyřešení groše do svatební kasy, za nápovědu z ní.</p></div></article>
+        <article class="step"><img src="img/k/brana.jpg" alt="" loading="lazy"><div class="t"><div class="no">5</div><h3>Finále v Bráně času</h3><p>Najdete ho. Spí. Povoz s nevěstou je za rohem a vy máte osm minut rozhodnout, jak to dopadne.</p></div></article>
+        <article class="step"><img src="img/konec.jpg" alt="" loading="lazy"><div class="t"><div class="no">6</div><h3>Karta pro partu</h3><p>Obrázek s vaším koncem, dopsaným slibem, časem a skóre. Pošlete ho do skupiny a zapíšeme vás do žebříčku.</p></div></article>
+      </div>
+    </div>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+  </div>
+</section>
+
+<section aria-labelledby="val-t">
+  <div class="wrap">
+    <div class="kicker reveal">03 / Co si odnesete</div>
+    <h2 id="val-t" class="reveal">Víc než <span>procházku</span></h2>
+    <div class="tiles">
+      <div class="tile reveal"><div class="n">90<small> min</small></div><p>společného programu, u kterého se parta hádá, směje a nekouká každý do svého mobilu</p></div>
+      <div class="tile reveal d1"><div class="n">9<small> míst</small></div><p>v Táboře, která znáte z průchodu, a teď uvidíte, co na nich je</p></div>
+      <div class="tile reveal d2"><div class="n">3<small> konce</small></div><p>a slib, který Žižka dopíše s vaší pomocí. Druhý konec si koupíte za groše.</p></div>
+      <div class="tile reveal d3"><div class="n">1<small> karta</small></div><p>na konci: váš konec, čas, skóre a místo na hostině. Do skupiny a do žebříčku.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="pribeh" aria-labelledby="pribeh-t">
+  <div class="wrap split">
+    <div>
+      <div class="kicker reveal">04 / Ukázka</div>
+      <h2 id="pribeh-t" class="reveal">Takhle to <span>začíná</span></h2>
+      <p class="lead reveal d1">Sobota, 9:30. Včera jste byli Žižkova rota. Dnes se probouzíte s hlavou jak střep, obřad je v poledne a ženich nikde. Nevěsta se právě nabourala do vašeho chatu.</p>
+      <p class="muted reveal d2" style="margin-top:12px">Humor je pro 15+. Žižka nepřednáší dějepis. Ale leccos se dozvíte.</p>
+    </div>
+    <div class="chat reveal" id="chat" role="img" aria-label="Ukázka chatu ze hry: nevěsta píše rotě, že se ženich ztratil.">
+      <div class="hd"><img src="img/av-nevesta.jpg" alt=""><div><b>Žižkova rozlučka ⚔️</b><span>Nevěsta online · Žižka offline</span></div></div>
+      <div class="msg sys">Do chatu se přidala Nevěsta</div>
+      <div class="msg"><img src="img/av-nevesta.jpg" alt=""><div><div class="n">Nevěsta <i>teď</i></div><div class="b">Dobrý ráno, roto. Tady nevěsta. Pro vás Generálka.</div></div></div>
+      <div class="msg"><img src="img/av-nevesta.jpg" alt=""><div><div class="n">Nevěsta <i>teď</i></div><div class="b">Obřad je v poledne. Ženich nespal v posteli. Telefon nebere, holuba nečte.</div></div></div>
+      <div class="msg"><img src="img/av-nevesta.jpg" alt=""><div><div class="n">Nevěsta <i>teď</i></div><div class="b">Rozlučka byla vaše akce. Vy jste ho měli hlídat. Tak kde je?</div></div></div>
+      <div class="msg me"><div><div class="b">Říkal: ještě jedno</div></div></div>
+      <div class="msg"><img src="img/av-nevesta.jpg" alt=""><div><div class="n">Nevěsta <i>teď</i></div><div class="b">Jestli ho do poledne nenajdete, popravím vás. Já, ne on.</div></div></div>
+      <div class="msg sys">📶 Žižkova zpráva z noci · odeslaná ve 02:14</div>
+      <div class="msg z"><img src="img/av-zizka.jpg" alt=""><div><div class="n">Žižka <i>odesláno 02:14</i></div><div class="b">Vy jste odpadli, roto. Chabý. Jdu se rozloučit s městem. Naposled.</div></div></div>
+      <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
+    </div>
+  </div>
+</section>
+
+<section class="noc" aria-labelledby="noc-t">
+  <div class="wrap">
+    <div class="kicker reveal">05 / Jeho noc</div>
+    <h2 id="noc-t" class="reveal">Devět okének, <span>která odemknete</span></h2>
+    <p class="lead reveal d1">Každá vyřešená hádanka otevře jedno okénko z Žižkovy noci. Dvě vidíte. Zbytek si zasloužíte.</p>
+    <div class="okna" id="okna" aria-label="Devět okének Žižkovy noci">
+      <div class="okno"><img src="img/noc/1.jpg" alt="02:14 – Žižka sedí u kašny pod sochou Rolanda a fotí si selfie s palcátem." loading="lazy"><div class="t">02:14</div></div>
+      <div class="okno"><img src="img/noc/2.jpg" alt="02:47 – Žižka u nočního krejčího, který mu stříhá rukáv svatebního pláště." loading="lazy"><div class="t">02:47</div></div>
+      <div class="okno lock" tabindex="0" role="button" aria-label="Zamčené okénko 03:05, odemkne se ve hře"><img src="img/noc/3.jpg" alt="" loading="lazy"><div class="t">03:05</div></div>
+      <div class="okno lock" tabindex="0" role="button" aria-label="Zamčené okénko 03:20, odemkne se ve hře"><img src="img/noc/4.jpg" alt="" loading="lazy"><div class="t">03:20</div></div>
+      <div class="okno lock" tabindex="0" role="button" aria-label="Zamčené okénko 03:40, odemkne se ve hře"><img src="img/noc/5.jpg" alt="" loading="lazy"><div class="t">03:40</div></div>
+      <div class="okno lock" tabindex="0" role="button" aria-label="Zamčené okénko 04:02, odemkne se ve hře"><img src="img/noc/6.jpg" alt="" loading="lazy"><div class="t">04:02</div></div>
+      <div class="okno lock" tabindex="0" role="button" aria-label="Zamčené okénko 04:30, odemkne se ve hře"><img src="img/noc/7.jpg" alt="" loading="lazy"><div class="t">04:30</div></div>
+      <div class="okno lock" tabindex="0" role="button" aria-label="Zamčené okénko 04:50, odemkne se ve hře"><img src="img/noc/8.jpg" alt="" loading="lazy"><div class="t">04:50</div></div>
+      <div class="okno lock fin" tabindex="0" role="button" aria-label="Zamčené finále 05:02, odemkne se ve hře"><img src="img/noc/9.jpg" alt="" loading="lazy"><div class="t">05:02</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="zebricek" aria-labelledby="zeb-t">
+  <div class="wrap">
+    <div class="kicker reveal">06 / Žebříček</div>
+    <h2 id="zeb-t" class="reveal">Která rota <span>je nejlepší</span></h2>
+    <p class="lead reveal d1">Na konci hry dostanete kartu se skóre. Pošlete ji nám a zapíšeme vás sem. Jméno roty si vymyslíte sami.</p>
+    <div class="board reveal" id="board"></div>
+    <div class="formula reveal d1">
+      <div><b>GROŠE</b><small>co zbylo ve svatební kase: za hádanky plus, za nápovědy mínus</small></div>
+      <div class="plus">+</div>
+      <div><b>ČAS</b><small>každá minuta pod 100 minut je jeden bod</small></div>
+    </div>
+    <p class="muted reveal d2" style="margin-top:12px;font-size:14px">Rychlá rota s nápovědami a pomalá bez nich tak mohou skončit stejně. Vyhrává ta, která je chytrá i rychlá.</p>
+  </div>
+</section>
+
+<section id="pro-koho" aria-labelledby="kdo-t">
+  <div class="wrap">
+    <div class="kicker reveal">07 / Pro koho</div>
+    <h2 id="kdo-t" class="reveal">Kdo s kým <span>a proč</span></h2>
+    <div class="cards">
+      <div class="card reveal"><h3>Rozlučka se svobodou</h3><p>Ženich zmizel, vy ho hledáte a nevěsta vám vyhrožuje popravou. Program na dopoledne po pařbě, který si sedne.</p><span class="q">„Kdo nic, myje kotle.“</span></div>
+      <div class="card reveal d1"><h3>Parta kamarádů</h3><p>Hádanky, u kterých se hádáte, kdo má pravdu, a hlášky, které si budete připomínat ještě v hospodě.</p><span class="q">„Nejste tak blbí, jak vypadáte.“</span></div>
+      <div class="card reveal d2"><h3>Rande</h3><p>Devadesát minut Táborem, na konci slib, který Žižka dopíše s vaší pomocí. Ne každé rande má tři konce.</p><span class="q">„…To bylo hezký. To bych od něj nečekala.“</span></div>
+      <div class="card reveal d3"><h3>Návštěva Tábora</h3><p>Centrum jinak než s průvodcem: kašna, radnice, pomník, Jordán, Brána času. Fakt je odměna, ne přednáška.</p><span class="q">„Stojí tu 400 let a drží slovo.“</span></div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="hrac-t">
+  <div class="wrap foto">
+    <img class="reveal" src="img/hrac.jpg" width="900" height="1600" alt="Hráčka s kávou v ruce ukazuje mobil se hrou na Žižkově náměstí v Táboře, v pozadí radniční věž." loading="lazy">
+    <div>
+      <div class="kicker reveal">08 / Z trasy</div>
+      <p class="quote reveal d1" id="hrac-t">Hádanky akorát.<br><span>Konec s Bránou času dobrý.</span><br>Na deset by to chtělo víc animací.</p>
+      <p class="reveal d2" style="margin-top:18px;color:var(--paper2)">Testerka po první hře 12. 10. Od té doby se dopisovalo, přepisovalo a zkoušelo. Dohrála za hodinu, protože trasu znala. Počítejte s devadesáti minutami a s tím, že se u pomníku pohádáte, kdo točí kterým kotoučem.</p>
+    </div>
+  </div>
+</section>
+
+<section id="koupit" class="buy" aria-labelledby="koupit-t">
+  <div class="wrap">
+    <div class="kicker reveal">09 / Hrát</div>
+    <h2 id="koupit-t" class="reveal" data-buy-title>Hrajte <span>pro svou partu</span></h2>
+    <div class="buybox">
+      <div class="reveal">
+        <div data-only="prodej">
+          <div class="price"><s class="hide" id="price-old"></s><span id="price">249</span> <small>Kč</small></div>
+          <p class="pnote hide" id="price-note"></p>
+          <p class="per">za celou partu 1–6 lidí · jedna hra · bez aplikace</p>
+        </div>
+        <div data-only="zdarma">
+          <div class="price">Zdarma</div>
+          <p class="pnote">Hra právě vyšla a první party hrají zdarma. Za to chceme jediné: napište nám pak dvě věty, co bylo dobré a co ne.</p>
+        </div>
+        <div data-only="brzy">
+          <div class="price">Brzy</div>
+          <p class="pnote">Hra se dokončuje. Nechte nám e-mail a dáme vědět, až se otevře první okénko.</p>
+        </div>
+        <h3>Co dostanete</h3>
+        <ul class="list">
+          <li>9 míst v centru Tábora, zhruba 90 minut a 2,5 km</li>
+          <li>chat s nevěstou, zprávy od Žižky a 9 hádanek ukrytých na místě</li>
+          <li>nápovědy na každém místě, nikde se nezaseknete</li>
+          <li>9 komiksových okének z noci, která odemykáte cestou</li>
+          <li>tři konce a slib, který dopíšete s ním</li>
+          <li>kartu se skóre pro partu a místo v žebříčku</li>
+        </ul>
+        <div class="trustgrid">
+          <div><b>Bez aplikace</b>Otevřete odkaz, hrajete. Žádná registrace.</div>
+          <div><b>Kdykoli</b>Ve dne, večer, v zimě i v létě. Hra si pamatuje, kde jste.</div>
+          <div data-only="prodej"><b>Peníze zpět</b>Když hra nefunguje nebo jste ji nezačali hrát.</div>
+          <div data-only="zdarma"><b>Nic po vás nechceme</b>Žádný e-mail předem, žádná registrace.</div>
+          <div><b>Z Tábora</b>Vymyšleno a otestováno na místě, ne od stolu.</div>
+        </div>
+      </div>
+      <div class="panel reveal d1">
+        <div data-only="prodej">
+          <h3>Jak to proběhne</h3>
+          <ol class="ol">
+            <li>Klepnete na Koupit a zaplatíte kartou nebo přes Apple Pay / Google Pay.</li>
+            <li>Hned po zaplacení se otevře hra. Odkaz přijde i e-mailem, kdybyste hráli později.</li>
+            <li>Dojdete ke kašně na Žižkově náměstí a otevřete chat roty.</li>
+          </ol>
+          <a class="btn big" id="pay-btn" href="#" rel="noopener">Koupit a hrát</a>
+          <p class="consent">Zaplacením souhlasíte s <a href="podminky.html">obchodními podmínkami</a> a s tím, že přístup ke hře dostanete okamžitě. Tím ztrácíte právo odstoupit od smlouvy do 14 dnů. Když hra nefunguje, peníze vrátíme.</p>
+          <p class="consent hide" id="pay-missing">Platba se připravuje. Napište si o hru na <a data-mail href="#">e-mail</a>.</p>
+        </div>
+        <div data-only="zdarma">
+          <h3>Jak to proběhne</h3>
+          <ol class="ol">
+            <li>Klepnete na Hrát zdarma. Hra se otevře rovnou v prohlížeči.</li>
+            <li>Dojdete ke kašně na Žižkově náměstí a otevřete chat roty.</li>
+            <li>Po hře nám napište dvě věty, co bylo dobré a co ne.</li>
+          </ol>
+          <a class="btn big" id="play-btn" href="hra/">Hrát zdarma</a>
+          <p class="consent">Hra je venkovní. Hrajete na vlastní odpovědnost, podle <a href="podminky.html">pravidel hry</a>.</p>
+        </div>
+        <div data-only="brzy">
+          <h3>Dejte nám vědět</h3>
+          <a class="btn big" data-mail data-subject="Chci vědět, až Žižkova rozlučka vyjde" href="#">Napsat e-mail</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="o-nas" aria-labelledby="onas-t">
+  <div class="wrap">
+    <div class="kicker reveal">10 / O nás</div>
+    <h2 id="onas-t" class="reveal">Proč to <span>děláme</span></h2>
+    <div class="about">
+      <div class="who reveal">
+        <p>Chtěl jsem udělat únikovou hru v Táboře, aby lidi neseděli doma a nekoukali do telefonu. Sám jsem to tak měl, roky, a nemyslím si, že je to dobře.</p>
+        <p>Tak jsem to otočil: telefon je ve hře jen průvodce, všechno ostatní je venku. Parta, město, hádanky na fasádách. Ne jedna noční akce jednou za rok, ale hra, kterou si zahrajete, kdy máte čas: ve dne, večer, v zimě i v létě.</p>
+        <p>Žižkova rozlučka je první díl. Když se vám bude líbit, napište. Když ne, napište taky.</p>
+        <div class="sign">Vasilij<small>Tábor, 2026</small></div>
+      </div>
+      <div class="brand reveal d1">
+        <div class="wm">CIK<span>Á</span>DA</div>
+        <div class="wmsub">venkovní únikové hry</div>
+        <p>CIKÁDA je značka, pod kterou tyhle hry vznikají. Vždycky stejný princip: město je herní deska, parta a jeden mobil, 90 minut. Každý díl má jiné místo a jiný příběh. Tábor je první.</p>
+        <div class="soc"><a id="ig2" class="hide" href="#" rel="noopener">Instagram</a><a data-mail href="#">E-mail</a></div>
+      </div>
+    </div>
+    <div class="next reveal" aria-labelledby="next-t">
+      <img src="img/k/dalsi.jpg" alt="" loading="lazy">
+      <div class="t">
+        <span class="soon">Připravuje se</span>
+        <h3 id="next-t" data-next-title>Druhý díl</h3>
+        <p data-next-text>Žižka zmizel v Bráně času a nikdo neví, ve kterém roce vylezl. Další příběh se píše. Kdo ho chce vědět první, ať se ozve.</p>
+        <div class="act"><a id="ig3" class="btn sec hide" href="#" rel="noopener">Sledovat Instagram</a><a class="btn sec" data-mail data-subject="Chci vědět o druhém dílu" href="#">Dát vědět e-mailem</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" class="faq" aria-labelledby="faq-t">
+  <div class="wrap">
+    <div class="kicker reveal">11 / Časté otázky</div>
+    <h2 id="faq-t" class="reveal">Než <span>vyrazíte</span></h2>
+    <details><summary>Je to opravdu úniková hra, když nejsme v místnosti?</summary><p>Ano, jen větší. Místo jedné místnosti máte centrum Tábora, místo zámku na dveřích devět hádanek, které se dají vyřešit jen na místě. Nikdo vás nezamkne a nikdo vás nehlídá. Hra vás vede chatem.</p></details>
+    <details><summary>Co když prší?</summary><p>Hraje se venku, počasí berete, jak přijde. V dešti se hůř ovládá mobil, pomůže pouzdro nebo obyčejný sáček. Když leje nebo klouže, hru odložte. Hra si pamatuje, kde jste skončili.</p></details>
+    <details><summary>Dá se hrát po tmě?</summary><p>Radši ne. Skoro každý úkol stojí na tom, co vidíte na fasádách, na kašně a v dlažbě, a to se po setmění špatně čte. V říjnu se stmívá kolem půl sedmé, vyrazte nejpozději ve čtyři. V listopadu je tma už kolem půl páté.</p></details>
+    <details><summary>Potřebujeme k tomu alkohol?</summary><p>Ne. Příběh se točí kolem jedné divoké noci, ale pít u toho nemusíte. Ve hře se pije jedině voda z pítka na Tržním náměstí.</p></details>
+    <details><summary>Můžou hrát děti?</summary><p>Humor je pro 15+: kocovina, rozlučka a nevěsta, která vyhrožuje popravou. Rodinnou verzi zatím nemáme.</p></details>
+    <details><summary>Je trasa bezbariérová?</summary><p>Není. Na trase je kopec k Jordánu a zpátky do centra a jedna úzká ulička. S kočárkem nebo na vozíku ji nedoporučujeme.</p></details>
+    <details><summary>Co když se zasekneme?</summary><p>Na každém místě máte nápovědy. Ta poslední řekne rovnou řešení, takže nikde nezůstanete stát. Nápověda stojí pár grošů ze svatební kasy, nic víc.</p></details>
+    <details><summary>Měří se čas?</summary><p>Jen pro žebříček: počítá se od otevření chatu do konce. Nikdo vás nehoní, pauza na kafe je dovolená, jen se připočte. Kdo o žebříček nestojí, čas ignoruje.</p></details>
+    <details><summary>Co s baterkou a daty?</summary><p>Stačí jeden nabitý mobil s mobilními daty. Hra se načte najednou, zhruba 4 MB, pak už skoro nic nestahuje. Když hodně fotíte, přibalte powerbanku.</p></details>
+    <details><summary>Kolik lidí zahraje najednou?</summary><p>Jedna parta o 1–6 lidech. Hraje se z jednoho telefonu, ostatní hledají, radí a pózují do fotek. Větší parta se rozdělí na dvě a soutěží o skóre.</p></details>
+    <details data-only="prodej"><summary>Jak dlouho přístup platí?</summary><p><span data-validity>12</span> měsíců od zaplacení, na jedno odehrání. Kdy vyrazíte, je na vás.</p></details>
+    <details data-only="prodej"><summary>Můžu to vrátit?</summary><p>Přístup ke hře dostanete hned po zaplacení, proto na něj ze zákona neplatí 14 dní na rozmyšlenou. Když ale hra nefunguje nebo jste ji nezačali hrát, napište nám a peníze vrátíme. Podrobnosti v <a href="podminky.html">obchodních podmínkách</a>.</p></details>
+    <details><summary>Co se děje s mými údaji?</summary><p>Hra nic neukládá na server. Postup, groše i zvolený konec zůstávají ve vašem telefonu. Web nemá žádné sledování ani cookies. Podrobnosti v <a href="soukromi.html">ochraně soukromí</a>.</p></details>
+  </div>
+</section>
+
+<section class="safe" aria-labelledby="bezp-t">
+  <div class="wrap">
+    <div class="kicker reveal">12 / Bezpečnost</div>
+    <h2 id="bezp-t" class="reveal">Hrajte <span>ohleduplně</span></h2>
+    <ul>
+      <li>Choďte po chodníku a při přecházení koukejte na silnici, ne do mobilu. Hlavně v Palackého ulici a na Křižíkově náměstí.</li>
+      <li>Na nic se neleze. Kašna, pomník, hradby ani Brána času nejsou prolézačky a žádný úkol to po vás nechce.</li>
+      <li>Nikam se nevstupuje. Všechno, co potřebujete, je vidět z ulice. Když si myslíte, že musíte dovnitř, řešíte to špatně.</li>
+      <li>V Hrnčířské ulici lidé bydlí a u Škochova domu se obědvá. Buďte tam potichu a neblokujte vchody.</li>
+      <li>U vody a na hrázi Jordánu zůstaňte na cestě. Kachny jsou porota, ne cíl.</li>
+      <li>Nic se nebere ani nenechává na místě. Všechno, co Žižka „schoval“, najdete očima.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap cols">
+    <div><div class="wm">CIK<span>Á</span>DA</div><div style="margin:6px 0 10px">Venkovní únikové hry. Parta, telefon, 90 minut.</div><div>Žižka je postava z příběhu, rozlučku si vymyslel sám.</div><div class="soc"><a id="ig4" class="hide" href="#" rel="noopener">Instagram</a><a data-mail href="#">E-mail</a></div></div>
+    <div><b>Provozovatel</b><span id="seller"></span></div>
+    <div><b>Odkazy</b><a href="podminky.html">Obchodní podmínky a pravidla hry</a><br><a href="soukromi.html">Ochrana soukromí</a><br><a href="#zebricek">Žebříček</a><br><a href="#faq">Časté otázky</a></div>
+  </div>
+</footer>
+
+<div class="bar" id="bar" aria-hidden="true">
+  <div class="p" id="bar-price">Hrát<small>Žižkova rozlučka · Tábor</small></div>
+  <a class="btn" href="#koupit" data-cta-label>Hrát</a>
 </div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="web/app.js"></script>
 </body>
 </html>

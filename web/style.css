@@ -1,0 +1,279 @@
+/* Žižkova rozlučka / CIKÁDA – prodejní web. Stavěno od telefonu, počítač je rozšíření. */
+@import url("fonts.css");
+
+:root{
+  --ink:#0B0D10; --ink2:#12151b; --ink3:#1a1e26; --line:#2b313b;
+  --paper:#F2E6D8; --paper2:#d9d2c8; --mute:#a6aeb8;
+  --ember:#E85A2A; --ember2:#ff7a47; --teal:#1FA8A0; --teal2:#5fd3cb; --gold:#e0c34a; --red:#e85a5a;
+  --w:1080px; --r:18px; --pad:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--ink);color:var(--paper);font:17px/1.55 Inter,system-ui,sans-serif;overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+a{color:var(--teal2)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--gold);color:#000;padding:8px 12px;border-radius:8px;z-index:100;font-weight:800}
+.skip:focus{left:8px}
+.wrap{width:min(var(--w),100% - 2*var(--pad));margin:0 auto}
+h1,h2,h3,.disp{font-family:"Bebas Neue",Impact,sans-serif;font-weight:400;letter-spacing:.02em;line-height:.95}
+h2{font-size:clamp(42px,9vw,72px);margin-bottom:12px}
+h2 span,.disp span{color:var(--ember)}
+h3{font-size:26px;margin-bottom:6px}
+p{max-width:62ch}
+.kicker{font:800 12.5px/1 Inter;letter-spacing:.2em;text-transform:uppercase;color:var(--teal2);margin-bottom:12px}
+.lead{font-size:19px;color:var(--paper2)}
+section{padding:64px 0}
+@media (min-width:860px){section{padding:96px 0}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--ember);color:#fff;border:0;border-radius:14px;padding:16px 26px;font:800 18px Inter;text-decoration:none;cursor:pointer;min-height:54px;transition:transform .15s,background .15s,box-shadow .15s;box-shadow:0 10px 30px rgba(232,90,42,.25)}
+.btn:hover{background:var(--ember2);transform:translateY(-1px)}
+.btn.sec{background:transparent;border:2px solid var(--line);color:var(--paper);box-shadow:none}
+.btn.sec:hover{border-color:var(--paper)}
+.btn.big{font-size:20px;padding:18px 32px;width:100%}
+.hide{display:none!important}
+.muted{color:var(--mute)}
+
+/* objevování při rolování */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}*{animation:none!important}}
+
+/* hlavička */
+.top{position:sticky;top:0;z-index:20;background:rgba(11,13,16,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:12px;min-height:60px}
+.logo{display:flex;flex-direction:column;text-decoration:none;color:var(--paper);line-height:1}
+.logo b{font-family:"Bebas Neue",Impact,sans-serif;font-weight:400;font-size:24px;letter-spacing:.04em}
+.logo b span{color:var(--ember)}
+.logo small{font:700 9.5px Inter;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-top:3px;white-space:nowrap}
+.nav{margin-left:auto;display:none;gap:22px}
+.nav a{color:var(--paper2);text-decoration:none;font-weight:600;font-size:15px}
+.nav a:hover{color:#fff}
+.top .btn{margin-left:auto;padding:10px 16px;font-size:15px;min-height:42px;box-shadow:none}
+@media (min-width:860px){.nav{display:flex}.top .btn{margin-left:0}}
+
+/* hero – jedna obrazovka, jedna věta, jedno tlačítko */
+.hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;padding:0}
+.hero .bg{position:absolute;inset:0}
+.hero .bg img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;transform:scale(1.04);animation:kb 18s ease-in-out infinite alternate}
+@keyframes kb{to{transform:scale(1.1) translateY(-1.5%)}}
+.hero .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,var(--ink) 0,rgba(11,13,16,.92) 28%,rgba(11,13,16,.15) 60%,rgba(11,13,16,.35) 100%)}
+.hero .in{position:relative;width:100%;padding:0 var(--pad) 40px}
+.hero .in>*{max-width:var(--w);margin-left:auto;margin-right:auto}
+.pill{display:inline-flex;align-items:center;gap:8px;background:rgba(11,13,16,.6);border:1px solid var(--line);color:var(--paper2);border-radius:999px;padding:7px 12px;font:700 12px Inter;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px;backdrop-filter:blur(4px)}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--teal2);box-shadow:0 0 10px var(--teal2);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.hero h1{font-size:clamp(76px,19vw,170px);line-height:.86;margin:0 0 14px}
+.hero h1 span{color:var(--ember);display:block}
+.hero .tag{font-size:clamp(22px,6vw,34px);line-height:1.25;margin-bottom:10px}
+.hero .tag b{color:#fff}
+.hero .sub{color:var(--paper2);font-size:17px;margin-bottom:22px;max-width:40ch}
+.hero .cta .btn{width:100%}
+.trust{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:16px;color:var(--mute);font-size:14px}
+.trust span::before{content:"✓ ";color:var(--teal2);font-weight:800}
+.scroll{position:absolute;right:20px;bottom:18px;width:28px;height:44px;border:2px solid rgba(242,230,216,.35);border-radius:16px;display:none}
+.scroll::after{content:"";position:absolute;left:50%;top:8px;width:4px;height:8px;margin-left:-2px;border-radius:2px;background:var(--paper);animation:sc 1.6s infinite}
+@keyframes sc{60%{transform:translateY(16px);opacity:0}100%{transform:translateY(16px);opacity:0}}
+@media (min-width:860px){
+  .hero{min-height:92vh;align-items:center}
+  .hero .bg img{object-position:62% 25%}
+  .hero .bg::after{background:linear-gradient(90deg,var(--ink) 0,rgba(11,13,16,.88) 38%,rgba(11,13,16,.1) 70%),linear-gradient(0deg,var(--ink) 0,rgba(11,13,16,0) 25%)}
+  .hero .in{padding:80px var(--pad)}
+  .hero .cta .btn{width:auto}
+  .hero .sub{font-size:19px}
+  .scroll{display:block}
+}
+
+/* co to je – tři karty */
+.cards3{display:grid;gap:14px;margin-top:26px}
+.kc{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:var(--ink2);min-height:300px;display:flex;flex-direction:column;justify-content:flex-end}
+.kc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75;transition:transform .6s}
+.kc:hover img{transform:scale(1.05)}
+.kc .t{position:relative;padding:22px;background:linear-gradient(0deg,rgba(11,13,16,.96) 40%,rgba(11,13,16,0))}
+.kc .no{font:800 12px Inter;letter-spacing:.18em;color:var(--teal2);margin-bottom:6px}
+.kc h3{font-size:30px}
+.kc p{color:var(--paper2);font-size:15.5px}
+@media (min-width:760px){.cards3{grid-template-columns:repeat(3,1fr)}.kc{min-height:380px}}
+.explain{background:var(--ink2);border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:14px;padding:16px 18px;margin-top:22px;font-size:16px;color:var(--paper2)}
+.explain b{color:var(--paper)}
+
+/* jak to probíhá – pás s kroky */
+.steps-wrap{margin:26px calc(-1*var(--pad)) 0;padding:0 var(--pad)}
+.steps{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.steps::-webkit-scrollbar{display:none}
+.step{flex:0 0 min(78vw,320px);scroll-snap-align:start;background:var(--ink2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
+.step img{aspect-ratio:4/3;object-fit:cover;width:100%}
+.step .t{padding:16px 18px 20px}
+.step .no{font-family:"Bebas Neue",Impact,sans-serif;font-size:44px;line-height:1;color:var(--ember)}
+.step h3{font-size:24px;margin:4px 0 6px}
+.step p{font-size:15px;color:var(--paper2)}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:6px}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--line);transition:background .2s,transform .2s}
+.dots i.on{background:var(--ember);transform:scale(1.25)}
+.stepnav{display:none;gap:8px;justify-content:flex-end;margin-top:-8px}
+.stepnav button{background:var(--ink2);border:1px solid var(--line);color:var(--paper);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer}
+@media (min-width:860px){.steps-wrap{margin:26px 0 0;padding:0}.step{flex-basis:300px}.stepnav{display:flex}}
+
+/* hodnota – dlaždice */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:26px}
+.tile{background:var(--ink2);border:1px solid var(--line);border-radius:var(--r);padding:18px 16px}
+.tile .n{font-family:"Bebas Neue",Impact,sans-serif;font-size:52px;line-height:1;color:var(--gold)}
+.tile .n small{font-size:.5em;color:var(--paper2)}
+.tile p{font-size:14.5px;color:var(--paper2);margin-top:6px}
+@media (min-width:760px){.tiles{grid-template-columns:repeat(4,1fr)}.tile{padding:24px 20px}}
+
+/* chat ukázka */
+.chat{background:var(--ink2);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:0 30px 60px rgba(0,0,0,.45);max-width:520px;margin:26px auto 0}
+.chat .hd{display:flex;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:14px}
+.chat .hd img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--teal)}
+.chat .hd b{display:block;font-size:16px}.chat .hd span{font-size:13px;color:var(--mute)}
+.msg{display:flex;gap:8px;align-items:flex-end;margin-bottom:10px;max-width:90%;opacity:0;transform:translateY(8px);transition:opacity .35s,transform .35s}
+.chat.play .msg.show{opacity:1;transform:none}
+.msg img{width:28px;height:28px;border-radius:50%;object-fit:cover;flex:none}
+.msg .b{background:var(--paper);color:var(--ink);padding:10px 14px;border-radius:16px;border-bottom-left-radius:4px;font-size:16px}
+.msg.z .b{background:#13323a;color:var(--paper);border:1px solid #1d4c55}
+.msg.me{margin-left:auto;flex-direction:row-reverse}
+.msg.me .b{background:var(--ember);color:#fff;border-bottom-right-radius:4px;border-bottom-left-radius:16px}
+.msg .n{font-size:12px;color:var(--mute);margin-bottom:3px;font-weight:700}
+.msg .n i{font-style:normal;color:var(--teal2);margin-left:6px}
+.msg.sys{display:block;max-width:none;text-align:center;font-size:13px;color:var(--mute);margin:8px 0 12px}
+.typing{font-size:13px;color:var(--mute);padding-left:36px;height:18px}
+.typing i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--mute);margin-right:3px;animation:blink 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+.split{display:grid;gap:28px;align-items:center}
+@media (min-width:860px){.split{grid-template-columns:1fr 1fr;gap:56px}.chat{margin:0}}
+
+/* okénka noci */
+.noc{background:var(--ink2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.okna{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:24px}
+.okno{aspect-ratio:3/4;border-radius:10px;overflow:hidden;position:relative;border:1px solid var(--line);background:var(--ink3);cursor:default}
+.okno img{width:100%;height:100%;object-fit:cover;transition:filter .5s}
+.okno .t{position:absolute;left:0;right:0;bottom:0;padding:22px 6px 6px;font:800 13px Inter;text-align:center;background:linear-gradient(transparent,rgba(0,0,0,.85));color:#fff}
+.okno.lock img{filter:grayscale(1) blur(4px) brightness(.5)}
+.okno.lock::before{content:"🔒";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:26px;z-index:1}
+.okno.lock{cursor:pointer}
+.okno.fin{border:2px solid var(--red);box-shadow:0 0 14px rgba(232,90,90,.5)}
+.okno.fin::before{content:"☠";color:#ff8a7a;font-size:30px}
+.okno.fin .t{color:#ff8a7a}
+.okno.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@media (min-width:760px){.okna{grid-template-columns:repeat(9,1fr)}}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);background:var(--paper);color:var(--ink);padding:10px 16px;border-radius:999px;font-weight:700;font-size:14px;opacity:0;transition:.3s;z-index:40;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1;transform:translateX(-50%)}
+
+/* žebříček */
+.board{background:var(--ink2);border:1px solid var(--line);border-radius:var(--r);padding:22px;margin-top:24px}
+.board table{width:100%;border-collapse:collapse;font-size:15px}
+.board th{text-align:left;font:800 11px Inter;letter-spacing:.14em;color:var(--mute);padding:0 0 10px}
+.board td{padding:10px 0;border-top:1px solid var(--line)}
+.board td.n{font:800 15px Inter;color:var(--ember);width:32px}
+.board td.r{text-align:right;color:var(--gold);font-weight:800}
+.board .empty{padding:26px 10px;text-align:center;color:var(--mute);border:1px dashed var(--line);border-radius:12px}
+.board .empty b{display:block;font-family:"Bebas Neue",Impact,sans-serif;font-weight:400;font-size:34px;color:var(--paper);margin-bottom:6px;letter-spacing:.02em}
+.formula{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-top:18px;text-align:center}
+.formula div{background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px 8px}
+.formula b{display:block;font-family:"Bebas Neue",Impact,sans-serif;font-weight:400;font-size:30px;color:var(--gold)}
+.formula small{color:var(--mute);font-size:12.5px}
+.formula .plus{font-family:"Bebas Neue",Impact,sans-serif;font-size:40px;color:var(--ember);background:none;border:0}
+
+/* pro koho */
+.cards{display:grid;gap:12px;margin-top:24px}
+.card{background:var(--ink2);border:1px solid var(--line);border-left:4px solid var(--ember);border-radius:var(--r);padding:20px}
+.card p{font-size:15.5px;color:var(--paper2)}
+.card .q{display:block;margin-top:10px;font-size:15px;color:var(--gold);font-style:italic}
+@media (min-width:760px){.cards{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1000px){.cards{grid-template-columns:repeat(4,1fr)}}
+
+/* z trasy */
+.foto{display:grid;gap:24px;align-items:center}
+.foto img{border-radius:var(--r);border:1px solid var(--line);max-height:70vh;width:auto;margin:0 auto}
+.quote{font-family:"Bebas Neue",Impact,sans-serif;font-size:clamp(34px,7vw,56px);line-height:1;letter-spacing:.02em}
+.quote span{color:var(--ember)}
+@media (min-width:860px){.foto{grid-template-columns:1fr 1fr;gap:48px}}
+
+/* koupit */
+.buy{background:linear-gradient(160deg,#10272c,#1c1220);border-top:1px solid var(--line)}
+.buybox{display:grid;gap:28px;align-items:start}
+.price{font-family:"Bebas Neue",Impact,sans-serif;font-size:clamp(76px,22vw,128px);line-height:.9;color:#fff}
+.price small{font-size:.42em;color:var(--gold)}
+.price s{color:var(--mute);font-size:.45em;margin-right:12px}
+.pnote{color:var(--gold);font-weight:700;margin:6px 0 16px}
+.per{color:var(--mute);margin-bottom:18px}
+.list{list-style:none;display:grid;gap:10px;margin:0 0 22px}
+.list li{padding-left:28px;position:relative;color:var(--paper2)}
+.list li::before{content:"◆";position:absolute;left:4px;top:2px;color:var(--teal);font-size:12px}
+.panel{background:rgba(11,13,16,.65);border:1px solid var(--line);border-radius:22px;padding:24px}
+.panel h3{margin-bottom:14px}
+.consent{font-size:13.5px;color:var(--mute);margin-top:12px;line-height:1.5}
+.ol{counter-reset:k;list-style:none;display:grid;gap:12px;margin-bottom:20px}
+.ol li{counter-increment:k;padding-left:40px;position:relative;color:var(--paper2)}
+.ol li::before{content:counter(k);position:absolute;left:0;top:-2px;width:28px;height:28px;border-radius:50%;background:var(--ember);color:#fff;font:800 15px/28px Inter;text-align:center}
+.trustgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.trustgrid div{background:rgba(11,13,16,.5);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:14px;color:var(--paper2)}
+.trustgrid b{display:block;color:var(--teal2);font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+@media (min-width:860px){.buybox{grid-template-columns:1.1fr .9fr;gap:40px}}
+
+/* o nás + další díl */
+.about{display:grid;gap:24px}
+.about .who{background:var(--ink2);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.about .who p{color:var(--paper2);margin-bottom:12px}
+.about .sign{font-family:"Bebas Neue",Impact,sans-serif;font-size:28px;color:var(--paper);letter-spacing:.04em}
+.about .sign small{display:block;font:600 13px Inter;color:var(--mute);letter-spacing:0}
+.brand{background:var(--ink2);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.brand .wm{font-family:"Bebas Neue",Impact,sans-serif;font-size:56px;letter-spacing:.18em;line-height:1;color:var(--paper)}
+.brand .wm span{color:var(--teal2)}
+.brand .wmsub{font:700 12px Inter;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);margin:4px 0 14px}
+.brand p{color:var(--paper2);font-size:15.5px}
+@media (min-width:860px){.about{grid-template-columns:1.2fr .8fr}}
+.next{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);min-height:320px;display:flex;align-items:flex-end;margin-top:24px}
+.next img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;filter:saturate(.8)}
+.next .t{position:relative;padding:24px;background:linear-gradient(0deg,rgba(11,13,16,.96) 50%,rgba(11,13,16,0))}
+.next .t h3{font-size:40px}
+.next .t p{color:var(--paper2);font-size:15.5px;max-width:48ch}
+.next .soon{display:inline-block;background:var(--gold);color:#000;font:800 12px Inter;letter-spacing:.16em;text-transform:uppercase;padding:6px 10px;border-radius:6px;margin-bottom:10px}
+.next .act{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.next .act .btn{padding:12px 18px;font-size:15px;min-height:44px;box-shadow:none}
+
+/* FAQ */
+.faq details{border-top:1px solid var(--line)}
+.faq details:last-child{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;padding:18px 44px 18px 0;font-weight:800;font-size:17px;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:4px;top:12px;font-size:30px;color:var(--ember);font-weight:400}
+.faq details[open] summary::after{content:"–"}
+.faq details p{padding:0 0 18px;color:var(--paper2);max-width:70ch}
+
+/* bezpečnost */
+.safe ul{list-style:none;display:grid;gap:12px 28px;margin-top:22px}
+.safe li{padding-left:28px;position:relative;color:var(--paper2)}
+.safe li::before{content:"✓";position:absolute;left:0;color:var(--teal2);font-weight:800}
+@media (min-width:760px){.safe ul{grid-template-columns:1fr 1fr}}
+
+/* patička */
+footer{padding:40px 0 110px;border-top:1px solid var(--line);color:var(--mute);font-size:14px}
+footer .cols{display:grid;gap:24px}
+footer a{color:var(--paper2)}
+footer b{color:var(--paper);display:block;margin-bottom:6px}
+footer .wm{font-family:"Bebas Neue",Impact,sans-serif;font-size:30px;letter-spacing:.18em;color:var(--paper)}
+footer .wm span{color:var(--teal2)}
+@media (min-width:760px){footer .cols{grid-template-columns:1.2fr 1fr 1fr}footer{padding-bottom:50px}}
+.soc{display:flex;gap:10px;margin-top:10px}
+.soc a{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:8px 14px;text-decoration:none;color:var(--paper);font-weight:700;font-size:14px}
+
+/* lišta dole na mobilu */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(11,13,16,.94);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:12px;transform:translateY(110%);transition:transform .3s}
+.bar.on{transform:none}
+.bar .p{font:800 18px Inter;color:#fff;white-space:nowrap}
+.bar .p small{display:block;font:600 12px Inter;color:var(--mute)}
+.bar .btn{margin-left:auto;padding:12px 18px;font-size:16px;min-height:44px;box-shadow:none}
+@media (min-width:860px){.bar{display:none}}
+
+/* podstránky (podmínky, soukromí) */
+.doc{padding:48px 0 90px}
+.doc h1{font-size:clamp(44px,9vw,72px);margin-bottom:8px}
+.doc h2{font-size:30px;margin:36px 0 10px}
+.doc p,.doc li{color:var(--paper2);max-width:72ch;margin-bottom:10px}
+.doc ol,.doc ul{padding-left:24px}
+.doc .date{color:var(--mute);margin-bottom:24px}
+.doc .box{background:var(--ink2);border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:12px;padding:16px 18px;margin:18px 0}
