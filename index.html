@@ -14,8 +14,8 @@
 <meta property="og:locale" content="cs_CZ">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230B0D10'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' font-family='Impact,sans-serif' fill='%23E85A2A'%3EŽ%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="web/style.css?v=20261016">
-<script src="web/config.js?v=20261016"></script>
+<link rel="stylesheet" href="web/style.css?v=20261021">
+<script src="web/config.js?v=20261021"></script>
 </head>
 <body>
 <a class="skip" href="#main">Přeskočit na obsah</a>
@@ -190,7 +190,7 @@
         </div>
         <div data-only="zdarma">
           <div class="price">Zdarma</div>
-          <p class="pnote">Hra právě vyšla a první party hrají zdarma. Za to chceme jediné: napište nám pak dvě věty, co bylo dobré a co ne.</p>
+          <p class="pnote">Hra právě vyšla a první party hrají zdarma. Za to chceme jediné: na konci hry nám dejte tři kliky v krátkém dotazníku.</p>
         </div>
         <div data-only="brzy">
           <div class="price">Brzy</div>
@@ -223,6 +223,7 @@
           </ol>
           <a class="btn big" id="pay-btn" href="#" rel="noopener">Koupit a hrát</a>
           <p class="consent">Zaplacením souhlasíte s <a href="podminky.html">obchodními podmínkami</a> a s tím, že přístup ke hře dostanete okamžitě. Tím ztrácíte právo odstoupit od smlouvy do 14 dnů. Když hra nefunguje, peníze vrátíme.</p>
+          <p class="consent">Máte kód od kamarádů? Zadáte ho na platební stránce.</p>
           <p class="consent hide" id="pay-missing">Platba se připravuje. Napište si o hru na <a data-mail href="#">e-mail</a>.</p>
         </div>
         <div data-only="zdarma">
@@ -230,7 +231,7 @@
           <ol class="ol">
             <li>Klepnete na Hrát zdarma. Hra se otevře rovnou v prohlížeči.</li>
             <li>Dojdete ke kašně na Žižkově náměstí a otevřete chat roty.</li>
-            <li>Po hře nám napište dvě věty, co bylo dobré a co ne.</li>
+            <li>Na konci nám dejte tři kliky v krátkém dotazníku.</li>
           </ol>
           <a class="btn big" id="play-btn" href="hra/">Hrát zdarma</a>
           <p class="consent">Hra je venkovní. Hrajete na vlastní odpovědnost, podle <a href="podminky.html">pravidel hry</a>.</p>
@@ -288,11 +289,11 @@
     <details><summary>Je trasa bezbariérová?</summary><p>Není. Na trase je kopec k Jordánu a zpátky do centra a jedna úzká ulička. S kočárkem nebo na vozíku ji nedoporučujeme.</p></details>
     <details><summary>Co když se zasekneme?</summary><p>Na každém místě máte nápovědy. Ta poslední řekne rovnou řešení, takže nikde nezůstanete stát. Nápověda stojí pár grošů ze svatební kasy, nic víc.</p></details>
     <details><summary>Měří se čas?</summary><p>Jen pro žebříček: počítá se od otevření chatu do konce. Nikdo vás nehoní, pauza na kafe je dovolená, jen se připočte. Kdo o žebříček nestojí, čas ignoruje.</p></details>
-    <details><summary>Co s baterkou a daty?</summary><p>Stačí jeden nabitý mobil s mobilními daty. Hra se načte najednou, zhruba 4 MB, pak už skoro nic nestahuje. Kdo cestou fotí, ať přibalí powerbanku.</p></details>
+    <details><summary>Co s baterkou a daty?</summary><p>Stačí jeden nabitý mobil. Hra se načte najednou, zhruba 4 MB. Otevřete ji předem doma na wifi a telefon si ji uloží, pak jde dohrát i bez signálu. Kdo cestou fotí, ať přibalí powerbanku.</p></details>
     <details><summary>Kolik lidí zahraje najednou?</summary><p>Jedna parta o 1–6 lidech. Hraje se z jednoho telefonu, ostatní hledají, luští a radí. Větší parta se rozdělí na dvě a soutěží o skóre.</p></details>
     <details data-only="prodej"><summary>Jak dlouho přístup platí?</summary><p><span data-validity>12</span> měsíců od zaplacení, na jedno odehrání. Kdy vyrazíte, je na vás.</p></details>
     <details data-only="prodej"><summary>Dají se peníze vrátit?</summary><p>Přístup ke hře dostanete hned po zaplacení, proto na něj ze zákona neplatí 14 dní na rozmyšlenou. Když ale hra nefunguje nebo jste ji nezačali hrát, napište nám a peníze vrátíme. Podrobnosti v <a href="podminky.html">obchodních podmínkách</a>.</p></details>
-    <details><summary>Co se děje s mými údaji?</summary><p>Hra nic neukládá na server. Postup, groše i zvolený konec zůstávají ve vašem telefonu. Web nemá žádné sledování ani cookies. Podrobnosti v <a href="soukromi.html">ochraně soukromí</a>.</p></details>
+    <details><summary>Co se děje s mými údaji?</summary><p>Hra nic neukládá na server. Postup, groše i zvolený konec zůstávají ve vašem telefonu. Jediné, co se odesílá, je nepovinný dotazník na konci, a to jen když ho sami pošlete. Web nemá žádné sledování ani cookies. Podrobnosti v <a href="soukromi.html">ochraně soukromí</a>.</p></details>
   </div>
 </section>
 
@@ -327,6 +328,6 @@
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="web/app.js?v=20261016"></script>
+<script src="web/app.js?v=20261021"></script>
 </body>
 </html>

@@ -287,6 +287,19 @@ input[type=range]{width:100%;accent-color:var(--ember)}
 .share small{color:var(--mute);font-size:13px}
 
 
+.fb{align-self:stretch;border:1px solid var(--line);border-radius:16px;padding:18px;background:var(--stone2);display:flex;flex-direction:column;gap:12px}
+.fb h4{font:400 30px/1 "Bebas Neue";letter-spacing:.02em}
+.fb .lead{font-size:14px;color:var(--mute);margin-top:-6px}
+.fb .q b{display:block;font-size:15px;margin-bottom:6px}
+.fb .ch{display:flex;flex-wrap:wrap;gap:6px}
+.fb .ch button{flex:1 1 auto;min-width:84px;background:transparent;border:1px solid var(--line);color:var(--paper);border-radius:10px;padding:10px 8px;font:600 14px Inter}
+.fb .ch button.on{background:var(--teal);border-color:var(--teal);color:#06201e}
+.fb textarea{width:100%;min-height:72px;background:var(--ink);border:1px solid var(--line);color:var(--paper);border-radius:10px;padding:10px 12px;font:400 15px/1.4 Inter;resize:vertical}
+.fb .btn:disabled{opacity:.45}
+.fb .kod{font:400 40px/1 "Bebas Neue";letter-spacing:.06em;color:var(--ember);text-align:center;border:1px dashed var(--ember);border-radius:12px;padding:12px 8px 8px}
+.fb small{color:var(--mute);font-size:13px}
+
+
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:30;display:flex;align-items:center;justify-content:center;padding:20px}
 .modal .in{background:var(--stone2);border:1px solid var(--line);border-radius:16px;padding:16px;max-width:400px;width:100%;max-height:85vh;overflow:auto;display:flex;flex-direction:column;gap:10px}
 .modal h3{font:400 26px "Bebas Neue"}
@@ -333,6 +346,7 @@ input[type=range]{width:100%;accent-color:var(--ember)}
 
 <script src="../web/config.js"></script>
 <script src="pristup.js"></script>
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
 <script>
 "use strict";
 const IMG="../../deploy-v2/demo2/assets/img/";
@@ -730,6 +744,45 @@ async function showEnd(e,retry){
  const f=add(`<div class="final"><div class="kicker">VÁŠ KONEC · ŽIŽKOVA ROZLUČKA · TÁBOR</div><h2>${esc(e.t.split(" ")[0])}${e.t.includes(" ")?`<br><span>${esc(e.t.split(" ").slice(1).join(" "))}</span>`:""}</h2><p style="margin:10px 0">${esc(e.sub)}</p>${ph(e.pic,true)}${board()}<div class="share"><input placeholder="Jméno vaší roty (nepovinné)" maxlength="28" autocomplete="off"><div class="row2"><button class="btn sh">Sdílet obrázek</button><button class="btn sec dl">Uložit</button></div><small>Obrázek s vaším koncem, slibem a místem na hostině. Pošlete ho do skupiny.</small></div>${retry?`<div><button class="btn sec retry">Zkusit jiný konec <span style="color:#e0c34a;font-weight:700">−30 gr.</span></button><p style="font-size:13px;color:var(--mute);margin-top:6px;text-align:center">Skóre a místo na hostině platí z prvního konce. Další konec ho nezhorší.</p></div>`:""}</div>`);
  f.querySelector(".sh").onclick=()=>shareCard(e,f,true);f.querySelector(".dl").onclick=()=>shareCard(e,f,false);
  if(retry)f.querySelector(".retry").onclick=()=>{const b=f.querySelector(".retry");if(GR<30){b.disabled=true;b.textContent=`Na další konec chybí ${30-GR} gr.`;return}GR-=30;wal("hit");b.parentElement.remove();add(`<div class="sys">↺ Zpátky v 10:59. Povoz je za rohem.</div>`);endStep()};
+ if(retry)feedback();
+}
+
+
+const FBQ=[["doporucit","Doporučili byste to kamarádům?",["Jasně","Možná","Spíš ne"]],["obtiznost","Hádanky byly…",["Moc lehké","Akorát","Moc těžké"]],["cena","Kolik by to stálo za celou partu?",["Do 100 Kč","Do 200 Kč","Do 300 Kč","Víc"]]];
+const fbCfg=()=>{const D=(window.KONFIG||{}).DOTAZNIK||{};return /^https:\/\/docs\.google\.com\/forms\/.+\/formResponse$/.test(D.URL||"")&&D.POLE?D:null};
+const fbKod=()=>{const K=window.KONFIG||{};return K.REZIM==="prodej"&&K.KOD_KAMARAD?K:null};
+const fbSend=(D,d)=>{const b=new URLSearchParams();for(const k in d)if(D.POLE[k]&&d[k])b.append(D.POLE[k],d[k]);return fetch(D.URL,{method:"POST",mode:"no-cors",body:b})};
+const fbQueue=()=>{try{return JSON.parse(localStorage.getItem("zr-fb-fronta")||"[]")}catch(e){return []}};
+async function fbFlush(){const D=fbCfg(),q=fbQueue();if(!D||!q.length)return;const rest=[];for(const d of q){try{await fbSend(D,d)}catch(e){rest.push(d)}}
+ try{rest.length?localStorage.setItem("zr-fb-fronta",JSON.stringify(rest)):localStorage.removeItem("zr-fb-fronta")}catch(e){}}
+window.addEventListener("online",fbFlush);setTimeout(fbFlush,3000);
+function feedback(){
+ let el=document.querySelector(".fb");if(el){feed.appendChild(el);return}
+ if(!fbCfg())return;
+ el=add(`<div class="fb"></div>`);
+ let done=false;try{done=localStorage.getItem("zr-fb")==="1"}catch(e){}
+ if(done){fbThanks(el);return}
+ const K=fbKod(),A={};
+ el.innerHTML=`<h4>Dáte nám 30 vteřin?</h4><p class="lead">Tři kliky. ${K?`Za odpověď dostanete kód ${esc(K.SLEVA_KAMARAD||"−50 %")} pro kamarády.`:"Píšeme další díl a chceme vědět, co opravit."} Kdo nechce, nemusí.</p>`
+  +FBQ.map(([k,t,o])=>`<div class="q"><b>${esc(t)}</b><div class="ch" data-k="${k}">${o.map(x=>`<button>${esc(x)}</button>`).join("")}</div></div>`).join("")
+  +`<textarea maxlength="600" placeholder="Co bylo nejlepší a co vás štvalo? (nepovinné)"></textarea><button class="btn fbsend" disabled>Odeslat</button><small style="text-align:center">Posíláme jen tyhle odpovědi a výsledek hry (konec, čas, groše). Žádné jméno ani kontakt.</small>`;
+ const s=el.querySelector(".fbsend"),ta=el.querySelector("textarea");
+ el.querySelectorAll(".ch").forEach(c=>c.querySelectorAll("button").forEach(b=>b.onclick=()=>{c.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));A[c.dataset.k]=b.textContent;s.disabled=false}));
+ ta.oninput=()=>{if(ta.value.trim())s.disabled=false};
+ s.onclick=async()=>{s.disabled=true;s.textContent="Odesílám…";
+  const d={...A,poznamka:ta.value.trim().slice(0,600),hra:`${(ENDS[ENDSEL[0]]||{}).t||"?"} · ${fmtMin(minutes())} · ${GS()} gr. · skóre ${score()} · placené pomoci ${Object.keys(SPENT).length} · konců ${ENDSEL.length}`};
+  try{await fbSend(fbCfg(),d)}catch(e){try{const q=fbQueue();q.push(d);localStorage.setItem("zr-fb-fronta",JSON.stringify(q))}catch(_){}}
+  try{localStorage.setItem("zr-fb","1")}catch(e){}
+  fbThanks(el)};
+}
+function fbThanks(el){
+ const K=fbKod(),web=new URL("../",location.href).href,sl=K&&(K.SLEVA_KAMARAD||"−50 %");
+ const txt=K?`Hráli jsme Žižkovu rozlučku, venkovní únikovku v Táboře. S kódem ${K.KOD_KAMARAD} ji máte o ${sl.replace("−","")} levněji: ${web}`
+            :`Hráli jsme Žižkovu rozlučku, venkovní únikovku v Táboře. Zkuste ji: ${web}`;
+ el.innerHTML=`<h4>Díky, roto</h4>`+(K?`<p class="lead">Tady je kód pro kamarády. Zadají ho při placení a mají ${esc(sl)}.</p><div class="kod">${esc(K.KOD_KAMARAD)}</div>`
+  :`<p class="lead">Další díl píšeme podle vás. Pošlete hru kamarádům.</p>`)
+  +`<button class="btn">${K?"Poslat kód kamarádům":"Poslat kamarádům"}</button><small style="text-align:center"></small>`;
+ el.querySelector(".btn").onclick=async()=>{try{if(navigator.share){await navigator.share({text:txt});return}await navigator.clipboard.writeText(txt);el.querySelector("small").textContent="Zkopírováno. Vložte to do skupiny."}catch(e){}};
 }
 
 

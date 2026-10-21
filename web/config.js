@@ -13,9 +13,9 @@ window.KONFIG = {
   REZIM: "zdarma",
 
   // Cena v Kč (ukazuje se jen v režimu "prodej"). Jen číslo.
-  PRICE: 249,
+  PRICE: 49,
   // Poznámka pod cenou, např. "zaváděcí cena do 30. 11." Prázdné "" = nic.
-  PRICE_NOTE: "",
+  PRICE_NOTE: "zaváděcí cena",
   // Cena, ze které se slevuje (přeškrtnutá). 0 = neukazovat.
   PRICE_OLD: 0,
 
@@ -31,6 +31,21 @@ window.KONFIG = {
   CONTACT_EMAIL: "pugacevskiv@gmail.com",
   // Instagram: jméno účtu bez zavináče, nebo celý odkaz. Prázdné "" = ikona se neukáže.
   INSTAGRAM: "",
+
+  // Kód pro kamarády. Hra ho ukáže tomu, kdo na konci vyplní krátký dotazník,
+  // ale jen v režimu "prodej". Stejný kód musí existovat ve Stripe (Promotion code,
+  // viz NASAZENI.md). Prázdné "" = kód se neukazuje.
+  KOD_KAMARAD: "ROTA50",
+  SLEVA_KAMARAD: "−50 %",
+
+  // Dotazník na konci hry (formulář Google). Vyplní Claude podle odkazu na formulář.
+  // Možnosti ve formuláři musí přesně odpovídat tlačítkům ve hře (FBQ v sablona-v2.html).
+  // URL končí /formResponse, POLE jsou čísla otázek „entry.…“. Prázdné URL = dotazník se neukáže.
+  DOTAZNIK: {
+    // formulář „Žižkova rozlučka · 30 vteřin po hře“ v účtu Google Vasilije (založen 21. 10. 2026)
+    URL: "https://docs.google.com/forms/d/e/1FAIpQLSf9qK9phCFNmHg43AnCMLZXRpneLJFkxRvW49oeOKqwGPDsOA/formResponse",
+    POLE: { doporucit: "entry.849322882", obtiznost: "entry.157601660", cena: "entry.2104959850", poznamka: "entry.1730413432", hra: "entry.1719992964" }
+  },
 
   // Kde leží hra (cesta vůči hlavní stránce).
   GAME_URL: "hra/",
