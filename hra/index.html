@@ -298,6 +298,7 @@ input[type=range]{width:100%;accent-color:var(--ember)}
 .fb .btn:disabled{opacity:.45}
 .fb .kod{font:400 40px/1 "Bebas Neue";letter-spacing:.06em;color:var(--ember);text-align:center;border:1px dashed var(--ember);border-radius:12px;padding:12px 8px 8px}
 .fb small{color:var(--mute);font-size:13px}
+html[data-theme=light] .fb .lead,html[data-theme=light] .fb small{color:#4a5260}
 
 
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:30;display:flex;align-items:center;justify-content:center;padding:20px}
@@ -741,7 +742,7 @@ async function endStep(){
 }
 async function showEnd(e,retry){
  for(const [w,t] of e.seq){if(w==="sys")add(`<div class="sys">${esc(t)}</div>`);else await say(w,t);await wait(200)}
- const f=add(`<div class="final"><div class="kicker">VÁŠ KONEC · ŽIŽKOVA ROZLUČKA · TÁBOR</div><h2>${esc(e.t.split(" ")[0])}${e.t.includes(" ")?`<br><span>${esc(e.t.split(" ").slice(1).join(" "))}</span>`:""}</h2><p style="margin:10px 0">${esc(e.sub)}</p>${ph(e.pic,true)}${board()}<div class="share"><input placeholder="Jméno vaší roty (nepovinné)" maxlength="28" autocomplete="off"><div class="row2"><button class="btn sh">Sdílet obrázek</button><button class="btn sec dl">Uložit</button></div><small>Obrázek s vaším koncem, slibem a místem na hostině. Pošlete ho do skupiny.</small></div>${retry?`<div><button class="btn sec retry">Zkusit jiný konec <span style="color:#e0c34a;font-weight:700">−30 gr.</span></button><p style="font-size:13px;color:var(--mute);margin-top:6px;text-align:center">Skóre a místo na hostině platí z prvního konce. Další konec ho nezhorší.</p></div>`:""}</div>`);
+ const f=add(`<div class="final"><div class="kicker">VÁŠ KONEC · ŽIŽKOVA ROZLUČKA · TÁBOR</div><h2>${esc(e.t.split(" ")[0])}${e.t.includes(" ")?`<br><span>${esc(e.t.split(" ").slice(1).join(" "))}</span>`:""}</h2><p style="margin:10px 0">${esc(e.sub)}</p>${ph(e.pic,true)}${board()}<div class="share"><input aria-label="Jméno vaší roty (nepovinné)" placeholder="Jméno vaší roty (nepovinné)" maxlength="28" autocomplete="off"><div class="row2"><button class="btn sh">Sdílet obrázek</button><button class="btn sec dl">Uložit</button></div><small>Obrázek s vaším koncem, slibem a místem na hostině. Pošlete ho do skupiny.</small></div>${retry?`<div><button class="btn sec retry">Zkusit jiný konec <span style="color:#e0c34a;font-weight:700">−30 gr.</span></button><p style="font-size:13px;color:var(--mute);margin-top:6px;text-align:center">Skóre a místo na hostině platí z prvního konce. Další konec ho nezhorší.</p></div>`:""}</div>`);
  f.querySelector(".sh").onclick=()=>shareCard(e,f,true);f.querySelector(".dl").onclick=()=>shareCard(e,f,false);
  if(retry)f.querySelector(".retry").onclick=()=>{const b=f.querySelector(".retry");if(GR<30){b.disabled=true;b.textContent=`Na další konec chybí ${30-GR} gr.`;return}GR-=30;wal("hit");b.parentElement.remove();add(`<div class="sys">↺ Zpátky v 10:59. Povoz je za rohem.</div>`);endStep()};
  if(retry)feedback();
@@ -764,10 +765,10 @@ function feedback(){
  if(done){fbThanks(el);return}
  const K=fbKod(),A={};
  el.innerHTML=`<h4>Dáte nám 30 vteřin?</h4><p class="lead">Tři kliky. ${K?`Za odpověď dostanete kód ${esc(K.SLEVA_KAMARAD||"−50 %")} pro kamarády.`:"Píšeme další díl a chceme vědět, co opravit."} Kdo nechce, nemusí.</p>`
-  +FBQ.map(([k,t,o])=>`<div class="q"><b>${esc(t)}</b><div class="ch" data-k="${k}">${o.map(x=>`<button>${esc(x)}</button>`).join("")}</div></div>`).join("")
-  +`<textarea maxlength="600" placeholder="Co bylo nejlepší a co vás štvalo? (nepovinné)"></textarea><button class="btn fbsend" disabled>Odeslat</button><small style="text-align:center">Posíláme jen tyhle odpovědi a výsledek hry (konec, čas, groše). Žádné jméno ani kontakt.</small>`;
+  +FBQ.map(([k,t,o])=>`<div class="q"><b>${esc(t)}</b><div class="ch" role="group" aria-label="${esc(t)}" data-k="${k}">${o.map(x=>`<button aria-pressed="false">${esc(x)}</button>`).join("")}</div></div>`).join("")
+  +`<textarea maxlength="600" aria-label="Co bylo nejlepší a co vás štvalo? (nepovinné)" placeholder="Co bylo nejlepší a co vás štvalo? (nepovinné)"></textarea><button class="btn fbsend" disabled>Odeslat</button><small style="text-align:center">Posíláme jen tyhle odpovědi a výsledek hry (konec, čas, groše). Žádné jméno ani kontakt.</small>`;
  const s=el.querySelector(".fbsend"),ta=el.querySelector("textarea");
- el.querySelectorAll(".ch").forEach(c=>c.querySelectorAll("button").forEach(b=>b.onclick=()=>{c.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));A[c.dataset.k]=b.textContent;s.disabled=false}));
+ el.querySelectorAll(".ch").forEach(c=>c.querySelectorAll("button").forEach(b=>b.onclick=()=>{c.querySelectorAll("button").forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-pressed",x===b)});A[c.dataset.k]=b.textContent;s.disabled=false}));
  ta.oninput=()=>{if(ta.value.trim())s.disabled=false};
  s.onclick=async()=>{s.disabled=true;s.textContent="Odesílám…";
   const d={...A,poznamka:ta.value.trim().slice(0,600),hra:`${(ENDS[ENDSEL[0]]||{}).t||"?"} · ${fmtMin(minutes())} · ${GS()} gr. · skóre ${score()} · placené pomoci ${Object.keys(SPENT).length} · konců ${ENDSEL.length}`};
