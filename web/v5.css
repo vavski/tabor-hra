@@ -1,0 +1,187 @@
+/* Žižkova rozlučka – úvodní stránka v5 (22. 10. 2026). Stavěno pro telefon: obraz místo textu, max 3 řádky v kuse.
+   Podmínky a soukromí dál používají style.css. */
+@import url("fonts.css");
+
+:root{
+  --ink:#0B0D10; --ink2:#12151b; --ink3:#1a1e26; --line:#2b313b;
+  --paper:#F2E6D8; --paper2:#d9d2c8; --mute:#a6aeb8;
+  --ember:#E85A2A; --ember2:#ff7a47; --teal:#1FA8A0; --teal2:#5fd3cb; --gold:#e0c34a;
+  --pad:20px; --r:22px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html,body{overflow-x:clip}
+body{background:var(--ink);color:var(--paper);font:17px/1.5 Inter,system-ui,sans-serif}
+img,video{display:block;max-width:100%}
+a{color:var(--teal2)}
+a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:8px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--gold);color:#000;padding:8px 12px;border-radius:8px;z-index:100;font-weight:800}
+.skip:focus{left:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.hide{display:none!important}
+.muted{color:var(--mute)}
+
+/* jedna osa pro všechno: 20 px od kraje, max 560 px */
+.wrap{width:min(560px,100% - 2*var(--pad));margin:0 auto}
+section{padding:56px 0}
+h1,h2,.price,.stats b,.logo,.card figcaption,.foot-logo{font-family:"Bebas Neue",Impact,sans-serif;font-weight:400;letter-spacing:.02em;line-height:.95}
+h2{font-size:clamp(48px,13vw,68px);margin-bottom:14px}
+h1 span,h2 span{color:var(--ember)}
+.lead{font-size:18px;color:var(--paper2);margin:-4px 0 18px}
+
+/* tlačítka */
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;background:var(--ember);color:#fff;border:0;border-radius:16px;padding:14px 22px;font:800 18px Inter;text-decoration:none;cursor:pointer;min-height:52px;box-shadow:0 10px 30px rgba(232,90,42,.35);transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.btn.big{width:100%;min-height:62px;font-size:21px}
+.btn.sm{min-height:42px;padding:8px 16px;font-size:15px;border-radius:12px}
+.shine::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-100%);animation:shine 3.2s ease-in-out infinite}
+@keyframes shine{0%,55%{transform:translateX(-100%)}85%,100%{transform:translateX(100%)}}
+
+/* hlavička */
+.top{position:fixed;inset:0 0 auto;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px var(--pad);padding-top:max(10px,env(safe-area-inset-top));background:linear-gradient(rgba(11,13,16,.85),rgba(11,13,16,0))}
+.logo{font-size:24px;color:var(--paper);text-decoration:none}
+.logo span{color:var(--ember)}
+
+/* 1 · úvod */
+.hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;padding:0 0 28px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(11,13,16,.35) 0%,rgba(11,13,16,.1) 30%,rgba(11,13,16,.75) 60%,var(--ink) 100%)}
+.hero-in{position:relative;z-index:2;width:min(560px,100% - 2*var(--pad));margin:0 auto}
+.pill{display:inline-flex;align-items:center;gap:8px;font:800 12px/1 Inter;letter-spacing:.14em;text-transform:uppercase;background:rgba(11,13,16,.6);border:1px solid var(--line);border-radius:99px;padding:8px 12px;margin-bottom:14px}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--teal2);box-shadow:0 0 0 0 var(--teal2);animation:ping 1.8s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
+h1{font-size:clamp(56px,16vw,92px);text-shadow:0 4px 24px rgba(0,0,0,.6)}
+h1 span{display:inline-block;animation:pop .7s .3s both}
+@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.9)}to{opacity:1;transform:none}}
+.hero-sub{font-size:18px;font-weight:600;margin:12px 0 18px;color:var(--paper)}
+.chips{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chips li{font:700 13px/1 Inter;background:rgba(242,230,216,.1);border:1px solid rgba(242,230,216,.18);border-radius:99px;padding:8px 12px}
+
+/* běžící pás míst */
+.marq{overflow:hidden;background:var(--ember);color:#fff;padding:12px 0;transform:rotate(-2deg) scale(1.03);margin:6px 0}
+.marq div{display:flex;gap:18px;width:max-content;animation:marq 22s linear infinite;font:400 24px/1 "Bebas Neue",Impact,sans-serif;letter-spacing:.06em}
+.marq b{font-weight:400;opacity:.7}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* 2 · tři kroky */
+.cards{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px var(--pad) 8px;scrollbar-width:none}
+.cards::-webkit-scrollbar{display:none}
+@media (min-width:600px){.cards{padding-left:calc(50% - 280px);padding-right:calc(50% - 280px)}}
+.card{position:relative;flex:0 0 78%;max-width:340px;scroll-snap-align:center;border-radius:var(--r);overflow:hidden;background:var(--ink3);aspect-ratio:4/5}
+.card img{width:100%;height:100%;object-fit:cover}
+.card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(11,13,16,.9))}
+.card figcaption{position:absolute;left:18px;right:18px;bottom:16px;z-index:2;font-size:40px;display:flex;align-items:center;gap:12px}
+.card figcaption b{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--ember);font-size:28px;font-weight:400;flex:none}
+.win{position:absolute;z-index:3;top:16px;right:16px;background:var(--teal);color:#fff;font:800 18px/1.1 Inter;padding:10px 14px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.4);transform:rotate(4deg)}
+.win small{display:block;font:700 13px Inter;opacity:.9}
+.card.in .win{animation:bump .6s .5s both}
+@keyframes bump{0%{transform:scale(0) rotate(-20deg)}70%{transform:scale(1.15) rotate(6deg)}100%{transform:scale(1) rotate(4deg)}}
+.swipe{font:700 13px Inter;color:var(--mute);margin-top:8px;letter-spacing:.06em}
+
+/* 3 · chat */
+.phone{background:var(--ink2);border:1px solid var(--line);border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.ph-top{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);background:var(--ink3)}
+.ph-top img{width:40px;height:40px;border-radius:50%}
+.ph-top b{display:block;font-size:16px}
+.ph-top small{color:var(--teal2);font-size:13px}
+.ph-body{padding:16px;display:flex;flex-direction:column;gap:10px;min-height:280px}
+.m{max-width:85%;padding:11px 14px;border-radius:18px 18px 18px 6px;background:var(--ink3);font-size:16px;line-height:1.4;animation:msg .35s both}
+.m.me{align-self:flex-end;background:var(--teal);color:#fff;border-radius:18px 18px 6px 18px}
+.m.sys{align-self:center;background:none;color:var(--mute);font-size:13px;padding:0}
+.m.hot{border:2px solid var(--ember)}
+.m small{display:block;color:var(--ember2);font-weight:800;font-size:12px;margin-bottom:2px}
+.typing{display:inline-flex;gap:4px;padding:14px;background:var(--ink3);border-radius:18px;width:max-content}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--mute);animation:dot 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes dot{50%{opacity:.25;transform:translateY(-3px)}}
+@keyframes msg{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ph-quick{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 16px}
+.ph-quick button,.ph-quick a{flex:1 1 45%;min-height:48px;border-radius:14px;border:2px solid var(--teal);background:transparent;color:var(--paper);font:700 15px Inter;cursor:pointer;animation:msg .35s both;text-align:center;text-decoration:none;display:grid;place-items:center;padding:8px}
+.ph-quick a{background:var(--ember);border-color:var(--ember);color:#fff;flex-basis:100%}
+
+/* 4 · video */
+.vid{border-radius:var(--r);overflow:hidden;aspect-ratio:9/16;max-height:80svh;margin:0 auto;background:var(--ink3);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.vid video{width:100%;height:100%;object-fit:cover}
+
+/* 5 · čísla */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stats div{background:var(--ink2);border:1px solid var(--line);border-radius:var(--r);padding:18px 16px}
+.stats b{display:block;font-size:68px;color:var(--ember)}
+.stats div:nth-child(2) b,.stats div:nth-child(4) b{color:var(--teal2)}
+.stats span{font:700 15px/1.3 Inter;color:var(--paper2)}
+
+/* 6 · okénka */
+.okna{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px var(--pad) 8px;scrollbar-width:none}
+.okna::-webkit-scrollbar{display:none}
+@media (min-width:600px){.okna{padding-left:calc(50% - 280px)}}
+.okno{position:relative;flex:0 0 46%;max-width:220px;aspect-ratio:3/4;border-radius:16px;overflow:hidden;scroll-snap-align:start;background:var(--ink3);cursor:pointer}
+.okno img{width:100%;height:100%;object-fit:cover}
+.okno figcaption{position:absolute;left:10px;bottom:10px;background:var(--teal);color:var(--ink);font:400 22px/1 "Bebas Neue",Impact;padding:5px 8px;border-radius:8px}
+.okno.lock img{filter:blur(14px) brightness(.5);transform:scale(1.2)}
+.okno.lock::after{content:"🔒";position:absolute;inset:0;display:grid;place-items:center;font-size:34px}
+.okno.fin figcaption{background:var(--ember);color:#fff}
+.okno.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* 7 · pro koho */
+.tiles{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tiles li{background:var(--ink2);border:1px solid var(--line);border-radius:var(--r);padding:18px 16px;font:400 30px/1 "Bebas Neue",Impact,sans-serif}
+.tiles i{display:block;font-style:normal;font-size:34px;margin-bottom:10px}
+
+/* 8 · koupit */
+.buy{position:relative;border-radius:28px;padding:28px 22px;background:var(--ink2);isolation:isolate}
+.buy::before{content:"";position:absolute;inset:-2px;z-index:-1;border-radius:30px;background:conic-gradient(from var(--a,0deg),var(--ember),var(--gold),var(--teal),var(--ember));animation:spin 6s linear infinite}
+.buy::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:28px;background:var(--ink2)}
+@property --a{syntax:"<angle>";inherits:false;initial-value:0deg}
+@keyframes spin{to{--a:360deg}}
+.price{font-size:110px;color:var(--paper);display:flex;align-items:baseline;gap:8px}
+.price small{font-size:40px;color:var(--ember)}
+.price s{font-size:40px;color:var(--mute)}
+.per{font:700 16px Inter;color:var(--paper2);margin:4px 0 16px}
+.per span{color:var(--gold)}
+.ticks{list-style:none;margin:0 0 20px;display:grid;gap:8px}
+.ticks li{font:700 16px Inter;padding-left:30px;position:relative}
+.ticks li::before{content:"✓";position:absolute;left:0;top:-1px;width:22px;height:22px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-size:13px}
+.small{font-size:13px;line-height:1.45;color:var(--mute);margin-top:12px}
+.start{margin-top:16px;font:800 13px Inter;letter-spacing:.08em;text-transform:uppercase;color:var(--teal2)}
+
+/* 9 · otázky */
+.faq{display:grid;gap:8px}
+.faq details{background:var(--ink2);border:1px solid var(--line);border-radius:16px}
+.faq summary{list-style:none;cursor:pointer;padding:16px 48px 16px 16px;font:700 16px/1.35 Inter;position:relative;min-height:52px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:16px;top:50%;transform:translateY(-50%);font:400 30px/1 Inter;color:var(--ember);transition:transform .2s}
+.faq details[open] summary::after{transform:translateY(-50%) rotate(45deg)}
+.faq details p{padding:0 16px 16px;color:var(--paper2);font-size:16px}
+
+/* 10 · o nás */
+.onas{border-radius:var(--r);overflow:hidden;background:var(--ink2);border:1px solid var(--line)}
+.onas img{width:100%;height:auto}
+.onas figcaption{padding:20px 18px}
+.onas h2{font-size:44px}
+.onas p{color:var(--paper2)}
+.onas p b{color:var(--paper)}
+.ig{display:inline-block;margin-top:10px;font-weight:800}
+
+/* patička */
+footer{padding:40px 0 120px;border-top:1px solid var(--line);font-size:14px}
+footer p{margin-bottom:10px}
+.foot-logo{font-size:30px}
+.foot-logo span{color:var(--ember)}
+
+/* lišta dole */
+.bar{position:fixed;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:30;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 10px 10px 18px;background:rgba(18,21,27,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:20px;transform:translateY(140%);transition:transform .3s;max-width:540px;margin:0 auto}
+.bar.on{transform:none}
+#bar-price{font:400 30px/1 "Bebas Neue",Impact,sans-serif}
+#bar-price small{display:block;font:700 12px Inter;color:var(--mute)}
+.toast{position:fixed;left:50%;bottom:96px;z-index:40;transform:translate(-50%,20px);opacity:0;background:var(--paper);color:var(--ink);font:700 14px Inter;padding:10px 14px;border-radius:12px;transition:.25s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* objevování */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .shine::after,.marq div,.pill i,.buy::before,h1 span,.card.in .win{animation:none}
+}
