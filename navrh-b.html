@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Žižkova rozlučka · návrh B</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230B0D10'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' font-family='Impact,sans-serif' fill='%23E85A2A'%3EŽ%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="web/nb.css?v=20261022">
+<script src="web/config.js?v=20261022"></script>
+</head>
+<body>
+<!-- Návrh B: web jako Reels. Každá obrazovka = jedna věc, posouvá se prstem nahoru. -->
+<div class="segs" aria-hidden="true" id="segs"></div>
+<a class="logo" href="#s1" aria-label="Žižkova rozlučka, nahoru">ŽIŽKOVA <span>ROZLUČKA</span></a>
+
+<nav class="rail" aria-label="Rychlé akce">
+  <a href="#koupit" class="r-main" aria-label="Hrát"><b>▶</b><span>Hrát</span></a>
+  <button type="button" id="share" aria-label="Poslat partě"><b>↗</b><span>Partě</span></button>
+  <a href="#faq" aria-label="Otázky"><b>?</b><span>Otázky</span></a>
+</nav>
+
+<main id="main">
+  <section class="scr" id="s1" aria-label="Úvod">
+    <video class="bg" src="img/v5/uvod.mp4" poster="img/v5/uvod.jpg" autoplay muted loop playsinline aria-hidden="true"></video>
+    <div class="cap">
+      <p class="tag">Tábor · úniková hra venku</p>
+      <h1>Žižka se v poledne žení.<br><span>A je pryč.</span></h1>
+      <p class="sub">Najděte ho. Do poledne.</p>
+    </div>
+    <p class="hint">posuň nahoru</p>
+  </section>
+
+  <section class="scr" aria-label="Krok 1">
+    <img class="bg" src="img/v5/krok1.jpg" alt="Hráčka drží mobil s chatem hry" loading="lazy">
+    <div class="cap"><p class="num">1</p><h2>Otevřete <span>chat</span></h2><p class="sub">Jeden mobil. Celá parta.</p></div>
+  </section>
+
+  <section class="scr" aria-label="Krok 2">
+    <img class="bg" src="img/v5/krok2.jpg" alt="Hráčka ukazuje na kašnu s hádankou" loading="lazy">
+    <div class="cap"><p class="num">2</p><h2>Najděte <span>hádanku</span></h2><p class="sub">Je přímo ve městě. Na kašně, na fasádě.</p></div>
+  </section>
+
+  <section class="scr" aria-label="Krok 3">
+    <img class="bg" src="img/v5/krok3.jpg" alt="Hráčka se směje, hádanku vyřešila" loading="lazy">
+    <span class="sticker reveal">✓ VYŘEŠENO<small>+ groše do kasy</small></span>
+    <div class="cap"><p class="num">3</p><h2>Vyřešte <span>ji</span></h2><p class="sub">Pak další. Devět míst.</p></div>
+  </section>
+
+  <section class="scr chat-scr" aria-label="Chat s nevěstou">
+    <img class="bg blur" src="img/noc/1.jpg" alt="" aria-hidden="true">
+    <div class="phone" id="chat" aria-live="polite">
+      <div class="ph-top"><img src="img/av-nevesta.jpg" alt="" width="36" height="36"><div><b>Nevěsta píše…</b><small>odpovězte jí</small></div></div>
+      <div class="ph-body" id="chat-body"></div>
+      <div class="ph-quick" id="chat-quick"></div>
+    </div>
+  </section>
+
+  <section class="scr" aria-label="Video z hraní">
+    <video class="bg" src="img/v5/ukazka.mp4" poster="img/v5/ukazka.jpg" muted loop playsinline preload="none" data-autoplay aria-label="Krátké video z hraní"></video>
+  </section>
+
+  <section class="scr okna-scr" aria-label="Okénka Žižkovy noci">
+    <div class="cap top"><h2>Co v noci <span>vyváděl?</span></h2><p class="sub">Každá hádanka odemkne okénko.</p></div>
+    <div class="grid">
+      <figure class="okno"><img src="img/noc/1.jpg" alt="Žižka u kašny" loading="lazy"><figcaption>02:14</figcaption></figure>
+      <figure class="okno"><img src="img/noc/2.jpg" alt="Krejčí stříhá rukáv" loading="lazy"><figcaption>02:47</figcaption></figure>
+      <figure class="okno lock"><img src="img/noc/3.jpg" alt="" loading="lazy"><figcaption>03:05</figcaption></figure>
+      <figure class="okno lock"><img src="img/noc/4.jpg" alt="" loading="lazy"><figcaption>03:20</figcaption></figure>
+      <figure class="okno lock"><img src="img/noc/5.jpg" alt="" loading="lazy"><figcaption>03:40</figcaption></figure>
+      <figure class="okno lock"><img src="img/noc/6.jpg" alt="" loading="lazy"><figcaption>04:02</figcaption></figure>
+      <figure class="okno lock"><img src="img/noc/7.jpg" alt="" loading="lazy"><figcaption>04:30</figcaption></figure>
+      <figure class="okno lock"><img src="img/noc/8.jpg" alt="" loading="lazy"><figcaption>04:50</figcaption></figure>
+      <figure class="okno lock fin"><img src="img/noc/9.jpg" alt="" loading="lazy"><figcaption>05:02</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="scr buy-scr" id="koupit" aria-label="Hrát">
+    <div class="buy">
+      <div data-only="prodej"><p class="price"><span id="price">49</span><small>Kč</small></p><p class="per">za celou partu · <span id="price-note">zaváděcí cena</span></p></div>
+      <div data-only="zdarma"><p class="price">Zdarma</p><p class="per">Teď hrajete zdarma. Na konci tři kliky v dotazníku.</p></div>
+      <div data-only="brzy"><p class="price">Brzy</p><p class="per">Dáme vědět, až hra vyjde.</p></div>
+      <ul class="facts"><li><b>1–6</b>lidí</li><li><b>9</b>míst</li><li><b>60–90</b>min</li><li><b>3</b>konce</li></ul>
+      <div data-only="prodej">
+        <a class="btn shine" id="pay-btn" href="#" rel="noopener">Koupit a hrát</a>
+        <p class="small">Kód od kamarádů zadáte při platbě. Zaplacením souhlasíte s <a href="podminky.html">obchodními podmínkami</a> a s tím, že přístup dostanete okamžitě, tím ztrácíte právo odstoupit od smlouvy do 14 dnů. Když hra nefunguje, peníze vrátíme.</p>
+        <p class="small hide" id="pay-missing">Platba se připravuje. Napište si o hru na <a data-mail href="#">e-mail</a>.</p>
+      </div>
+      <div data-only="zdarma">
+        <a class="btn shine" id="play-btn" href="hra/">Hrát zdarma</a>
+        <p class="small">Hrajete na vlastní odpovědnost, podle <a href="podminky.html">pravidel hry</a>.</p>
+      </div>
+      <div data-only="brzy"><a class="btn" data-mail data-subject="Chci vědět, až Žižkova rozlučka vyjde" href="#">Napsat e-mail</a></div>
+      <p class="start">Start: kašna na Žižkově náměstí · bez aplikace</p>
+    </div>
+  </section>
+
+  <section class="rest" id="faq" aria-labelledby="faq-t">
+    <h2 id="faq-t">Otázky</h2>
+    <details><summary>Nejsem z Tábora. Zvládnu to?</summary><p>Ano. Chat vás vede. Start je u kašny na Žižkově náměstí, 20 minut pěšky od nádraží.</p></details>
+    <details><summary>Co když se zasekneme?</summary><p>Na každém místě jsou nápovědy. Ta poslední řekne řešení.</p></details>
+    <details><summary>Co když prší?</summary><p>Když leje, přerušte to. Hra si pamatuje, kde jste.</p></details>
+    <details><summary>Dá se hrát po tmě?</summary><p>Radši ne, hádanky jsou na fasádách. V listopadu vyrazte nejpozději ve tři.</p></details>
+    <details><summary>Bude signál?</summary><p>Otevřete hru doma na wifi. Pak jde dohrát i bez signálu.</p></details>
+    <details><summary>Musíme pít? Můžou děti?</summary><p>Pít nemusíte. Humor je pro 15+.</p></details>
+    <details><summary>Jak dlouho přístup platí?</summary><p><span data-validity>12</span> měsíců od zaplacení, jedna hra pro partu.</p></details>
+    <footer>
+      <p><a href="podminky.html">Podmínky a pravidla</a> · <a href="soukromi.html">Soukromí</a> · <a data-mail href="#">e-mail</a></p>
+      <p class="muted">Hrajete na vlastní odpovědnost. Žádné cookies ani sledování.</p>
+      <p class="muted" id="seller"></p>
+    </footer>
+  </section>
+</main>
+<div class="toast" id="toast" role="status"></div>
+<script src="web/v5.js?v=20261022b"></script>
+<script src="web/nb.js?v=20261022"></script>
+</body>
+</html>

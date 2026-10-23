@@ -1,0 +1,118 @@
+/* Návrh C: světlý komiks. Papír s rastrem, tlusté černé obrysy, tvrdé stíny, nálepky a bubliny. */
+@import url("fonts.css");
+:root{--paperbg:#F4EBDD;--ink:#121212;--ember:#E85A2A;--teal:#14A79E;--gold:#F2C230;--pink:#F27BA8;--mute:#5b5f66;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:clip}
+body{background:var(--paperbg) radial-gradient(rgba(0,0,0,.09) 1px,transparent 1.4px) 0 0/9px 9px;color:var(--ink);font:17px/1.45 Inter,system-ui,sans-serif;overflow-x:clip}
+img,video{display:block;max-width:100%}
+a{color:var(--ink)}
+.hide{display:none!important}.muted{color:var(--mute)}
+h1,h2,.price,.logo,.f-logo,.stamp,.pow,.stickers li,.marq,figcaption,.t-head{font-family:"Bebas Neue",Impact,sans-serif;font-weight:400;letter-spacing:.02em;line-height:.92}
+h1 span,h2 span{color:var(--ember)}
+main section{width:min(560px,100% - 40px);margin:0 auto;padding:44px 0}
+h2{font-size:clamp(50px,14vw,72px);margin-bottom:16px;text-shadow:3px 3px 0 var(--gold)}
+.lead{font-weight:700;margin:-6px 0 16px}
+
+/* tlačítka s tvrdým stínem */
+.btn{display:inline-flex;align-items:center;justify-content:center;background:var(--ember);color:#fff;border:3px solid var(--ink);border-radius:14px;padding:12px 20px;font:800 18px Inter;text-decoration:none;box-shadow:5px 5px 0 var(--ink);transition:transform .1s,box-shadow .1s}
+.btn:active{transform:translate(4px,4px);box-shadow:1px 1px 0 var(--ink)}
+.btn.big{width:100%;min-height:64px;font-size:22px}
+.btn.sm{padding:6px 14px;font-size:15px;box-shadow:3px 3px 0 var(--ink);border-width:2px}
+
+.top{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:10px 20px;background:var(--paperbg);border-bottom:3px solid var(--ink)}
+.logo{font-size:26px;color:var(--ink);text-decoration:none}.logo span{color:var(--ember)}
+
+/* panely */
+.panel{position:relative;border:4px solid var(--ink);border-radius:6px;background:#000;box-shadow:7px 7px 0 var(--ink);overflow:visible}
+.panel img,.panel video{width:100%;height:100%;object-fit:cover}
+.tilt-l{transform:rotate(-1.6deg)}.tilt-r{transform:rotate(1.4deg)}
+.hero{padding-top:26px!important}
+.panel.big{aspect-ratio:4/5;margin-bottom:26px}
+.stamp{position:absolute;top:-14px;left:12px;background:var(--gold);border:3px solid var(--ink);padding:6px 10px;font-size:20px;transform:rotate(-3deg);box-shadow:3px 3px 0 var(--ink)}
+.balloon{position:absolute;background:#fff;border:3px solid var(--ink);border-radius:22px;padding:12px 16px;font:800 18px/1.25 Inter;box-shadow:4px 4px 0 var(--ink)}
+.balloon i{position:absolute;width:22px;height:22px;background:#fff;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink)}
+.b-hero{right:-8px;bottom:-22px;max-width:76%;transform:rotate(1.5deg)}
+.b-hero i{left:26px;top:-13px;transform:rotate(-135deg)}
+.b-mini{top:18px;right:14px;font-size:22px;padding:8px 14px}
+.b-mini i{left:-13px;top:14px;transform:rotate(135deg)}
+h1{font-size:clamp(60px,17vw,96px);margin:18px 0 18px;text-shadow:4px 4px 0 var(--gold)}
+.stickers{list-style:none;display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.stickers li{font-size:24px;padding:6px 12px;border:3px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--ink)}
+.s1{background:var(--teal);color:#fff;transform:rotate(-3deg)}.s2{background:var(--gold);transform:rotate(2deg)}
+.s3{background:var(--pink);transform:rotate(-1deg)}.s4{background:#fff;transform:rotate(3deg)}
+
+.marq{overflow:hidden;background:var(--ink);color:var(--gold);padding:12px 0;font-size:26px;letter-spacing:.06em;transform:rotate(1.5deg);margin:10px 0}
+.marq div{display:flex;gap:18px;width:max-content;animation:marq 20s linear infinite}
+.marq b{font-weight:400;color:var(--ember)}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+.strip{display:grid;gap:26px}
+.strip .panel{aspect-ratio:4/3}
+.strip figcaption{position:absolute;left:-6px;bottom:-16px;background:#fff;border:3px solid var(--ink);padding:6px 12px;font-size:28px;display:flex;align-items:center;gap:10px;box-shadow:3px 3px 0 var(--ink)}
+.strip figcaption b{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--ember);color:#fff;font-weight:400}
+.pow{position:absolute;top:14px;right:10px;background:var(--gold);color:var(--ember);font-size:40px;padding:8px 14px;border:4px solid var(--ink);clip-path:polygon(0 12%,12% 0,30% 10%,50% 0,68% 10%,88% 0,100% 14%,92% 50%,100% 86%,86% 100%,66% 90%,48% 100%,30% 90%,10% 100%,0 84%,8% 50%);transform:rotate(-6deg)}
+.reveal.in .pow{animation:bum .5s .3s both}
+@keyframes bum{0%{transform:scale(0) rotate(-30deg)}70%{transform:scale(1.2) rotate(-4deg)}100%{transform:scale(1) rotate(-6deg)}}
+
+/* chat jako komiksové bubliny */
+.phone{background:#fff;border:4px solid var(--ink);border-radius:22px;box-shadow:7px 7px 0 var(--ink);overflow:hidden}
+.ph-top{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:3px solid var(--ink);background:var(--gold);font-size:18px}
+.ph-top img{width:40px;height:40px;border-radius:50%;border:2px solid var(--ink)}
+.ph-body{padding:16px 14px;display:flex;flex-direction:column;gap:12px;min-height:280px}
+.m{max-width:86%;padding:10px 14px;border:3px solid var(--ink);border-radius:18px 18px 18px 4px;background:#fff;font:600 16px/1.35 Inter;box-shadow:3px 3px 0 var(--ink);animation:msg .3s both}
+.m.me{align-self:flex-end;background:var(--teal);color:#fff;border-radius:18px 18px 4px 18px}
+.m.sys{align-self:center;border:0;box-shadow:none;background:none;color:var(--mute);font-size:13px;padding:0}
+.m.hot{background:#ffe1d5}
+.m small{display:block;color:var(--ember);font-weight:800;font-size:12px}
+.typing{display:inline-flex;gap:4px;padding:12px;border:3px solid var(--ink);border-radius:18px;background:#fff;width:max-content}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--ink);animation:dot 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes dot{50%{opacity:.2}}@keyframes msg{from{opacity:0;transform:scale(.9)}}
+.ph-quick{display:flex;flex-wrap:wrap;gap:8px;padding:0 14px 14px}
+.ph-quick button,.ph-quick a{flex:1 1 45%;min-height:48px;border:3px solid var(--ink);border-radius:12px;background:#fff;color:var(--ink);font:800 15px Inter;box-shadow:3px 3px 0 var(--ink);cursor:pointer;display:grid;place-items:center;text-decoration:none;padding:6px}
+.ph-quick a{background:var(--ember);color:#fff;flex-basis:100%}
+
+.polaroid{background:#fff;border:3px solid var(--ink);padding:12px 12px 4px;box-shadow:7px 7px 0 var(--ink);transform:rotate(-2deg);width:min(330px,88%);margin:0 auto}
+.polaroid video{aspect-ratio:9/16;width:100%;object-fit:cover;background:#000}
+.polaroid p{font:700 15px Inter;text-align:center;padding:10px 0}
+
+.comic{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;border:4px solid var(--ink);padding:8px;background:#fff;box-shadow:7px 7px 0 var(--ink)}
+.okno{position:relative;aspect-ratio:3/4;border:3px solid var(--ink);overflow:hidden;cursor:pointer;background:#ddd}
+.okno img{width:100%;height:100%;object-fit:cover}
+.okno.lock img{filter:blur(9px) grayscale(.6);transform:scale(1.2)}
+.okno.lock::after{content:"?";position:absolute;inset:0;display:grid;place-items:center;font:400 54px "Bebas Neue",Impact;color:#fff;text-shadow:3px 3px 0 var(--ink)}
+.okno figcaption{position:absolute;left:4px;bottom:4px;background:var(--gold);border:2px solid var(--ink);font-size:16px;padding:2px 5px}
+.okno.fin figcaption{background:var(--ember);color:#fff}
+.okno.shake{animation:shake .4s}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* vstupenka */
+.ticket{position:relative;background:#fff;border:4px solid var(--ink);border-radius:18px;padding:22px 20px;box-shadow:8px 8px 0 var(--ink)}
+.t-head{font-size:22px;color:var(--teal);letter-spacing:.08em}
+.price{font-size:130px;display:flex;align-items:baseline;gap:6px;text-shadow:5px 5px 0 var(--gold)}
+.price small{font-size:46px;color:var(--ember);text-shadow:none}
+.per{font-weight:800}.per span{color:var(--ember)}
+.ticks{list-style:none;margin:16px 0;display:grid;gap:6px;font-weight:700}
+.ticks li::before{content:"✔ ";color:var(--teal)}
+.perf{border-top:3px dashed var(--ink);margin:16px -20px 18px;position:relative}
+.perf::before,.perf::after{content:"";position:absolute;top:-16px;width:28px;height:28px;border-radius:50%;background:var(--paperbg);border:4px solid var(--ink)}
+.perf::before{left:-16px}.perf::after{right:-16px}
+.small{font-size:12px;line-height:1.45;color:var(--mute);margin-top:12px}
+.start{margin-top:14px;font:800 13px Inter;letter-spacing:.06em;color:var(--teal)}
+
+#faq details{background:#fff;border:3px solid var(--ink);border-radius:12px;margin-bottom:10px;box-shadow:3px 3px 0 var(--ink)}
+#faq summary{cursor:pointer;padding:14px 16px;font:800 16px Inter;list-style:none}
+#faq summary::-webkit-details-marker{display:none}
+#faq details p{padding:0 16px 14px}
+
+footer{width:min(560px,100% - 40px);margin:0 auto;padding:30px 0 120px;border-top:3px solid var(--ink);font-size:14px}
+footer p{margin-bottom:8px}.f-logo{font-size:30px}.f-logo span{color:var(--ember)}
+
+.bar{position:fixed;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:30;display:flex;justify-content:space-between;align-items:center;padding:8px 8px 8px 16px;background:#fff;border:3px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--ink);transform:translateY(160%);transition:transform .3s;max-width:540px;margin:0 auto}
+.bar.on{transform:none}
+#bar-price{font:400 30px/1 "Bebas Neue",Impact}#bar-price small{display:block;font:700 12px Inter;color:var(--mute)}
+.toast{position:fixed;left:50%;bottom:100px;z-index:40;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#fff;font:700 14px Inter;padding:10px 14px;border-radius:12px;transition:.25s;pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .5s,transform .5s}
+.reveal.in{opacity:1;transform:none}
+.reveal.tilt-l.in{transform:rotate(-1.6deg)}.reveal.tilt-r.in{transform:rotate(1.4deg)}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.marq div{animation:none}}

@@ -6,8 +6,20 @@
   --ink:#0B0D10; --ink2:#12151b; --ink3:#1a1e26; --line:#2b313b;
   --paper:#F2E6D8; --paper2:#d9d2c8; --mute:#a6aeb8;
   --ember:#E85A2A; --ember2:#ff7a47; --teal:#1FA8A0; --teal2:#5fd3cb; --gold:#e0c34a;
-  --pad:20px; --r:22px;
+  --glass:rgba(18,21,27,.92); --chip:rgba(242,230,216,.1); --chipb:rgba(242,230,216,.18);
+  --pad:20px; --r:22px; color-scheme:dark;
 }
+/* světlá verze: podle telefonu, nebo přepínačem ◐ v hlavičce */
+@media (prefers-color-scheme:light){:root:not([data-theme=dark]){
+  --ink:#F6F0E6; --ink2:#FFFFFF; --ink3:#EFE5D6; --line:#E0D3C0;
+  --paper:#15181D; --paper2:#3A414C; --mute:#666E7A;
+  --ember:#D94C1C; --ember2:#E85A2A; --teal:#12867F; --teal2:#0E7A73; --gold:#9A7B0C;
+  --glass:rgba(255,255,255,.92); --chip:rgba(255,255,255,.14); --chipb:rgba(255,255,255,.3); color-scheme:light}}
+:root[data-theme=light]{
+  --ink:#F6F0E6; --ink2:#FFFFFF; --ink3:#EFE5D6; --line:#E0D3C0;
+  --paper:#15181D; --paper2:#3A414C; --mute:#666E7A;
+  --ember:#D94C1C; --ember2:#E85A2A; --teal:#12867F; --teal2:#0E7A73; --gold:#9A7B0C;
+  --glass:rgba(255,255,255,.92); --chip:rgba(255,255,255,.14); --chipb:rgba(255,255,255,.3); color-scheme:light}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 html,body{overflow-x:clip}
@@ -27,6 +39,7 @@ section{padding:56px 0}
 h1,h2,.price,.stats b,.logo,.card figcaption,.foot-logo{font-family:"Bebas Neue",Impact,sans-serif;font-weight:400;letter-spacing:.02em;line-height:.95}
 h2{font-size:clamp(48px,13vw,68px);margin-bottom:14px}
 h1 span,h2 span{color:var(--ember)}
+.hero h1 span{color:#E85A2A}
 .lead{font-size:18px;color:var(--paper2);margin:-4px 0 18px}
 
 /* tlačítka */
@@ -38,24 +51,26 @@ h1 span,h2 span{color:var(--ember)}
 @keyframes shine{0%,55%{transform:translateX(-100%)}85%,100%{transform:translateX(100%)}}
 
 /* hlavička */
-.top{position:fixed;inset:0 0 auto;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px var(--pad);padding-top:max(10px,env(safe-area-inset-top));background:linear-gradient(rgba(11,13,16,.85),rgba(11,13,16,0))}
-.logo{font-size:24px;color:var(--paper);text-decoration:none}
+.top{position:fixed;inset:0 0 auto;z-index:20;display:flex;align-items:center;gap:10px;padding:10px var(--pad);padding-top:max(10px,env(safe-area-inset-top));background:linear-gradient(rgba(11,13,16,.85),rgba(11,13,16,0))}
+.top .btn{margin-left:auto}
+.theme{width:42px;height:42px;border-radius:12px;border:1px solid rgba(255,255,255,.25);background:rgba(11,13,16,.45);color:#fff;font-size:18px;cursor:pointer}
+.logo{font-size:24px;color:#F2E6D8;text-decoration:none}
 .logo span{color:var(--ember)}
 
 /* 1 · úvod */
-.hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;padding:0 0 28px;overflow:hidden}
+.hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;padding:0 0 44px;overflow:hidden;background:#0B0D10;color:#F2E6D8}
 .hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.hero::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(11,13,16,.35) 0%,rgba(11,13,16,.1) 30%,rgba(11,13,16,.75) 60%,var(--ink) 100%)}
+.hero::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(11,13,16,.35) 0%,rgba(11,13,16,.1) 30%,rgba(11,13,16,.8) 58%,rgba(11,13,16,.92) 92%,var(--ink) 100%)}
 .hero-in{position:relative;z-index:2;width:min(560px,100% - 2*var(--pad));margin:0 auto}
-.pill{display:inline-flex;align-items:center;gap:8px;font:800 12px/1 Inter;letter-spacing:.14em;text-transform:uppercase;background:rgba(11,13,16,.6);border:1px solid var(--line);border-radius:99px;padding:8px 12px;margin-bottom:14px}
-.pill i{width:8px;height:8px;border-radius:50%;background:var(--teal2);box-shadow:0 0 0 0 var(--teal2);animation:ping 1.8s infinite}
+.pill{display:inline-flex;align-items:center;gap:8px;font:800 12px/1 Inter;letter-spacing:.14em;text-transform:uppercase;background:rgba(11,13,16,.6);border:1px solid #2b313b;border-radius:99px;padding:8px 12px;margin-bottom:14px}
+.pill i{width:8px;height:8px;border-radius:50%;background:#5fd3cb;box-shadow:0 0 0 0 #5fd3cb;animation:ping 1.8s infinite}
 @keyframes ping{70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
 h1{font-size:clamp(56px,16vw,92px);text-shadow:0 4px 24px rgba(0,0,0,.6)}
 h1 span{display:inline-block;animation:pop .7s .3s both}
 @keyframes pop{from{opacity:0;transform:translateY(18px) scale(.9)}to{opacity:1;transform:none}}
-.hero-sub{font-size:18px;font-weight:600;margin:12px 0 18px;color:var(--paper)}
+.hero-sub{font-size:18px;font-weight:600;margin:12px 0 18px}
 .chips{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.chips li{font:700 13px/1 Inter;background:rgba(242,230,216,.1);border:1px solid rgba(242,230,216,.18);border-radius:99px;padding:8px 12px}
+.chips li{font:700 13px/1 Inter;background:rgba(242,230,216,.1);border:1px solid rgba(242,230,216,.2);border-radius:99px;padding:8px 12px}
 
 /* běžící pás míst */
 .marq{overflow:hidden;background:var(--ember);color:#fff;padding:12px 0;transform:rotate(-2deg) scale(1.03);margin:6px 0}
@@ -70,8 +85,8 @@ h1 span{display:inline-block;animation:pop .7s .3s both}
 .card{position:relative;flex:0 0 78%;max-width:340px;scroll-snap-align:center;border-radius:var(--r);overflow:hidden;background:var(--ink3);aspect-ratio:4/5}
 .card img{width:100%;height:100%;object-fit:cover}
 .card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(11,13,16,.9))}
-.card figcaption{position:absolute;left:18px;right:18px;bottom:16px;z-index:2;font-size:40px;display:flex;align-items:center;gap:12px}
-.card figcaption b{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--ember);font-size:28px;font-weight:400;flex:none}
+.card figcaption{position:absolute;left:18px;right:18px;bottom:16px;z-index:2;color:#F2E6D8;font-size:40px;display:flex;align-items:center;gap:12px}
+.card figcaption b{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:#E85A2A;font-size:28px;font-weight:400;flex:none}
 .win{position:absolute;z-index:3;top:16px;right:16px;background:var(--teal);color:#fff;font:800 18px/1.1 Inter;padding:10px 14px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.4);transform:rotate(4deg)}
 .win small{display:block;font:700 13px Inter;opacity:.9}
 .card.in .win{animation:bump .6s .5s both}
@@ -116,7 +131,7 @@ h1 span{display:inline-block;animation:pop .7s .3s both}
 @media (min-width:600px){.okna{padding-left:calc(50% - 280px)}}
 .okno{position:relative;flex:0 0 46%;max-width:220px;aspect-ratio:3/4;border-radius:16px;overflow:hidden;scroll-snap-align:start;background:var(--ink3);cursor:pointer}
 .okno img{width:100%;height:100%;object-fit:cover}
-.okno figcaption{position:absolute;left:10px;bottom:10px;background:var(--teal);color:var(--ink);font:400 22px/1 "Bebas Neue",Impact;padding:5px 8px;border-radius:8px}
+.okno figcaption{position:absolute;left:10px;bottom:10px;background:#5fd3cb;color:#0B0D10;font:400 22px/1 "Bebas Neue",Impact;padding:5px 8px;border-radius:8px}
 .okno.lock img{filter:blur(14px) brightness(.5);transform:scale(1.2)}
 .okno.lock::after{content:"🔒";position:absolute;inset:0;display:grid;place-items:center;font-size:34px}
 .okno.fin figcaption{background:var(--ember);color:#fff}
@@ -170,7 +185,7 @@ footer p{margin-bottom:10px}
 .foot-logo span{color:var(--ember)}
 
 /* lišta dole */
-.bar{position:fixed;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:30;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 10px 10px 18px;background:rgba(18,21,27,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:20px;transform:translateY(140%);transition:transform .3s;max-width:540px;margin:0 auto}
+.bar{position:fixed;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:30;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 10px 10px 18px;background:var(--glass);box-shadow:0 10px 30px rgba(0,0,0,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:20px;transform:translateY(140%);transition:transform .3s;max-width:540px;margin:0 auto}
 .bar.on{transform:none}
 #bar-price{font:400 30px/1 "Bebas Neue",Impact,sans-serif}
 #bar-price small{display:block;font:700 12px Inter;color:var(--mute)}
@@ -185,3 +200,7 @@ footer p{margin-bottom:10px}
   .reveal{opacity:1;transform:none;transition:none}
   .shine::after,.marq div,.pill i,.buy::before,h1 span,.card.in .win{animation:none}
 }
+
+/* světlá: drobnosti, které nejdou jen přes barvy */
+:root[data-theme=light] .stats div,:root[data-theme=light] .tiles li,:root[data-theme=light] .faq details,:root[data-theme=light] .phone,:root[data-theme=light] .onas{box-shadow:0 6px 20px rgba(60,40,10,.07)}
+@media (prefers-color-scheme:light){:root:not([data-theme=dark]) .stats div,:root:not([data-theme=dark]) .tiles li,:root:not([data-theme=dark]) .faq details,:root:not([data-theme=dark]) .phone,:root:not([data-theme=dark]) .onas{box-shadow:0 6px 20px rgba(60,40,10,.07)}}

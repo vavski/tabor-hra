@@ -8,6 +8,17 @@
   var warn = function (m) { if (window.console) console.warn("[rozlučka] " + m); };
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var IO = "IntersectionObserver" in window;
+  var on = function (sel, fn) { var e = $(sel); if (e) fn(e); };
+
+  // světlý / tmavý vzhled: výchozí podle telefonu, přepínač si zapamatuje volbu (jen v tomhle prohlížeči)
+  on("#theme", function (b) {
+    b.onclick = function () {
+      var dark = document.documentElement.getAttribute("data-theme") ? document.documentElement.getAttribute("data-theme") === "dark" : !(window.matchMedia && matchMedia("(prefers-color-scheme: light)").matches);
+      var t = dark ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", t);
+      try { localStorage.setItem("zr-theme", t); } catch (e) {}
+    };
+  });
 
   // režim prodeje
   var rezim = ["zdarma", "prodej", "brzy"].indexOf(K.REZIM) >= 0 ? K.REZIM : "zdarma";
@@ -22,16 +33,16 @@
   $$("[data-cta]").forEach(function (a) { a.href = "#koupit"; });
 
   // cena
-  $("#price").textContent = price;
-  if (rezim !== "prodej") { $("#stat-price").setAttribute("data-count", 0); $("#stat-price").textContent = "0"; $("#stat-price-t").textContent = rezim === "zdarma" ? "Kč, teď hrajete zdarma" : "Kč, brzy"; }
+  on("#price", function (e) { e.textContent = price; });
+  if (!$("#stat-price")) {} else if (rezim !== "prodej") { $("#stat-price").setAttribute("data-count", 0); $("#stat-price").textContent = "0"; $("#stat-price-t").textContent = rezim === "zdarma" ? "Kč, teď hrajete zdarma" : "Kč, brzy"; }
   else $("#stat-price").setAttribute("data-count", price);
-  if (Number(K.PRICE_OLD) > price) { $("#price-old").textContent = K.PRICE_OLD; $("#price-old").classList.remove("hide"); }
-  $("#price-note").textContent = K.PRICE_NOTE || "jedna hra";
-  $("#bar-price").innerHTML = (rezim === "prodej" ? price + "&nbsp;Kč" : rezim === "zdarma" ? "Zdarma" : "Brzy") + "<small>za celou partu · Tábor</small>";
+  if (Number(K.PRICE_OLD) > price && $("#price-old")) { $("#price-old").textContent = K.PRICE_OLD; $("#price-old").classList.remove("hide"); }
+  on("#price-note", function (e) { e.textContent = K.PRICE_NOTE || "jedna hra"; });
+  if ($("#bar-price")) $("#bar-price").innerHTML = (rezim === "prodej" ? price + "&nbsp;Kč" : rezim === "zdarma" ? "Zdarma" : "Brzy") + "<small>za celou partu · Tábor</small>";
   $$("[data-validity]").forEach(function (el) { el.textContent = K.VALIDITY_MONTHS || 12; });
 
   var pay = $("#pay-btn");
-  if (pay) { if (payOk) pay.href = K.PAY_URL; else { pay.classList.add("hide"); $("#pay-missing").classList.remove("hide"); } }
+  if (pay) { if (payOk) pay.href = K.PAY_URL; else { pay.classList.add("hide"); on("#pay-missing", function (e) { e.classList.remove("hide"); }); } }
   var play = $("#play-btn"); if (play && K.GAME_URL) play.href = K.GAME_URL;
 
   // kontakt, instagram, provozovatel
@@ -42,9 +53,9 @@
     if (a.textContent.trim() === "e-mail") a.textContent = mail;
   });
   var ig = (K.INSTAGRAM || "").trim();
-  if (ig) { var igu = /^https?:/.test(ig) ? ig : "https://www.instagram.com/" + ig.replace(/^@/, "") + "/"; var a = $("#ig2"); a.href = igu; a.classList.remove("hide"); }
+  if (ig) { var igu = /^https?:/.test(ig) ? ig : "https://www.instagram.com/" + ig.replace(/^@/, "") + "/"; $$("[data-ig]").forEach(function (a) { a.href = igu; a.classList.remove("hide"); }); }
   var seller = [K.SELLER_NAME, K.SELLER_ICO ? "IČO " + K.SELLER_ICO : "", K.SELLER_ADDRESS].filter(Boolean);
-  $("#seller").innerHTML = "Provozovatel: " + seller.map(esc).join(", ") + (K.SELLER_VAT ? "" : ". Nejsme plátci DPH.");
+  if ($("#seller")) $("#seller").innerHTML = "Provozovatel: " + seller.map(esc).join(", ") + (K.SELLER_VAT ? "" : ". Nejsme plátci DPH.");
 
   // objevování při rolování
   var seen = function (els, fn, opt) {
@@ -74,10 +85,10 @@
     var ceka = function (ms) { return new Promise(function (r) { setTimeout(r, reduce ? 0 : ms); }); };
     var pis = function (html, cls) {
       var t = document.createElement("div"); t.className = "typing"; t.innerHTML = "<i></i><i></i><i></i>";
-      if (cls !== "me" && cls !== "sys") body.appendChild(t);
+      if (cls !== "me" && cls !== "sys") { body.appendChild(t); body.scrollTop = body.scrollHeight; }
       return ceka(cls === "me" || cls === "sys" ? 150 : 700 + Math.min(900, html.length * 14)).then(function () {
         if (t.parentNode) t.remove();
-        var m = document.createElement("div"); m.className = "m " + (cls || ""); m.innerHTML = html; body.appendChild(m);
+        var m = document.createElement("div"); m.className = "m " + (cls || ""); m.innerHTML = html; body.appendChild(m); body.scrollTop = body.scrollHeight;
       });
     };
     var tlacitka = function (moznosti) {
@@ -115,16 +126,18 @@
 
   // zamčená okénka jen zatřesou a řeknou proč
   var toast = $("#toast"), tt;
-  var say = function (m) { toast.textContent = m; toast.classList.add("on"); clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove("on"); }, 1800); };
+  var say = function (m) { if (!toast) return; toast.textContent = m; toast.classList.add("on"); clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove("on"); }, 1800); };
   $$(".okno.lock").forEach(function (o) {
     o.addEventListener("click", function () { o.classList.remove("shake"); void o.offsetWidth; o.classList.add("shake"); say(o.classList.contains("fin") ? "Finále. Otevře se, až ho najdete." : "Odemknete ve hře, až vyřešíte hádanku."); });
   });
 
   // lišta dole: po úvodu ano, u bloku Hrát ne
   var bar = $("#bar"), hero = $(".hero"), buy = $("#koupit");
+  if (bar && hero && buy) {
   var onScroll = function () {
     var r = buy.getBoundingClientRect();
     bar.classList.toggle("on", window.scrollY > hero.offsetHeight - 120 && !(r.top < window.innerHeight - 80 && r.bottom > 0));
   };
   window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  }
 })();
