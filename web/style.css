@@ -7,6 +7,9 @@
   --ember:#E85A2A; --ember2:#ff7a47; --teal:#1FA8A0; --teal2:#5fd3cb; --gold:#e0c34a; --red:#e85a5a;
   --w:1080px; --r:18px; --pad:20px;
 }
+/* světlá verze jako na hlavní stránce (v5.css): podle telefonu, nebo podle volby ◐ */
+@media (prefers-color-scheme:light){:root:not([data-theme=dark]){--ink:#F6F0E6; --ink2:#FFFFFF; --ink3:#EFE5D6; --line:#E0D3C0; --paper:#15181D; --paper2:#3A414C; --mute:#666E7A; --ember:#D94C1C; --ember2:#E85A2A; --teal:#12867F; --teal2:#0E7A73; --gold:#9A7B0C; color-scheme:light}}
+:root[data-theme=light]{--ink:#F6F0E6; --ink2:#FFFFFF; --ink3:#EFE5D6; --line:#E0D3C0; --paper:#15181D; --paper2:#3A414C; --mute:#666E7A; --ember:#D94C1C; --ember2:#E85A2A; --teal:#12867F; --teal2:#0E7A73; --gold:#9A7B0C; color-scheme:light}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{background:var(--ink);color:var(--paper);font:17px/1.55 Inter,system-ui,sans-serif;overflow-x:hidden}
@@ -41,6 +44,8 @@ section{padding:64px 0}
 
 /* hlavička */
 .top{position:sticky;top:0;z-index:20;background:rgba(11,13,16,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+@media (prefers-color-scheme:light){:root:not([data-theme=dark]) .top{background:rgba(246,240,230,.92)}}
+:root[data-theme=light] .top{background:rgba(246,240,230,.92)}
 .top .wrap{display:flex;align-items:center;gap:12px;min-height:60px}
 .logo{display:flex;flex-direction:column;text-decoration:none;color:var(--paper);line-height:1}
 .logo b{font-family:"Bebas Neue",Impact,sans-serif;font-weight:400;font-size:24px;letter-spacing:.04em}

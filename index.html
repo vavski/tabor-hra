@@ -15,8 +15,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230B0D10'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' font-family='Impact,sans-serif' fill='%23E85A2A'%3EŽ%3C/text%3E%3C/svg%3E">
 <script>try{var t=localStorage.getItem("zr-theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
-<link rel="stylesheet" href="web/v5.css?v=20261022b">
-<script src="web/config.js?v=20261022"></script>
+<link rel="stylesheet" href="web/v5.css?v=20261024">
+<script src="web/config.js?v=20261024"></script>
 </head>
 <body>
 <a class="skip" href="#main">Přeskočit na obsah</a>
@@ -51,16 +51,19 @@
 <!-- 2 · jak to jde: tři fotky -->
 <section id="jak" aria-labelledby="jak-t">
   <div class="wrap">
-    <h2 id="jak-t" class="reveal">Jak to <span>jde</span></h2>
+    <h2 id="jak-t" class="reveal">Jak to <span>funguje</span></h2>
   </div>
-  <div class="cards" tabindex="0" aria-label="Tři kroky, posuňte prstem">
+  <div class="cards" tabindex="0" aria-label="Čtyři kroky, posuňte prstem">
     <figure class="card reveal"><img src="img/v5/krok1.jpg" alt="Hráčka na náměstí drží mobil s chatem hry" loading="lazy" width="720" height="900">
       <figcaption><b>1</b>Otevřete chat</figcaption></figure>
-    <figure class="card reveal d1"><img src="img/v5/krok2.jpg" alt="Hráčka ukazuje na kašnu, kde je schovaná hádanka" loading="lazy" width="720" height="900">
+    <figure class="card reveal d1"><img src="img/v5/krok2.jpg" alt="Hráčka ukazuje na kašnu, místo s hádankou je zakryté" loading="lazy" width="720" height="900">
       <figcaption><b>2</b>Najděte hádanku</figcaption></figure>
-    <figure class="card reveal d2"><img src="img/v5/krok3.jpg" alt="Hráčka se směje u kašny, hádanku vyřešila" loading="lazy" width="720" height="900">
+    <figure class="card reveal d2"><img src="img/v5/krok3.jpg" alt="Hráčka se na náměstí směje a ukazuje mobil, hádanku vyřešila" loading="lazy" width="720" height="900">
       <span class="win">✓ VYŘEŠENO<small>+ groše do kasy</small></span>
       <figcaption><b>3</b>Vyřešte ji</figcaption></figure>
+    <figure class="card reveal d3"><img src="img/v5/krok4.jpg" alt="Dva hráči na náměstí, každý ukazuje jiným směrem" loading="lazy" width="720" height="900">
+      <span class="win alt">DO 12:00<small>jinak poprava</small></span>
+      <figcaption><b>4</b>Najděte Žižku</figcaption></figure>
   </div>
   <div class="wrap"><p class="swipe">posuňte prstem →</p></div>
 </section>
@@ -68,8 +71,8 @@
 <!-- 3 · chat na zkoušku -->
 <section id="chat-sec" aria-labelledby="chat-t">
   <div class="wrap">
-    <h2 id="chat-t" class="reveal">Nevěsta <span>píše</span></h2>
-    <p class="lead reveal">Takhle hra začíná. Odpovězte jí.</p>
+    <h2 id="chat-t" class="reveal">Takhle hra <span>začíná</span></h2>
+    <p class="lead reveal">Nevěsta píše. Odpovězte jí.</p>
     <div class="phone reveal" id="chat" aria-live="polite">
       <div class="ph-top"><img src="img/av-nevesta.jpg" alt="" width="40" height="40"><div><b>Žižkova rozlučka</b><small>Nevěsta online · Žižka offline</small></div></div>
       <div class="ph-body" id="chat-body"></div>
@@ -93,7 +96,7 @@
   <div class="wrap">
     <h2 id="cis-t" class="sr">Hra v číslech</h2>
     <div class="stats">
-      <div class="reveal"><b data-count="49" id="stat-price">49</b><span id="stat-price-t">Kč za celou partu</span></div>
+      <div class="reveal"><b class="nw">60–90</b><span>minut hraní</span></div>
       <div class="reveal d1"><b>1–6</b><span>lidí, jeden mobil</span></div>
       <div class="reveal d2"><b data-count="9">9</b><span>míst v centru</span></div>
       <div class="reveal d3"><b data-count="3">3</b><span>konce na výběr</span></div>
@@ -129,6 +132,7 @@
       <li class="reveal d1"><i>💍</i>Rozlučka</li>
       <li class="reveal d2"><i>❤️</i>Rande</li>
       <li class="reveal d3"><i>🧭</i>Výlet do Tábora</li>
+      <li class="reveal wide"><i>🕵️</i>Klidně i sám</li>
     </ul>
   </div>
 </section>
@@ -139,7 +143,7 @@
     <div class="buy reveal">
       <h2 id="koupit-t" class="sr">Hrát</h2>
       <div data-only="prodej">
-        <div class="price"><s class="hide" id="price-old"></s><span id="price">49</span><small>Kč</small></div>
+        <div class="price"><s class="hide" id="price-old"></s><span id="price">219</span><small>Kč</small></div>
         <p class="per">za celou partu · <span id="price-note">zaváděcí cena</span></p>
       </div>
       <div data-only="zdarma">
@@ -152,13 +156,13 @@
       </div>
       <ul class="ticks">
         <li>Hrajete hned, bez aplikace</li>
-        <li>Kdykoli za světla, bez rezervace</li>
-        <li data-only="prodej">Peníze zpět, když hra nefunguje</li>
+        <li>Kdykoli, bez rezervace</li>
+        <li data-only="prodej" data-kod>Po hře krátký dotazník a za něj kód <span data-sleva>−30 %</span> pro kamarády</li>
       </ul>
       <div data-only="prodej">
         <a class="btn big shine" id="pay-btn" href="#" rel="noopener">Koupit a hrát</a>
-        <p class="small">Máte kód od kamarádů? Zadáte ho při platbě.</p>
-        <p class="small">Zaplacením souhlasíte s <a href="podminky.html">obchodními podmínkami</a> a s tím, že přístup ke hře dostanete okamžitě. Tím ztrácíte právo odstoupit od smlouvy do 14 dnů. Když hra nefunguje, peníze vrátíme.</p>
+        <p class="small" data-kod>Máte kód od kamarádů? Zadáte ho při platbě.</p>
+        <p class="small">Zaplacením souhlasíte s <a href="podminky.html">obchodními podmínkami</a> a s tím, že přístup ke hře dostanete okamžitě. Tím ztrácíte právo odstoupit od smlouvy do 14 dnů.</p>
         <p class="small hide" id="pay-missing">Platba se připravuje. Napište si o hru na <a data-mail href="#">e-mail</a>.</p>
       </div>
       <div data-only="zdarma">
@@ -168,7 +172,7 @@
       <div data-only="brzy">
         <a class="btn big" data-mail data-subject="Chci vědět, až Žižkova rozlučka vyjde" href="#">Napsat e-mail</a>
       </div>
-      <p class="start">Start: kašna na Žižkově náměstí</p>
+      <p class="start">Start: kdekoli na Žižkově náměstí</p>
     </div>
   </div>
 </section>
@@ -178,17 +182,17 @@
   <div class="wrap">
     <h2 id="faq-t" class="reveal">Otázky</h2>
     <div class="faq">
-      <details><summary>Nejsem z Tábora. Zvládnu to?</summary><p>Ano. Chat vás vede od místa k místu. Start je u kašny na Žižkově náměstí, 20 minut pěšky od nádraží.</p></details>
+      <details><summary>Nejsem z Tábora. Zvládnu to?</summary><p>Ano. Chat vás provede od místa k místu. Start je kdekoli na Žižkově náměstí v centru Starého Města, asi 10 minut pěšky od zastávky Křižíkovo náměstí.</p></details>
       <details><summary>Co když se zasekneme?</summary><p>Na každém místě jsou nápovědy. Ta poslední řekne řešení.</p></details>
       <details><summary>Kolik nás může být?</summary><p>1–6 lidí na jeden mobil. Větší parta se rozdělí na dvě a soutěží.</p></details>
       <details><summary>Co když prší?</summary><p>Hraje se venku. Když leje, přerušte to. Hra si pamatuje, kde jste.</p></details>
-      <details><summary>Dá se hrát po tmě?</summary><p>Radši ne, hádanky jsou na fasádách. V listopadu vyrazte nejpozději ve tři.</p></details>
+      <details><summary>Dá se hrát po tmě?</summary><p>Ano. Centrum je osvětlené a všechno najdete i po setmění.</p></details>
       <details><summary>Bude signál?</summary><p>Otevřete hru doma na wifi (asi 4 MB). Pak jde dohrát i bez signálu.</p></details>
-      <details><summary>Musíme pít?</summary><p>Ne. Ve hře se pije jen voda z pítka.</p></details>
-      <details><summary>Můžou hrát děti?</summary><p>Humor je pro 15+. Rodinnou verzi zatím nemáme.</p></details>
-      <details><summary>Je trasa bezbariérová?</summary><p>Není. Je na ní kopec k Jordánu a úzká ulička.</p></details>
+      <details><summary>Můžou hrát děti?</summary><p>Hádanky zvládnou. Jenže Žižka je po rozlučce a nemluví jako v čítance. Proto od 15 let.</p></details>
+      <details><summary>Je trasa bezbariérová?</summary><p>Ano, na trase nejsou schody. Počítejte jen s dlažbou.</p></details>
+      <details><summary>Co když hra nefunguje?</summary><p>Napište nám na <a data-mail href="#">e-mail</a>, co se stalo. Opravíme to, nebo vám vrátíme peníze.</p></details>
       <details><summary>Jak dlouho přístup platí?</summary><p><span data-validity>12</span> měsíců od zaplacení, jedna hra pro jednu partu.</p></details>
-      <details><summary>Je tu žebříček?</summary><p>Ano. Pošlete nám kartu z konce hry a zapíšeme vaši rotu.</p></details>
+      <details><summary>Je tu žebříček?</summary><p>Nejlepší roty zveřejňujeme na Instagramu. Pošlete nám kartu z konce hry.</p></details>
     </div>
   </div>
 </section>
@@ -197,9 +201,10 @@
 <section id="o-nas" aria-labelledby="onas-t">
   <div class="wrap">
     <figure class="onas reveal">
-      <img src="img/v5/onas.jpg" alt="Vasilij, autor hry, s testerkou na náměstí v Táboře" loading="lazy" width="720" height="541">
+      <img src="img/v5/onas.jpg" alt="Vasi a Terka, autoři hry, na náměstí v Táboře" loading="lazy" width="720" height="541">
       <figcaption><h2 id="onas-t">Kdo za tím <span>stojí</span></h2>
-        <p>Vymyslel jsem to pro Tábor, ať lidi nesedí doma u mobilu. Hraju to s vámi a ladím podle vás. <b>Vasilij</b></p>
+        <p>Čau, my jsme Vasi a Terka. V Táboře nám chyběla aktivita, u které si odpočinete, nesedíte doma a trochu se hýbete. Zapojíte hlavu a zasmějete se. Vyrazit můžete sami, ve dvou nebo s partou.</p>
+        <div class="faq proc"><details><summary>Proč zrovna únikovka?</summary><p>Únikovky mě baví od malička. Mám rád chvíli, kdy si nad něčím lámu hlavu, a pak mi to docvakne. Na chvíli přitom vypnu od skutečných starostí. Tahle dětská radost z vyřešeného úkolu mi v dospělém životě chyběla, tak jsem ji postavil přímo do ulic Tábora. Proto jsou některé hádanky jednoduché a vtipné. <b>Vasi</b></p></details></div>
         <a class="ig hide" id="ig2" data-ig href="#" rel="noopener">Instagram</a></figcaption>
     </figure>
   </div>
@@ -218,11 +223,11 @@
 </footer>
 
 <div class="bar" id="bar">
-  <div id="bar-price">49&nbsp;Kč<small>za celou partu</small></div>
+  <div id="bar-price">Únikovka<small>v centru Tábora · 60–90 min</small></div>
   <a class="btn shine" data-cta href="#koupit"><span data-cta-label>Hrát</span></a>
 </div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="web/v5.js?v=20261022b"></script>
+<script src="web/v5.js?v=20261024"></script>
 </body>
 </html>

@@ -29,7 +29,7 @@
   $$("[data-only]").forEach(function (el) { el.classList.toggle("hide", el.getAttribute("data-only") !== rezim); });
 
   var label = { zdarma: "Hrát zdarma", prodej: "Hrát za " + price + " Kč", brzy: "Dát vědět" }[rezim];
-  $$("[data-cta-label]").forEach(function (el) { el.textContent = label; });
+  $$("[data-cta-label]").forEach(function (el) { el.textContent = rezim === "prodej" ? (el.closest(".big") ? "Hrát únikovku" : "Hrát") : label; });
   $$("[data-cta]").forEach(function (a) { a.href = "#koupit"; });
 
   // cena
@@ -38,7 +38,9 @@
   else $("#stat-price").setAttribute("data-count", price);
   if (Number(K.PRICE_OLD) > price && $("#price-old")) { $("#price-old").textContent = K.PRICE_OLD; $("#price-old").classList.remove("hide"); }
   on("#price-note", function (e) { e.textContent = K.PRICE_NOTE || "jedna hra"; });
-  if ($("#bar-price")) $("#bar-price").innerHTML = (rezim === "prodej" ? price + "&nbsp;Kč" : rezim === "zdarma" ? "Zdarma" : "Brzy") + "<small>za celou partu · Tábor</small>";
+  if ($("#bar-price") && rezim !== "prodej") $("#bar-price").innerHTML = (rezim === "prodej" ? price + "&nbsp;Kč" : rezim === "zdarma" ? "Zdarma" : "Brzy") + "<small>za celou partu · Tábor</small>";
+  $$("[data-sleva]").forEach(function (el) { el.textContent = K.SLEVA_KAMARAD || el.textContent; });
+  if (!K.KOD_KAMARAD) $$("[data-kod]").forEach(function (el) { el.classList.add("hide"); });
   $$("[data-validity]").forEach(function (el) { el.textContent = K.VALIDITY_MONTHS || 12; });
 
   var pay = $("#pay-btn");
@@ -88,7 +90,7 @@
       if (cls !== "me" && cls !== "sys") { body.appendChild(t); body.scrollTop = body.scrollHeight; }
       return ceka(cls === "me" || cls === "sys" ? 150 : 700 + Math.min(900, html.length * 14)).then(function () {
         if (t.parentNode) t.remove();
-        var m = document.createElement("div"); m.className = "m " + (cls || ""); m.innerHTML = html; body.appendChild(m); body.scrollTop = body.scrollHeight;
+        var m = document.createElement("div"); m.className = "m " + (cls || "nev"); m.innerHTML = html; body.appendChild(m); body.scrollTop = body.scrollHeight;
       });
     };
     var tlacitka = function (moznosti) {
@@ -106,7 +108,7 @@
     var start = function () {
       body.innerHTML = ""; quick.innerHTML = "";
       pis("Do chatu se přidala Nevěsta", "sys")
-        .then(function () { return pis("Dobrý ráno, roto. Tady nevěsta. Pro vás Generálka."); })
+        .then(function () { return pis("<small>Generálka</small>Dobrý ráno, roto. Tady nevěsta. Pro vás Generálka."); })
         .then(function () { return pis("Ženich nespal v posteli. Telefon nebere, holuba nečte."); })
         .then(function () { return pis("Rozlučka byla vaše akce. Vy jste ho měli hlídat. Tak kde je?"); })
         .then(function () {
@@ -114,8 +116,8 @@
             return { t: k, fn: function () {
               pis(esc(k), "me")
                 .then(function () { return pis(REAKCE[k]); })
-                .then(function () { return pis("Jestli ho do poledne nenajdete, popravím vás. Já, ne on.", "hot"); })
-                .then(function () { return pis("<small>Žižka · odesláno 02:14</small>Vy jste odpadli, roto. Chabý. Jdu se rozloučit s městem. Naposled."); })
+                .then(function () { return pis("Jestli ho do poledne nenajdete, popravím vás. Já, ne on.", "nev hot"); })
+                .then(function () { return pis("<small>Žižka · odesláno 02:14</small>Vy jste odpadli, roto. Chabý. Jdu se rozloučit s městem. Naposled.", "zz"); })
                 .then(function () { tlacitka([{ t: "Najít Žižku →", href: "#koupit" }, { t: "Znovu", fn: start }]); });
             } };
           }));

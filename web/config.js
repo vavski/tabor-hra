@@ -10,19 +10,19 @@ window.KONFIG = {
   //   "prodej"  = tlačítko „Koupit“, vede na platební odkaz (PAY_URL),
   //               po zaplacení platební brána pošle hráče rovnou do hry
   //   "brzy"    = hra ještě není venku, jen „Dejte nám vědět“ (e-mail)
-  REZIM: "zdarma",
+  REZIM: "prodej",
 
   // Cena v Kč (ukazuje se jen v režimu "prodej"). Jen číslo.
-  PRICE: 49,
+  PRICE: 219,
   // Poznámka pod cenou, např. "zaváděcí cena do 30. 11." Prázdné "" = nic.
-  PRICE_NOTE: "zaváděcí cena",
+  PRICE_NOTE: "",
   // Cena, ze které se slevuje (přeškrtnutá). 0 = neukazovat.
   PRICE_OLD: 0,
 
   // Platební odkaz (Stripe Payment Link, případně jiná brána). Musí začínat https://
   // Po zaplacení nastavte v bráně přesměrování na adresu hry s klíčem,
   // např. https://vavski.github.io/tabor-hra/hra/?k=KLIC  (viz NASAZENI.md)
-  PAY_URL: "",
+  PAY_URL: "https://buy.stripe.com/aFa14m31Y6Y5a5R3Rg2Ji00",
 
   // Den spuštění. Před ním je nahoře štítek „Hrajeme od …“, pak zmizí.
   LAUNCH_DATE: "2026-10-22",
@@ -35,8 +35,8 @@ window.KONFIG = {
   // Kód pro kamarády. Hra ho ukáže tomu, kdo na konci vyplní krátký dotazník,
   // ale jen v režimu "prodej". Stejný kód musí existovat ve Stripe (Promotion code,
   // viz NASAZENI.md). Prázdné "" = kód se neukazuje.
-  KOD_KAMARAD: "ROTA50",
-  SLEVA_KAMARAD: "−50 %",
+  KOD_KAMARAD: "ROTA30",
+  SLEVA_KAMARAD: "−30 %",
 
   // Dotazník na konci hry (formulář Google). Vyplní Claude podle odkazu na formulář.
   // Možnosti ve formuláři musí přesně odpovídat tlačítkům ve hře (FBQ v sablona-v2.html).

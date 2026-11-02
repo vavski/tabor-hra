@@ -6,12 +6,13 @@
 <title>Obchodní podmínky a pravidla hry – Žižkova rozlučka</title>
 <meta name="description" content="Obchodní podmínky, pravidla hry a reklamace venkovní hry Žižkova rozlučka v Táboře.">
 <meta name="robots" content="noindex">
-<link rel="stylesheet" href="web/style.css?v=20261021">
-<script src="web/config.js?v=20261021"></script>
+<script>try{var t=localStorage.getItem("zr-theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<link rel="stylesheet" href="web/style.css?v=20261102">
+<script src="web/config.js?v=20261024"></script>
 </head>
 <body>
 <a class="skip" href="#main">Přeskočit na obsah</a>
-<header class="top"><div class="wrap"><a class="logo" href="./">Žižkova <span>rozlučka</span></a><nav class="nav" aria-label="Hlavní"><a href="./">Zpět na web</a><a href="soukromi.html">Ochrana soukromí</a></nav></div></header>
+<header class="top"><div class="wrap"><a class="logo" href="./"><b>ŽIŽKOVA <span>ROZLUČKA</span></b></a><nav class="nav" aria-label="Hlavní"><a href="./">Zpět na web</a><a href="soukromi.html">Ochrana soukromí</a></nav></div></header>
 <main id="main" class="doc"><div class="wrap">
 <h1>Obchodní podmínky <span style="color:var(--ember)">a pravidla hry</span></h1>
 <p class="date">Platí od 22. 10. 2026. Krátce a česky, bez právnického balastu. Kdybyste něčemu nerozuměli, napište nám.</p>
@@ -26,7 +27,7 @@
 <div class="box" data-only="zdarma"><p><strong>Teď je hra zdarma.</strong> V době, kdy je na webu uvedeno „Zdarma“, nic neplatíte, neuzavíráte kupní smlouvu a platí pro vás jen pravidla hry v částech 6 až 8. Za to vás prosíme o zpětnou vazbu.</p></div>
 
 <h2>3. Cena a platba</h2>
-<p>Cena je uvedená na webu u tlačítka Koupit a je konečná. <span id="vat-p"></span> Platí se předem kartou nebo mobilní peněženkou přes platební bránu. Potvrzení o platbě vám přijde na e-mail, který při platbě zadáte.</p>
+<p>Cena je <span id="price-p">uvedená na webu u tlačítka Koupit</span> a je konečná. <span id="vat-p"></span> Platí se předem kartou nebo mobilní peněženkou přes platební bránu. Potvrzení o platbě vám přijde na e-mail, který při platbě zadáte.</p>
 
 <h2>4. Dodání a platnost</h2>
 <p>Po zaplacení vás platební brána přesměruje rovnou do hry a telefon, na kterém jste platili, si přístup zapamatuje. Když chcete hrát z jiného telefonu nebo jste přístup ztratili, napište nám a odkaz pošleme. Přístup platí <span data-validity>12</span> měsíců od zaplacení na jedno odehrání. Hru můžete kdykoli přerušit a pokračovat, postup se ukládá ve vašem telefonu.</p>
@@ -67,6 +68,7 @@
 document.querySelectorAll("[data-only]").forEach(function(e){e.classList.toggle("hide",e.getAttribute("data-only")!==r)});
 var s=[K.SELLER_NAME,K.SELLER_ICO?"IČO "+K.SELLER_ICO:"",K.SELLER_ADDRESS,K.CONTACT_EMAIL?"e-mail "+K.CONTACT_EMAIL:""].filter(Boolean).join(", ");
 document.getElementById("seller-p").textContent="Provozovatelem hry a prodávajícím je "+s+". Fyzická osoba podnikající podle živnostenského zákona, zapsaná v živnostenském rejstříku.";
+if(K.PRICE)document.getElementById("price-p").textContent=K.PRICE+" Kč za jednu partu (uvedená i na webu u tlačítka Koupit)";
 document.getElementById("vat-p").textContent=K.SELLER_VAT?"Cena je včetně DPH.":"Nejsme plátci DPH, cena je bez DPH a žádná se nepřičítá.";
 document.querySelectorAll("[data-validity]").forEach(function(e){e.textContent=K.VALIDITY_MONTHS||12});})();
 </script>
