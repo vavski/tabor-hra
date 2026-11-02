@@ -111,6 +111,13 @@ h1 span{display:inline-block;animation:pop .7s .3s both}
 .m.hot::before{left:-40px;bottom:-2px}
 .m.zz{background:var(--ember);color:#fff}
 .m.zz small{color:#fff;opacity:.85}
+.hlas{display:flex;flex-direction:column;gap:4px}
+.hlas .meta{display:flex;align-items:center;gap:8px;margin-left:38px;font-size:13px;color:var(--mute)}
+.hlas .meta b{color:var(--paper2)}
+.hlas .m{font-size:15px}
+.play{display:grid;place-items:center;width:22px;height:22px;padding:0 0 0 2px;border:0;border-radius:50%;background:var(--ember);color:#fff;font:700 10px/1 Inter;cursor:pointer;box-shadow:0 0 0 8px transparent}
+.play.on{padding:0;animation:pulz 1s infinite}
+@keyframes pulz{50%{box-shadow:0 0 0 5px rgba(232,90,42,.25)}}
 .m small{display:block;color:var(--ember2);font-weight:800;font-size:12px;margin-bottom:2px}
 .typing{display:inline-flex;gap:4px;padding:14px;background:var(--ink3);border-radius:18px;width:max-content}
 .typing i{width:7px;height:7px;border-radius:50%;background:var(--mute);animation:dot 1s infinite}
@@ -178,6 +185,12 @@ h1 span{display:inline-block;animation:pop .7s .3s both}
 .faq details[open] summary::after{transform:translateY(-50%) rotate(45deg)}
 .faq details p{padding:0 16px 16px;color:var(--paper2);font-size:16px}
 .proc{margin-top:14px}
+.nazor{margin-top:20px;display:grid;gap:10px;background:var(--ink2);border:1px solid var(--line);border-radius:16px;padding:16px}
+.nazor label{font-size:16px}
+.nazor textarea{width:100%;min-height:90px;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--ink);color:var(--paper);font:16px/1.4 Inter,system-ui,sans-serif}
+.nazor .btn{justify-self:start}
+.nazor .small{font-size:13px;color:var(--mute)}
+.nazor .dik{font-weight:700;color:var(--teal2)}
 
 /* 10 · o nás */
 .onas{border-radius:var(--r);overflow:hidden;background:var(--ink2);border:1px solid var(--line)}

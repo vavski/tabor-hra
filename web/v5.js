@@ -81,50 +81,56 @@
     new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { v.preload = "auto"; var p = v.play(); if (p) p.catch(function () {}); } else v.pause(); }); }, { threshold: 0.4 }).observe(v);
   });
 
-  // chat na zkoušku: začátek hry, jen se dá odpovědět
-  var body = $("#chat-body"), quick = $("#chat-quick");
-  if (body) {
-    var ceka = function (ms) { return new Promise(function (r) { setTimeout(r, reduce ? 0 : ms); }); };
-    var pis = function (html, cls) {
-      var t = document.createElement("div"); t.className = "typing"; t.innerHTML = "<i></i><i></i><i></i>";
-      if (cls !== "me" && cls !== "sys") { body.appendChild(t); body.scrollTop = body.scrollHeight; }
-      return ceka(cls === "me" || cls === "sys" ? 150 : 700 + Math.min(900, html.length * 14)).then(function () {
-        if (t.parentNode) t.remove();
-        var m = document.createElement("div"); m.className = "m " + (cls || "nev"); m.innerHTML = html; body.appendChild(m); body.scrollTop = body.scrollHeight;
+  // hlasovky v ukázce: hraje jen ta, na kterou se ťukne, vždy jen jedna, nic samo nehraje
+  var VLNA = [5, 9, 14, 8, 18, 12, 22, 16, 10, 19, 24, 13, 7, 15, 21, 11, 17, 23, 9, 14, 20, 12, 6, 16, 22, 10, 13, 8];
+  $$(".hlas .vlna").forEach(function (v) { v.innerHTML = VLNA.map(function (h) { return '<i style="height:' + h + 'px"></i>'; }).join(""); });
+  var zvuk = window.Audio ? new Audio() : null, hraje = null;
+  var vlnaStav = function (b, podil) {
+    var is = $$("i", b.closest(".hlas")), n = Math.round(podil * is.length);
+    is.forEach(function (x, k) { x.classList.toggle("on", k < n); });
+  };
+  var zastav = function () {
+    if (!hraje) return;
+    hraje.textContent = "▶"; hraje.classList.remove("on"); hraje.setAttribute("aria-label", hraje.getAttribute("aria-label").replace("Pozastavit", "Přehrát"));
+    vlnaStav(hraje, 0); hraje = null;
+  };
+  if (zvuk) {
+    zvuk.preload = "none";
+    zvuk.addEventListener("timeupdate", function () { if (hraje && zvuk.duration) vlnaStav(hraje, zvuk.currentTime / zvuk.duration); });
+    zvuk.addEventListener("ended", zastav);
+    $$(".hlas .play").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (hraje === b) { zvuk.pause(); zastav(); return; }
+        zvuk.pause(); zastav();
+        zvuk.src = b.getAttribute("data-src"); zvuk.currentTime = 0;
+        var pr = zvuk.play(); if (pr) pr.catch(function () { zastav(); });
+        hraje = b; b.textContent = "❚❚"; b.classList.add("on"); b.setAttribute("aria-label", b.getAttribute("aria-label").replace("Přehrát", "Pozastavit"));
       });
-    };
-    var tlacitka = function (moznosti) {
-      quick.innerHTML = "";
-      moznosti.forEach(function (o) {
-        var b = document.createElement(o.href ? "a" : "button"); b.textContent = o.t;
-        if (o.href) b.href = o.href; else { b.type = "button"; b.onclick = function () { quick.innerHTML = ""; o.fn(); }; }
-        quick.appendChild(b);
-      });
-    };
-    var REAKCE = {
-      "Byli jsme s ním… do půlnoci": "„Do půlnoci.“ A pak jste odpadli a on šel do noci sám. Skvělá rota.",
-      "Říkal: ještě jedno": "„Ještě jedno.“ No jasně. A pak jste odpadli a on šel do noci sám. Skvělá rota."
-    };
-    var start = function () {
-      body.innerHTML = ""; quick.innerHTML = "";
-      pis("Do chatu se přidala Nevěsta", "sys")
-        .then(function () { return pis("<small>Generálka</small>Dobrý ráno, roto. Tady nevěsta. Pro vás Generálka."); })
-        .then(function () { return pis("Ženich nespal v posteli. Telefon nebere, holuba nečte."); })
-        .then(function () { return pis("Rozlučka byla vaše akce. Vy jste ho měli hlídat. Tak kde je?"); })
-        .then(function () {
-          tlacitka(Object.keys(REAKCE).map(function (k) {
-            return { t: k, fn: function () {
-              pis(esc(k), "me")
-                .then(function () { return pis(REAKCE[k]); })
-                .then(function () { return pis("Jestli ho do poledne nenajdete, popravím vás. Já, ne on.", "nev hot"); })
-                .then(function () { return pis("<small>Žižka · odesláno 02:14</small>Vy jste odpadli, roto. Chabý. Jdu se rozloučit s městem. Naposled.", "zz"); })
-                .then(function () { tlacitka([{ t: "Najít Žižku →", href: "#koupit" }, { t: "Znovu", fn: start }]); });
-            } };
-          }));
-        });
-    };
-    seen([$("#chat")], start, { threshold: 0.35 });
+    });
   }
+
+  // „Hráli jste?“: text jde do stejného formuláře Google jako dotazník ve hře (pole poznámka, hra = "web").
+  // Bez signálu se uloží do stejné fronty jako ve hře a odešle se, až signál bude. Na webu se nic nezobrazuje.
+  var D = K.DOTAZNIK || {}, fbOk = /^https:\/\/docs\.google\.com\/forms\/.+\/formResponse$/.test(D.URL || "") && D.POLE;
+  var fronta = function () { try { return JSON.parse(localStorage.getItem("zr-fb-fronta") || "[]"); } catch (e) { return []; } };
+  var posli = function (d) { var b = new URLSearchParams(); for (var k in d) if (D.POLE[k] && d[k]) b.append(D.POLE[k], d[k]); return fetch(D.URL, { method: "POST", mode: "no-cors", body: b }); };
+  var dozenout = function () {
+    var q = fronta(), zbytek = [], n = q.length; if (!fbOk || !n) return;
+    q.forEach(function (d) { posli(d).catch(function () { zbytek.push(d); }).then(function () { if (--n === 0) try { localStorage.setItem("zr-fb-fronta", JSON.stringify(zbytek)); } catch (e) {} }); });
+  };
+  on("#nazor", function (f) {
+    if (!fbOk || !window.fetch) return;
+    f.classList.remove("hide"); dozenout(); window.addEventListener("online", dozenout);
+    f.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var t = $("#nazor-t").value.trim(); if (!t) { $("#nazor-t").focus(); return; }
+      var d = { poznamka: t, hra: "web" };
+      var hotovo = function () { $("#nazor-t").value = ""; $(".dik", f).classList.remove("hide"); };
+      var uloz = function () { try { var q = fronta(); q.push(d); localStorage.setItem("zr-fb-fronta", JSON.stringify(q)); } catch (_) {} hotovo(); };
+      if (navigator.onLine === false) { uloz(); return; }
+      posli(d).then(hotovo, uloz);
+    });
+  });
 
   // zamčená okénka jen zatřesou a řeknou proč
   var toast = $("#toast"), tt;

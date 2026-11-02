@@ -894,7 +894,7 @@ function feedback(){
  const K=fbKod(),A={};
  el.innerHTML=`<h4>Dáte nám 30 vteřin?</h4><p class="lead">Tři kliky. ${K?`Za odpověď dostanete kód ${esc(K.SLEVA_KAMARAD||"−50 %")} pro kamarády.`:"Píšeme další díl a chceme vědět, co opravit."} Kdo nechce, nemusí.</p>`
   +FBQ.map(([k,t,o])=>`<div class="q"><b>${esc(t)}</b><div class="ch" role="group" aria-label="${esc(t)}" data-k="${k}">${o.map(x=>`<button aria-pressed="false">${esc(x)}</button>`).join("")}</div></div>`).join("")
-  +`<textarea maxlength="600" aria-label="Co bylo nejlepší a co vás štvalo? (nepovinné)" placeholder="Co bylo nejlepší a co vás štvalo? (nepovinné)"></textarea><button class="btn fbsend" disabled>Odeslat</button><small style="text-align:center">Posíláme jen tyto odpovědi a výsledek hry (konec, čas, groše). Žádné jméno ani kontakt.</small>`;
+  +`<div class="q"><b>Jak se vám to líbilo?</b><textarea maxlength="600" aria-label="Jak se vám to líbilo? (nepovinné, uvidíme to jen my)" placeholder="Co bylo nejlepší a co vás štvalo? Uvidíme to jen my."></textarea></div><button class="btn fbsend" disabled>Odeslat</button><small style="text-align:center">Posíláme jen tyto odpovědi a výsledek hry (konec, čas, groše). Žádné jméno ani kontakt.</small>`;
  const s=el.querySelector(".fbsend"),ta=el.querySelector("textarea");
  el.querySelectorAll(".ch").forEach(c=>c.querySelectorAll("button").forEach(b=>b.onclick=()=>{c.querySelectorAll("button").forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-pressed",x===b)});A[c.dataset.k]=b.textContent;s.disabled=false}));
  ta.oninput=()=>{if(ta.value.trim())s.disabled=false};

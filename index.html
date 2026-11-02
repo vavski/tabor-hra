@@ -15,7 +15,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230B0D10'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' font-family='Impact,sans-serif' fill='%23E85A2A'%3EŽ%3C/text%3E%3C/svg%3E">
 <script>try{var t=localStorage.getItem("zr-theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
-<link rel="stylesheet" href="web/v5.css?v=20261024">
+<link rel="stylesheet" href="web/v5.css?v=20261102">
 <script src="web/config.js?v=20261024"></script>
 </head>
 <body>
@@ -38,7 +38,7 @@
     <p class="hero-sub">Najděte ho. Město je herní deska, mobil vás vede.</p>
     <a class="btn big shine" data-cta href="#koupit"><span data-cta-label>Hrát</span></a>
     <ul class="chips">
-      <li>1–6 lidí</li><li>jeden mobil</li><li>9 míst</li><li>60–90 min</li><li>bez aplikace</li>
+      <li>1–6 lidí</li><li>jeden mobil</li><li>9 míst</li><li>60–90 min</li><li>bez aplikace</li><li>namluvené, nemusíte číst</li>
     </ul>
   </div>
 </section>
@@ -68,15 +68,23 @@
   <div class="wrap"><p class="swipe">posuňte prstem →</p></div>
 </section>
 
-<!-- 3 · chat na zkoušku -->
+<!-- 3 · začátek hry: dvě skutečné hlasovky ze hry, pustí se jen ťuknutím -->
 <section id="chat-sec" aria-labelledby="chat-t">
   <div class="wrap">
     <h2 id="chat-t" class="reveal">Takhle hra <span>začíná</span></h2>
-    <p class="lead reveal">Nevěsta píše. Odpovězte jí.</p>
-    <div class="phone reveal" id="chat" aria-live="polite">
+    <p class="lead reveal">Pusťte si to. Nic nečtete, posloucháte.</p>
+    <div class="phone reveal" id="chat">
       <div class="ph-top"><img src="img/av-nevesta.jpg" alt="" width="40" height="40"><div><b>Žižkova rozlučka</b><small>Nevěsta online · Žižka offline</small></div></div>
-      <div class="ph-body" id="chat-body"></div>
-      <div class="ph-quick" id="chat-quick"></div>
+      <div class="ph-body">
+        <div class="m sys">Do chatu se přidala Nevěsta</div>
+        <div class="hlas"><div class="meta"><b>Nevěsta</b><span>teď</span><button type="button" class="play" data-src="img/v5/hlas-nevesta.mp3" aria-label="Přehrát hlasovku nevěsty">▶</button></div>
+          <div class="m nev">Dobrý ráno, roto. Tady nevěsta.</div>
+          <div class="m nev">Obřad je v poledne. Žižka mi nespal v posteli. Nebere telefon a nečte ani holuba.</div>
+          <div class="m nev">Byli jste nerozluční. Měli jste ho hlídat. Tak kde jako je?</div></div>
+        <div class="hlas"><div class="meta"><b>Žižka</b><span>odesláno 02:14</span><button type="button" class="play" data-src="img/v5/hlas-zizka.mp3" aria-label="Přehrát hlasovku Žižky">▶</button></div>
+          <div class="m zz">Vy jste odpadli, roto. Chabý. Moje rozlučka jede dál, jdu se rozloučit s městem. Se svobodou. Naposled.</div></div>
+      </div>
+      <div class="ph-quick"><a href="#koupit">Najít Žižku →</a></div>
     </div>
   </div>
 </section>
@@ -194,6 +202,13 @@
       <details><summary>Jak dlouho přístup platí?</summary><p><span data-validity>12</span> měsíců od zaplacení, jedna hra pro jednu partu.</p></details>
       <details><summary>Je tu žebříček?</summary><p>Nejlepší roty zveřejňujeme na Instagramu. Pošlete nám kartu z konce hry.</p></details>
     </div>
+    <form class="nazor hide" id="nazor" novalidate>
+      <label for="nazor-t"><b>Hráli jste?</b> Napište nám, jak se vám to líbilo.</label>
+      <textarea id="nazor-t" rows="3" maxlength="1500" required></textarea>
+      <button class="btn" type="submit">Odeslat</button>
+      <p class="small">Uvidíme to jen my.</p>
+      <p class="dik hide" role="status">Díky, přečteme si to.</p>
+    </form>
   </div>
 </section>
 
@@ -228,6 +243,6 @@
 </div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="web/v5.js?v=20261024"></script>
+<script src="web/v5.js?v=20261102"></script>
 </body>
 </html>
