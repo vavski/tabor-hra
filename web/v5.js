@@ -109,6 +109,19 @@
     });
   }
 
+  // volba v ukázce: odpověď nevěsty se ukáže a hned pustí (ťuknutí je souhlas se zvukem); jde přepnout na druhou
+  var out = $("#volba-out");
+  $$(".volba button").forEach(function (v) {
+    v.addEventListener("click", function () {
+      if (!out) return;
+      $$(".volba button").forEach(function (x) { x.classList.toggle("on", x === v); });
+      var m = $(".m", out), p = $(".play", out);
+      m.textContent = v.getAttribute("data-t"); p.setAttribute("data-src", v.getAttribute("data-src"));
+      out.classList.remove("hide"); m.style.animation = "none"; void m.offsetWidth; m.style.animation = "";
+      if (zvuk) { if (hraje === p) { zvuk.pause(); zastav(); } p.click(); }
+    });
+  });
+
   // „Hráli jste?“: text jde do stejného formuláře Google jako dotazník ve hře (pole poznámka, hra = "web").
   // Bez signálu se uloží do stejné fronty jako ve hře a odešle se, až signál bude. Na webu se nic nezobrazuje.
   var D = K.DOTAZNIK || {}, fbOk = /^https:\/\/docs\.google\.com\/forms\/.+\/formResponse$/.test(D.URL || "") && D.POLE;
