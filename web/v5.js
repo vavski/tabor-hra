@@ -47,6 +47,19 @@
   if (pay) { if (payOk) pay.href = K.PAY_URL; else { pay.classList.add("hide"); on("#pay-missing", function (e) { e.classList.remove("hide"); }); } }
   var play = $("#play-btn"); if (play && K.GAME_URL) play.href = K.GAME_URL;
 
+  // kdo už zaplatil, nemá platit znovu: telefon si pamatuje klíč z hra/pristup.js, místo „Koupit“ vidí „Pokračovat ve hře“
+  var paid = false;
+  try { paid = rezim === "prodej" && !!localStorage.getItem("zr-klic"); } catch (e) {}
+  if (paid) {
+    var game = K.GAME_URL || "hra/";
+    $$("[data-cta]").forEach(function (a) { a.href = game; });
+    $$("[data-cta-label]").forEach(function (el) { el.textContent = el.closest(".big") ? "Pokračovat ve hře" : "Pokračovat"; });
+    if (pay) { pay.href = game; pay.removeAttribute("rel"); pay.textContent = "Pokračovat ve hře"; }
+    $$("[data-kod], #koupit .drobne").forEach(function (el) { el.classList.add("hide"); });
+    on("#paid-note", function (e) { e.classList.remove("hide"); });
+    on("#pay-again", function (a) { if (payOk) a.href = K.PAY_URL; else a.classList.add("hide"); });
+  }
+
   // kontakt, instagram, provozovatel
   var mail = (K.CONTACT_EMAIL || "").trim();
   $$("[data-mail]").forEach(function (a) {
