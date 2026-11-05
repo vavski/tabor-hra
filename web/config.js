@@ -58,7 +58,7 @@ window.KONFIG = {
   SELLER_VAT: false,
 
   // Platnost zakoupeného přístupu v měsících (jen text v podmínkách a FAQ).
-  VALIDITY_MONTHS: 12,
+  VALIDITY_MONTHS: 6,
 
   // Žebříček. Zapisujte party, které poslaly kartu z konce hry. Prázdné [] = „zatím prázdný“.
   // Skóre a čas opište z karty. Příklad řádku: { rota: "Chrápající pětka", cas: "1 h 12 min", skore: 238 }
