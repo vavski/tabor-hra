@@ -863,7 +863,7 @@ async function endStep(){
  if(FAST){const L=ENDSEL.length?ENDSEL:[0];for(const [j,i] of L.entries()){if(j)add(`<div class="sys">↺ Zpátky v 10:59. Povoz je za rohem.</div>`);add(`<div class="row me"><div class="bub">${esc(ENDS[i].b)}</div></div>`);await showEnd(ENDS[i],j===L.length-1)}return}
  const q=add(`<div class="konecvol"><div class="kicker">☠ Finále</div><h3>Vyberte konec</h3><p>Rozhodněte se jako rota. Podle toho, co vyberete, příběh skončí.</p>${ENDS.map((x,i)=>`<button><b>${"ABC"[i]}</b><span>${esc(x.b)}</span></button>`).join("")}</div>`);
  const i=await new Promise(res=>q.querySelectorAll("button").forEach((b,i)=>b.onclick=()=>{q.remove();add(`<div class="row me"><div class="bub">${esc(ENDS[i].b)}</div></div>`);res(i)}));
- if(!TEND)TEND=Date.now();if(GRF==null)GRF=GR;ENDSEL.push(i);save();await showEnd(ENDS[i],true);
+ if(!TEND){TEND=Date.now();poc("konec")}if(GRF==null)GRF=GR;ENDSEL.push(i);save();await showEnd(ENDS[i],true);
 }
 async function showEnd(e,retry){
  for(const [w,t] of e.seq){if(w==="sys")add(`<div class="sys">${esc(t)}</div>`);else await say(w,t);await wait(200)}
@@ -885,6 +885,8 @@ const fbQueue=()=>{try{return JSON.parse(localStorage.getItem("zr-fb-fronta")||"
 async function fbFlush(){const D=fbCfg(),q=fbQueue();if(!D||!q.length)return;const rest=[];for(const d of q){try{await fbSend(D,d)}catch(e){rest.push(d)}}
  try{rest.length?localStorage.setItem("zr-fb-fronta",JSON.stringify(rest)):localStorage.removeItem("zr-fb-fronta")}catch(e){}}
 window.addEventListener("online",fbFlush);setTimeout(fbFlush,3000);
+
+const poc=u=>{const P=(window.KONFIG||{}).POCITADLO||{};if(FAST||!/^https:\/\/docs\.google\.com\/forms\/.+\/formResponse$/.test(P.URL||"")||!P.POLE)return;const b=new URLSearchParams();b.append(P.POLE,u);try{fetch(P.URL,{method:"POST",mode:"no-cors",body:b}).catch(()=>{})}catch(e){}};
 function feedback(){
  let el=document.querySelector(".dotaz");if(el){feed.appendChild(el);return}
  if(!fbCfg())return;
@@ -1260,7 +1262,7 @@ $("#themeBtn").onclick=()=>thm(document.documentElement.dataset.theme==="light"?
   cb.textContent=SV.pos>=S.length?"Zpět na konec hry":onWay&&nx?`Pokračovat · cesta na ${nx.st.split(" · ")[0].toLowerCase().replace("stanice","stanici")}`:`Pokračovat · ${st?st.st.split(" · ")[0]:"začátek"}`;
   $("#startBtn").textContent="Začít znovu";$("#startBtn").classList.add("sec");
   cb.onclick=()=>{$("#splash").classList.add("hide");$("#app").classList.remove("hide");hlOdemkni();hlUi();resume(SV)}}}
-$("#startBtn").onclick=()=>{if(loadSave()&&!confirm("Opravdu začít znovu? Rozehraná hra i groše se smažou."))return;clearSave();T0=Date.now();TEND=0;GRF=null;TEAM=($("#teamIn").value||"").trim().slice(0,28);TT={};STATS=null;$("#splash").classList.add("hide");$("#app").classList.remove("hide");drawWindows();hlOdemkni();
+$("#startBtn").onclick=()=>{if(loadSave()&&!confirm("Opravdu začít znovu? Rozehraná hra i groše se smažou."))return;clearSave();T0=Date.now();TEND=0;GRF=null;TEAM=($("#teamIn").value||"").trim().slice(0,28);TT={};STATS=null;poc("start");$("#splash").classList.add("hide");$("#app").classList.remove("hide");drawWindows();hlOdemkni();
  HLASP.then(m=>{if(m.size)add(`<div class="sys">🔊 Zprávy uslyšíte nahlas. Pauza a ✕ jsou nahoře, ztlumit jde tlačítkem 🔊.</div>`);hlUi();run()})};
 
 

@@ -47,6 +47,14 @@ window.KONFIG = {
     POLE: { doporucit: "entry.849322882", obtiznost: "entry.157601660", cena: "entry.2104959850", poznamka: "entry.1730413432", hra: "entry.1719992964" }
   },
 
+  // Anonymní počítadlo her (formulář Google s jednou otázkou). Hra pošle jen „start“ při nové hře
+  // a „konec“ při dohrání, nic o hráči. URL končí /formResponse, POLE je „entry.…“. Prázdné URL = nic se neposílá.
+  POCITADLO: {
+    // formulář „Žižkova rozlučka · počítadlo“ v účtu Google Vasilije (založen 5. 11. 2026), odpovědi jdou do tabulky
+    URL: "https://docs.google.com/forms/d/e/1FAIpQLSfKIWDLW7Rhd8IJ3ZtjNGpez4wQVUHDvHHarYnulo4AmusAiQ/formResponse",
+    POLE: "entry.2103490135"
+  },
+
   // Kde leží hra (cesta vůči hlavní stránce).
   GAME_URL: "hra/",
 
