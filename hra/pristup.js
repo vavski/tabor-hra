@@ -14,8 +14,7 @@
 */
 window.PRISTUP = {
   OTISKY: [
-    "daa8d67a9c676e21ce3bd57e42d7ca4ea1de11b781238bcbc876b72b2ec40f16", // klíč do 5. 11. 2026 (byl čitelný v kódu)
-    "d6803e59dacfee81e294b2b8378623966ea07a3ba617058bd3b39edfc8e886da"  // klíč od 5. 11. 2026
+    "d6803e59dacfee81e294b2b8378623966ea07a3ba617058bd3b39edfc8e886da"  // klíč od 5. 11. 2026 (starý vypnut 6. 11., nikdo s ním nekoupil)
   ]
 };
 (function () {
