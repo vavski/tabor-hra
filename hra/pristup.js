@@ -51,11 +51,36 @@ window.PRISTUP = {
     else { ok = platny(localStorage.getItem("zr-klic")); }
   } catch (e) { ok = platny(k); }
   if (ok) return;
+
+  // Prohlížeč uvnitř Instagramu/Facebooku má vlastní paměť, oddělenou od Chromu/Safari.
+  // Kdo zaplatil v Chromu a pak klikne na odkaz v Instagramu, skončí tady. Pošleme ho do Chromu.
+  var ua = navigator.userAgent || "";
+  var vAplikaci = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Messenger/i.test(ua);
+  var android = /Android/i.test(ua);
+  var appka = /Instagram/i.test(ua) ? "Instagramu" : "Facebooku";
+  var doChromu = "intent://" + location.host + location.pathname + location.search
+    + "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(location.href) + ";end";
+
+  var BTN = 'display:inline-block;background:#E85A2A;color:#fff;text-decoration:none;font-weight:800;padding:14px 24px;border-radius:12px';
+  var BTN2 = 'display:inline-block;color:#F2E6D8;text-decoration:none;font-weight:600;padding:12px 20px;border-radius:12px;border:1px solid #3a3f47;font-size:15px';
+  var TIP = 'margin:0 0 18px;padding:12px 14px;border-radius:12px;background:#1a1d22;font-size:15px';
+  var obsah;
+  if (vAplikaci) {
+    obsah = '<p style="margin-bottom:20px">Otevřeli jste hru uvnitř ' + appka + '. Ten si nepamatuje, že jste zaplatili v prohlížeči.</p>'
+      + (android
+        ? '<a href="' + doChromu + '" style="' + BTN + '">Otevřít v Chromu</a>'
+          + '<p style="margin:12px 0 18px;font-size:14px;color:#a6aeb8">Nic se nestalo? Nahoře vpravo ⋮ → Otevřít v Chromu.</p>'
+        : '<p style="' + TIP + '">Nahoře vpravo klepněte na <b>⋯</b> a zvolte <b>Otevřít v prohlížeči</b>.</p>')
+      + '<p style="margin-bottom:20px">Nebo klikněte na odkaz do hry v e-mailu s potvrzením platby.</p>'
+      + '<a href="../" style="' + BTN2 + '">Ještě nemám zaplaceno</a>';
+  } else {
+    obsah = '<p style="margin-bottom:20px">Tahle adresa vede do hry, ale bez zaplaceného přístupu Generálka nikoho nepustí. Odkaz do hry dostanete hned po zaplacení a přijde vám i e-mailem.</p>'
+      + '<a href="../" style="' + BTN + '">Koupit hru</a>';
+  }
   document.addEventListener("DOMContentLoaded", function () {
     document.body.innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;font:17px/1.5 Inter,system-ui,sans-serif;background:#0B0D10;color:#F2E6D8">'
       + '<div style="max-width:420px"><div style="font:400 56px/1 \'Bebas Neue\',Impact,sans-serif;margin-bottom:12px">Žižkova <span style="color:#E85A2A">rozlučka</span></div>'
-      + '<p style="margin-bottom:20px">Tahle adresa vede do hry, ale bez zaplaceného přístupu Generálka nikoho nepustí. Odkaz do hry dostanete hned po zaplacení a přijde vám i e-mailem.</p>'
-      + '<a href="../" style="display:inline-block;background:#E85A2A;color:#fff;text-decoration:none;font-weight:800;padding:14px 24px;border-radius:12px">Koupit hru</a>'
+      + obsah
       + '<p style="margin-top:18px;font-size:14px;color:#a6aeb8">Zaplatili jste a nejde to? Napište na ' + (K.CONTACT_EMAIL || "e-mail z webu") + '.</p></div></div>';
   });
 })();
