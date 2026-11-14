@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Zkouška Piráti</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pannellum/2.5.6/pannellum.css">
+<style>
+/* Jen zkouška tří momentů. Tmavá noc na moři, mosazné ovládání, vše pro telefon na výšku. */
+:root{--bg:#081321;--panel:#0f2236;--line:#2b4560;--fg:#e9eef4;--muted:#93a6b8;--brass:#d4a94e;--ok:#5fd38d;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;overflow:hidden}
+.screen.on{display:flex}
+#menu{overflow:auto;gap:14px;padding:calc(env(safe-area-inset-top) + 20px) max(16px,env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 20px) max(16px,env(safe-area-inset-left))}
+h1{font-size:30px;margin:6px 0 0;color:var(--brass)}
+.note{color:var(--muted);font-size:14px;margin:0}
+.btn{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--fg);font:inherit;font-weight:650;padding:16px;border-radius:14px;text-align:left;width:100%;cursor:pointer}
+.btn small{display:block;font-weight:400;color:var(--muted);margin-top:4px}
+.btn.primary{background:var(--brass);border-color:var(--brass);color:#1a1205;text-align:center}
+.btn:focus-visible,.chip:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+.bar{position:absolute;left:0;right:0;top:0;z-index:6;display:flex;gap:8px;align-items:center;padding:calc(env(safe-area-inset-top) + 10px) 12px 14px;background:linear-gradient(#081321ee,#08132100)}
+.bar .t{flex:1;font-weight:700}
+.chip{appearance:none;border:1px solid var(--line);background:#0f2236d9;color:var(--fg);font:inherit;font-size:14px;padding:8px 12px;border-radius:999px;cursor:pointer}
+.bottom{position:absolute;left:0;right:0;bottom:0;z-index:6;display:flex;flex-direction:column;gap:8px;padding:28px 12px calc(env(safe-area-inset-bottom) + 12px);background:linear-gradient(#08132100,#081321f2 35%)}
+.msg{background:#0f2236f2;border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:15px}
+.msg b{color:var(--brass)}
+.row{display:flex;gap:8px}
+.row .btn{text-align:center;padding:12px}
+input[type=text]{flex:1;min-width:0;font:inherit;font-size:20px;text-transform:uppercase;letter-spacing:.25em;padding:12px;border-radius:12px;border:1px solid var(--line);background:#06101c;color:var(--fg)}
+#pano{position:absolute;inset:0}
+#book{position:absolute;inset:0;z-index:9;display:none;overflow:auto;background:#081321f5;padding:calc(env(safe-area-inset-top) + 16px) 16px 24px}
+#book.on{display:block}
+.flags{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:16px 0}
+.flags figure{margin:0;text-align:center;font-weight:700;font-size:20px}
+.flags canvas{width:100%;height:auto;display:block;margin-bottom:6px}
+#vid,#ov{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#semTop{position:absolute;z-index:6;right:12px;top:calc(env(safe-area-inset-top) + 58px);display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+#semLetter{font-size:72px;font-weight:800;line-height:1;min-width:84px;text-align:center;padding:8px 10px;border-radius:16px;background:#0f2236d9;border:2px solid var(--line)}
+#semLetter.good{border-color:var(--ok);color:var(--ok)}
+#diag{width:120px;height:120px;background:#0f2236d9;border-radius:14px;border:1px solid var(--line)}
+#semWord{display:flex;gap:6px;font-size:24px;font-weight:800;letter-spacing:.05em}
+#semWord span{opacity:.45}
+#semWord span.done{opacity:1;color:var(--ok)}
+#semWord span.cur{opacity:1;color:var(--brass);text-decoration:underline}
+#sky{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+.big{font-size:44px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<section id="menu" class="screen on">
+  <h1>Zkouška: Piráti</h1>
+  <p class="note">Tohle není hra. Zkoušíme jen tři momenty, jestli fungují na tvém telefonu. Otevři v Chromu nebo Safari, ne v Instagramu.</p>
+  <button class="btn" data-go="paluba" data-motion>1 · Paluba v 360°<small>Otáčej se s telefonem po pokoji. Najdi fregatu a rozlušti její vlajky.</small></button>
+  <button class="btn" data-go="semafor">2 · Semafor<small>Postav se před kameru a ukazuj rukama písmena. Kamera je kontroluje.</small></button>
+  <button class="btn" data-go="hvezdy" data-motion>3 · Hvězdy a kompas<small>Lehni si, najdi Polárku nad sebou, pak natoč telefon na kurz 240°.</small></button>
+  <p class="note" id="motionState"></p>
+</section>
+
+<section id="paluba" class="screen">
+  <div id="pano"></div>
+  <div class="bar"><button class="chip" data-back>← Zpět</button><span class="t">Paluba</span><button class="chip" id="bookBtn">Kódová kniha</button></div>
+  <div class="bottom">
+    <div class="msg" id="palMsg"><b>Kapitán:</b> Za námi je fregata a něco na nás mává vlajkama. Otoč se a zjisti, co chtěj.</div>
+    <div class="row"><input type="text" id="palIn" maxlength="8" autocomplete="off" aria-label="Vzkaz z vlajek"><button class="btn primary" id="palOk" style="width:auto">Odeslat</button></div>
+  </div>
+  <div id="book">
+    <div class="row" style="align-items:center"><strong style="flex:1;font-size:20px;color:var(--brass)">Kódová kniha</strong><button class="chip" id="bookClose">Zavřít</button></div>
+    <p class="note">Signální vlajky se věší pod sebe a čtou se shora dolů. Pracovní verze, vzhled vlajek se ještě ověří.</p>
+    <div class="flags" id="flags"></div>
+  </div>
+</section>
+
+<section id="semafor" class="screen">
+  <video id="vid" playsinline muted></video>
+  <canvas id="ov"></canvas>
+  <div class="bar"><button class="chip" data-back>← Zpět</button><span class="t">Semafor</span><button class="chip" id="flipCam">Otočit kameru</button></div>
+  <div id="semTop"><div id="semLetter">–</div><canvas id="diag" width="240" height="240" aria-label="Jak ukázat písmeno"></canvas></div>
+  <div class="bottom">
+    <div id="semWord"></div>
+    <div class="msg" id="semMsg"><b>Kapitán:</b> Spojenecká loď nás nevidí na vysílačku. Vyhláskuj jim rukama OSTROV. Každé písmeno chvilku podrž.</div>
+    <div class="row"><button class="btn primary" id="camOn">Zapnout kameru</button><button class="btn" id="semSkip" style="width:auto">Přeskočit</button></div>
+  </div>
+</section>
+
+<section id="hvezdy" class="screen">
+  <canvas id="sky"></canvas>
+  <div class="bar"><button class="chip" data-back>← Zpět</button><span class="t" id="skyTitle">Hvězdy</span><button class="chip" id="flipDir">↔ Obrátit</button><button class="chip" id="hintBtn">Nápověda</button></div>
+  <div class="bottom">
+    <div class="msg" id="skyMsg"><b>Kapitán:</b> Navigátor je přes palubu. Najdi Polárku a dej ji doprostřed kříže. Lehni si, telefon drž nad sebou a ťukni Začít.</div>
+    <div class="row"><button class="btn primary" id="skyStart">Začít</button></div>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pannellum/2.5.6/pannellum.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const vibe=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
+
+/* ---------- pohyb telefonu ---------- */
+let motionAsked=false, motionOK=false;
+const O={a:null,b:null,g:null,heading:null,abs:false};
+window.addEventListener('deviceorientation',e=>{
+  if(e.alpha!=null)O.a=e.alpha; if(e.beta!=null)O.b=e.beta; if(e.gamma!=null)O.g=e.gamma;
+  if(typeof e.webkitCompassHeading==='number'&&e.webkitCompassHeading>=0){O.heading=e.webkitCompassHeading;O.abs=true}
+});
+window.addEventListener('deviceorientationabsolute',e=>{if(e.alpha!=null){O.heading=(360-e.alpha)%360;O.abs=true}});
+async function askMotion(){
+  if(motionAsked) return motionOK; motionAsked=true;
+  try{
+    if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
+      motionOK=(await DeviceOrientationEvent.requestPermission())==='granted';
+    }else motionOK=typeof DeviceOrientationEvent!=='undefined';
+  }catch(e){motionOK=false}
+  $('#motionState').textContent=motionOK?'Pohyb telefonu povolený.':'Pohyb telefonu není dostupný, zkoušky půjdou ovládat prstem.';
+  return motionOK;
+}
+
+/* ---------- přepínání obrazovek ---------- */
+let current='menu';
+function show(id){
+  current=id;
+  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));
+  if(id!=='semafor') stopCam();
+  if(id==='paluba') initPano();
+  if(id==='hvezdy') initSky();
+}
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',async()=>{
+  if(b.hasAttribute('data-motion')) await askMotion();
+  show(b.dataset.go);
+}));
+document.querySelectorAll('[data-back]').forEach(b=>b.addEventListener('click',()=>show('menu')));
+
+/* ---------- 1 · paluba ---------- */
+function rng(seed){return()=>{seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const FC={r:'#d52b1e',w:'#f4f4f0',b:'#1f4aa8',y:'#f3c614'};
+function drawFlag(c,L,x,y,w,h){
+  c.save();c.translate(x,y);
+  const R=(col,a,b2,cw,ch)=>{c.fillStyle=col;c.fillRect(a,b2,cw,ch)};
+  switch(L){
+    case 'S':R(FC.w,0,0,w,h);R(FC.b,w/3,h/3,w/3,h/3);break;
+    case 'P':R(FC.b,0,0,w,h);R(FC.w,w/3,h/3,w/3,h/3);break;
+    case 'T':R(FC.r,0,0,w/3,h);R(FC.w,w/3,0,w/3,h);R(FC.b,2*w/3,0,w/3+1,h);break;
+    case 'O':R(FC.y,0,0,w,h);c.fillStyle=FC.r;c.beginPath();c.moveTo(0,0);c.lineTo(w,0);c.lineTo(w,h);c.closePath();c.fill();break;
+    case 'E':R(FC.b,0,0,w,h/2);R(FC.r,0,h/2,w,h/2);break;
+    case 'H':R(FC.w,0,0,w/2,h);R(FC.r,w/2,0,w/2,h);break;
+    case 'K':R(FC.y,0,0,w/2,h);R(FC.b,w/2,0,w/2,h);break;
+    case 'D':R(FC.y,0,0,w,h);R(FC.b,0,h/5,w,3*h/5);break;
+  }
+  c.strokeStyle='rgba(0,0,0,.55)';c.lineWidth=2;c.strokeRect(0,0,w,h);c.restore();
+}
+function drawFrigate(x,cx,hy){
+  x.fillStyle='#10161f';
+  x.beginPath();x.moveTo(cx-380,hy-30);x.lineTo(cx+400,hy-42);x.lineTo(cx+320,hy+55);x.lineTo(cx-320,hy+55);x.closePath();x.fill();
+  x.fillStyle='#e8c56a';for(let i=0;i<10;i++)x.fillRect(cx-290+i*62,hy-12,14,10);
+  const masts=[cx-260,cx,cx+260];
+  masts.forEach((m,i)=>{const top=hy-(i===1?540:440);x.fillStyle='#10161f';x.fillRect(m-7,top,14,hy-top);
+    x.fillStyle='#9aa3ad';const w=i===1?150:120;for(let k=0;k<3;k++)x.fillRect(m-w/2,top+24+k*122,w,96)});
+  const fx=cx+95, fy=hy-520;
+  x.strokeStyle='#10161f';x.lineWidth=3;x.beginPath();x.moveTo(cx,fy);x.lineTo(fx+40,fy+14);x.lineTo(fx+40,fy+22+4*80);x.stroke();
+  ['S','T','O','P'].forEach((L,i)=>drawFlag(x,L,fx,fy+24+i*80,80,58));
+}
+function makePanorama(){
+  const W=4096,H=2048,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');const R=rng(7);
+  let g=x.createLinearGradient(0,0,0,H/2);g.addColorStop(0,'#040a18');g.addColorStop(.7,'#182c4e');g.addColorStop(1,'#48678c');x.fillStyle=g;x.fillRect(0,0,W,H/2);
+  for(let i=0;i<1000;i++){x.fillStyle=`rgba(255,255,255,${.3+R()*.7})`;const s=R()<.05?3:1.6;x.fillRect(R()*W,R()*H*.42,s,s)}
+  g=x.createLinearGradient(0,H/2,0,H);g.addColorStop(0,'#2a4866');g.addColorStop(1,'#050d18');x.fillStyle=g;x.fillRect(0,H/2,W,H/2);
+  x.strokeStyle='rgba(180,210,240,.2)';x.lineWidth=2;
+  for(let i=0;i<1500;i++){const y=H/2+Math.pow(R(),1.6)*H*.3,len=10+(y-H/2)*.15*R(),xx=R()*W;x.beginPath();x.moveTo(xx,y);x.quadraticCurveTo(xx+len/2,y-3,xx+len,y);x.stroke()}
+  drawFrigate(x,(135/360+.5)*W,H/2);
+  x.fillStyle='#4a2f1a';x.fillRect(0,1290,W,38);
+  x.fillStyle='#3a2414';for(let px=0;px<W;px+=90)x.fillRect(px,1328,22,140);
+  x.fillStyle='#5b3a20';x.fillRect(0,1460,W,H-1460);
+  x.strokeStyle='#3d2614';x.lineWidth=4;for(let y=1460;y<H;y+=36){x.beginPath();x.moveTo(0,y);x.lineTo(W,y);x.stroke()}
+  x.fillStyle='#3b2615';x.fillRect(W/2-26,0,52,1460);
+  x.fillStyle='#d9ccb0';x.beginPath();x.moveTo(W/2-300,180);x.quadraticCurveTo(W/2,240,W/2+300,180);x.lineTo(W/2+330,820);x.quadraticCurveTo(W/2,900,W/2-330,820);x.closePath();x.fill();
+  return c.toDataURL('image/jpeg',.85);
+}
+let pano=null;
+function initPano(){
+  if(pano) return;
+  if(typeof pannellum==='undefined'){$('#palMsg').innerHTML='Prohlížeč 360° se nenačetl. Zkus obnovit stránku.';return}
+  pano=pannellum.viewer('pano',{type:'equirectangular',panorama:makePanorama(),autoLoad:true,orientationOnByDefault:motionOK,showZoomCtrl:false,showFullscreenCtrl:false,compass:false,hfov:95,yaw:0,pitch:0});
+}
+(function(){
+  const box=$('#flags');
+  ['E','S','H','T','K','O','D','P'].forEach(L=>{
+    const f=document.createElement('figure'),c=document.createElement('canvas');c.width=160;c.height=116;
+    drawFlag(c.getContext('2d'),L,0,0,160,116);f.append(c,document.createTextNode(L));box.append(f);
+  });
+})();
+$('#bookBtn').onclick=()=>$('#book').classList.add('on');
+$('#bookClose').onclick=()=>$('#book').classList.remove('on');
+$('#palOk').onclick=()=>{
+  const v=$('#palIn').value.trim().toUpperCase().replace(/\s/g,'');
+  if(v==='STOP'){$('#palMsg').innerHTML='<b>Kapitán:</b> Mám zastavit? Ha. Plné plachty, mizíme!';vibe([60,40,120])}
+  else $('#palMsg').innerHTML='<b>Kapitán:</b> To nedává smysl. Vlajky se čtou shora dolů, koukni do kódový knihy.';
+};
+
+/* ---------- 2 · semafor ---------- */
+// Pozice ramen jako ručičky hodin z pohledu toho, kdo se dívá: 0 = 12:00, 1 = 1:30, … 4 = 6:00 (dolů), 6 = 9:00. Pracovní tabulka.
+const SEM={'4-5':'A','4-6':'B','4-7':'C','0-4':'D','1-4':'E','2-4':'F','3-4':'G','5-6':'H','5-7':'I','0-5':'K','1-5':'L','2-5':'M','3-5':'N','6-7':'O','0-6':'P','1-6':'Q','2-6':'R','3-6':'S','0-7':'T','1-7':'U','2-7':'Y','0-2':'J','0-3':'V','1-2':'W','1-3':'X','2-3':'Z','4-4':'·'};
+const REV={};for(const k in SEM)REV[SEM[k]]=k.split('-').map(Number);
+const WORD='OSTROV';let idx=0,lastL='',holdStart=0,landmarker=null,stream=null,facing='user',raf=0;
+const setSem=h=>{$('#semMsg').innerHTML=h};
+function drawTarget(){
+  $('#semWord').innerHTML=[...WORD].map((c,i)=>`<span class="${i<idx?'done':i===idx?'cur':''}">${c}</span>`).join('');
+  const d=$('#diag'),c=d.getContext('2d');c.clearRect(0,0,d.width,d.height);
+  const L=WORD[idx];if(!L)return;
+  const W=d.width,cx=W/2,sh=W*.36,mir=facing==='user';
+  c.save();if(mir){c.translate(W,0);c.scale(-1,1)}
+  c.strokeStyle='#e9eef4';c.lineWidth=W/22;c.lineCap='round';
+  c.beginPath();c.arc(cx,W*.2,W*.08,0,7);c.stroke();
+  c.beginPath();c.moveTo(cx,W*.3);c.lineTo(cx,W*.62);c.lineTo(cx-W*.1,W*.9);c.moveTo(cx,W*.62);c.lineTo(cx+W*.1,W*.9);c.stroke();
+  const arms=REV[L].map(s=>({phi:s*Math.PI/4})).sort((p,q)=>Math.sin(p.phi)-Math.sin(q.phi));
+  arms.forEach((a,i)=>{const ox=cx+(i===0?-W*.1:W*.1),len=W*.32,ex=ox+Math.sin(a.phi)*len,ey=sh-Math.cos(a.phi)*len;
+    c.strokeStyle='#d4a94e';c.beginPath();c.moveTo(ox,sh);c.lineTo(ex,ey);c.stroke();
+    c.fillStyle=i===0?'#d52b1e':'#f3c614';c.fillRect(ex-W*.06,ey-W*.06,W*.12,W*.12)});
+  c.restore();
+}
+drawTarget();
+async function loadPose(){
+  if(landmarker)return landmarker;
+  const V='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
+  const {PoseLandmarker,FilesetResolver}=await import(V+'/vision_bundle.mjs');
+  const fs=await FilesetResolver.forVisionTasks(V+'/wasm');
+  const opts=d=>({baseOptions:{modelAssetPath:'https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task',delegate:d},runningMode:'VIDEO',numPoses:1});
+  try{landmarker=await PoseLandmarker.createFromOptions(fs,opts('GPU'))}catch(e){landmarker=await PoseLandmarker.createFromOptions(fs,opts('CPU'))}
+  return landmarker;
+}
+function stopCam(){cancelAnimationFrame(raf);if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}}
+async function startCam(){
+  $('#camOn').disabled=true;setSem('Načítám rozpoznávání postavy, chvilku to trvá…');
+  try{await loadPose()}catch(e){setSem('Rozpoznávání se nenačetlo ('+e.message+'). Ťukni Přeskočit.');$('#camOn').disabled=false;return}
+  try{stopCam();stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:facing,width:{ideal:640},height:{ideal:480}},audio:false})}
+  catch(e){setSem('Kamera nejde zapnout ('+e.name+'). Povol kameru v nastavení prohlížeče.');$('#camOn').disabled=false;return}
+  const v=$('#vid');v.srcObject=stream;try{await v.play()}catch(e){}
+  const t=facing==='user'?'scaleX(-1)':'none';v.style.transform=t;$('#ov').style.transform=t;
+  $('#camOn').textContent='Kamera běží';drawTarget();
+  setSem('<b>Kapitán:</b> Postav se tak, aby tě kamera viděla od pasu nahoru, a ukazuj písmena podle obrázku vpravo.');
+  loop();
+}
+function showLetter(L){
+  const el=$('#semLetter');el.textContent=L;const want=WORD[idx];el.classList.toggle('good',!!want&&L===want);
+  if(!want)return;
+  if(L===want){if(lastL!==L)holdStart=performance.now();else if(performance.now()-holdStart>700){advance();return}}
+  lastL=L;
+}
+function advance(){
+  idx++;lastL='';vibe(60);drawTarget();
+  if(idx>=WORD.length)setSem('<b>Kapitán:</b> OSTROV! Spojenci mění kurz k nám. A ani jsi nevypadal jako tančící chobotnice. Skoro.');
+}
+function loop(){
+  const v=$('#vid'),cv=$('#ov'),x=cv.getContext('2d');
+  const step=()=>{
+    if(!stream)return;
+    if(v.readyState>=2&&v.videoWidth){
+      if(cv.width!==v.videoWidth){cv.width=v.videoWidth;cv.height=v.videoHeight}
+      const W=cv.width,H=cv.height;let res=null;
+      try{res=landmarker.detectForVideo(v,performance.now())}catch(e){}
+      x.clearRect(0,0,W,H);
+      const lm=res&&res.landmarks&&res.landmarks[0];
+      if(lm){
+        x.lineWidth=Math.max(5,W/70);x.lineCap='round';
+        [[11,13,15],[12,14,16]].forEach(([s,e,w])=>{x.strokeStyle='#d4a94e';x.beginPath();x.moveTo(lm[s].x*W,lm[s].y*H);x.lineTo(lm[e].x*W,lm[e].y*H);x.lineTo(lm[w].x*W,lm[w].y*H);x.stroke()});
+        const arm=(s,w)=>{const S=lm[s],R=lm[w];if((S.visibility??1)<.5||(R.visibility??1)<.5)return null;
+          const th=(Math.atan2((R.x-S.x)*W,-(R.y-S.y)*H)*180/Math.PI+360)%360;return Math.round(th/45)%8};
+        const a=arm(11,15),b=arm(12,16);
+        showLetter(a!==null&&b!==null?(SEM[[a,b].sort((p,q)=>p-q).join('-')]||'?'):'–');
+      }else showLetter('–');
+    }
+    raf=requestAnimationFrame(step);
+  };
+  cancelAnimationFrame(raf);raf=requestAnimationFrame(step);
+}
+$('#camOn').onclick=startCam;
+$('#flipCam').onclick=()=>{facing=facing==='user'?'environment':'user';drawTarget();if(stream)startCam()};
+$('#semSkip').onclick=()=>{if(idx<WORD.length)advance()};
+
+/* ---------- 3 · hvězdy a kompas ---------- */
+// [rektascenze v hodinách, deklinace ve stupních, jasnost]; Polárka, Velký vůz, Kasiopeja, Malý vůz.
+const BRIGHT=[[2.53,89.26,2.0],[11.06,61.75,1.8],[11.03,56.38,2.3],[11.90,53.69,2.4],[12.26,57.03,3.3],[12.90,55.96,1.8],[13.40,54.93,2.2],[13.79,49.31,1.9],
+  [0.15,59.15,2.3],[0.68,56.54,2.2],[0.95,60.72,2.4],[1.43,60.24,2.7],[1.91,63.67,3.4],
+  [14.85,74.16,2.1],[15.35,71.83,3.0],[17.54,86.59,4.4],[16.77,82.04,4.2],[15.73,77.79,4.3],[16.29,75.76,5.0]];
+const toMap=(ra,dec)=>{const r=90-dec,t=ra*15*Math.PI/180;return{x:r*Math.sin(t),y:r*Math.cos(t)}};
+const STARS=BRIGHT.map(([ra,dec,m])=>({...toMap(ra,dec),m}));
+(function(){const R=rng(42);for(let i=0;i<420;i++){const p=toMap(R()*24,38+R()*52);STARS.push({...p,m:4.6+R()*1.4})}})();
+const POL=STARS[0];
+const DIPPER=[1,2,3,4,5,6,7].map(i=>STARS[i]);
+let sky={on:false,mode:'sky',cal:null,off:{x:0,y:0},drag:{x:0,y:0},sign:1,hint:0,hold:0,manual:0,headStart:0};
+function initSky(){
+  if(sky.inited){return}sky.inited=true;
+  const m=STARS[4];sky.off={x:m.x-2,y:m.y+4};
+  const cv=$('#sky');let last=null;
+  cv.addEventListener('pointerdown',e=>{last={x:e.clientX,y:e.clientY};cv.setPointerCapture(e.pointerId)});
+  cv.addEventListener('pointermove',e=>{if(!last)return;const dx=e.clientX-last.x,dy=e.clientY-last.y;last={x:e.clientX,y:e.clientY};
+    if(sky.mode==='sky'){const S=scale();sky.drag.x-=dx/S;sky.drag.y-=dy/S}else{sky.manual=(sky.manual+dx*.5+360)%360}});
+  cv.addEventListener('pointerup',()=>last=null);cv.addEventListener('pointercancel',()=>last=null);
+  requestAnimationFrame(drawSky);
+}
+const scale=()=>{const cv=$('#sky');return Math.min(cv.clientWidth,cv.clientHeight)/40};
+function viewCenter(){
+  let tx=0,ty=0,rot=0;
+  if(sky.cal&&O.b!=null){const wrap=d=>((d+540)%360)-180;
+    tx=wrap(O.g-sky.cal.g)*1.2*sky.sign;ty=wrap(O.b-sky.cal.b)*1.2*sky.sign;rot=O.a!=null&&sky.cal.a!=null?wrap(O.a-sky.cal.a)*Math.PI/180:0}
+  const c=Math.cos(-rot),s=Math.sin(-rot);
+  return{x:sky.off.x+sky.drag.x+tx*c-ty*s,y:sky.off.y+sky.drag.y+tx*s+ty*c,rot};
+}
+function drawSky(ts){
+  if(current!=='hvezdy'){requestAnimationFrame(drawSky);return}
+  const cv=$('#sky'),dpr=Math.min(2,window.devicePixelRatio||1),W=cv.clientWidth,H=cv.clientHeight;
+  if(cv.width!==Math.round(W*dpr)){cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr)}
+  const x=cv.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);
+  x.fillStyle='#030814';x.fillRect(0,0,W,H);
+  if(sky.mode==='sky'){
+    const S=scale(),v=viewCenter(),c=Math.cos(v.rot),s=Math.sin(v.rot);
+    const P=p=>{const dx=p.x-v.x,dy=p.y-v.y;return{x:W/2+(dx*c-dy*s)*S,y:H/2+(dx*s+dy*c)*S}};
+    if(sky.hint>=2){x.strokeStyle='rgba(212,169,78,.55)';x.lineWidth=2;x.beginPath();DIPPER.forEach((p,i)=>{const q=P(p);i?x.lineTo(q.x,q.y):x.moveTo(q.x,q.y)});const q4=P(STARS[4]),q1=P(STARS[1]);x.lineTo(q4.x,q4.y);x.stroke();
+      const a=P(STARS[2]),b=P(STARS[1]);x.setLineDash([6,8]);x.beginPath();x.moveTo(a.x,a.y);x.lineTo(a.x+(b.x-a.x)*6,a.y+(b.y-a.y)*6);x.stroke();x.setLineDash([])}
+    for(const st of STARS){const q=P(st);if(q.x<-10||q.y<-10||q.x>W+10||q.y>H+10)continue;
+      const r=Math.max(.6,(5.8-st.m)*1.25),tw=.75+.25*Math.sin(ts/400+st.x*3);x.fillStyle=`rgba(235,240,255,${Math.min(1,tw*(1.1-st.m/7))})`;x.beginPath();x.arc(q.x,q.y,r,0,7);x.fill()}
+    x.strokeStyle='rgba(212,169,78,.8)';x.lineWidth=1.5;x.beginPath();x.arc(W/2,H/2,2.2*S,0,7);x.moveTo(W/2-3.5*S,H/2);x.lineTo(W/2-1.2*S,H/2);x.moveTo(W/2+1.2*S,H/2);x.lineTo(W/2+3.5*S,H/2);x.moveTo(W/2,H/2-3.5*S);x.lineTo(W/2,H/2-1.2*S);x.moveTo(W/2,H/2+1.2*S);x.lineTo(W/2,H/2+3.5*S);x.stroke();
+    const dist=Math.hypot(POL.x-v.x,POL.y-v.y);
+    if(sky.cal||sky.drag.x||sky.drag.y){
+      if(dist<2.2){if(!sky.hold)sky.hold=ts;if(ts-sky.hold>1500)toCompass()}else sky.hold=0;
+    }
+  }else{
+    const useAbs=O.abs&&O.heading!=null;const h=useAbs?O.heading:sky.manual;
+    if(!useAbs&&ts-sky.headStart>2500&&!sky.noAbsShown){sky.noAbsShown=true;$('#skyMsg').innerHTML='<b>Kapitán:</b> Telefon neukazuje sever. Pro zkoušku otáčej kompasem prstem.'}
+    const cx=W/2,cy=H*.45,R=Math.min(W,H)*.34;
+    x.strokeStyle='#2b4560';x.lineWidth=2;x.beginPath();x.arc(cx,cy,R,0,7);x.stroke();
+    x.save();x.translate(cx,cy);x.rotate(-h*Math.PI/180);
+    x.fillStyle='#e9eef4';x.font='700 18px system-ui';x.textAlign='center';x.textBaseline='middle';
+    [['S',0],['V',90],['J',180],['Z',270]].forEach(([t,d])=>{const a=d*Math.PI/180;x.fillText(t,Math.sin(a)*(R-22),-Math.cos(a)*(R-22))});
+    for(let d=0;d<360;d+=10){const a=d*Math.PI/180,l=d%30?6:12;x.strokeStyle='#5a7590';x.beginPath();x.moveTo(Math.sin(a)*R,-Math.cos(a)*R);x.lineTo(Math.sin(a)*(R-l),-Math.cos(a)*(R-l));x.stroke()}
+    const t=240*Math.PI/180;x.strokeStyle='#d4a94e';x.lineWidth=5;x.beginPath();x.moveTo(Math.sin(t)*(R-30),-Math.cos(t)*(R-30));x.lineTo(Math.sin(t)*(R+14),-Math.cos(t)*(R+14));x.stroke();
+    x.restore();
+    x.fillStyle='#d4a94e';x.beginPath();x.moveTo(cx,cy-R-18);x.lineTo(cx-10,cy-R+2);x.lineTo(cx+10,cy-R+2);x.closePath();x.fill();
+    x.fillStyle='#e9eef4';x.font='800 44px system-ui';x.textAlign='center';x.fillText(Math.round(h)+'°',cx,cy+R+50);
+    const diff=Math.abs(((h-240+540)%360)-180);
+    if(diff<7){if(!sky.hold)sky.hold=ts;if(ts-sky.hold>2000&&!sky.done){sky.done=true;vibe([80,60,80,60,200]);$('#skyMsg').innerHTML='<b>Kapitán:</b> ZEMĚ NA OBZORU! Kurz 240 sedí. Navigátora mi nikdo nevrátí, ale tebe si nechám.'}}else sky.hold=0;
+  }
+  requestAnimationFrame(drawSky);
+}
+function toCompass(){
+  if(sky.mode!=='sky')return;sky.mode='compass';sky.hold=0;sky.headStart=performance.now();vibe([60,40,60]);
+  $('#skyTitle').textContent='Kompas';$('#hintBtn').hidden=true;$('#flipDir').hidden=true;$('#skyStart').hidden=true;
+  $('#skyMsg').innerHTML='<b>Kapitán:</b> Polárka! Tam je sever. Podle mapy plujeme kurzem 240°. Drž telefon naplocho a otáčej se celým tělem, dokud zlatá ryska nebude nahoře.';
+}
+$('#skyStart').onclick=()=>{
+  if(O.b==null){$('#skyMsg').innerHTML='<b>Kapitán:</b> Pohyb telefonu nejde. Posouvej oblohu prstem a hledej Polárku.';return}
+  sky.cal={a:O.a,b:O.b,g:O.g};sky.drag={x:0,y:0};$('#skyStart').textContent='Znovu vycentrovat';
+  $('#skyMsg').innerHTML='<b>Kapitán:</b> Nakláněj telefon a hledej. Polárka musí do kříže a chvilku tam vydržet.';
+};
+$('#flipDir').onclick=()=>{sky.sign*=-1};
+$('#hintBtn').onclick=()=>{sky.hint=Math.min(2,sky.hint+1);
+  $('#skyMsg').innerHTML=sky.hint===1?'<b>Kapitán:</b> Najdi Velký vůz, sedm jasných hvězd jako kastrol. Prodluž jeho přední hranu zhruba pětkrát.':'<b>Kapitán:</b> Zlatá čára ukazuje vůz, čárkovaná vede k Polárce.'};
+</script>
+</body>
+</html>
