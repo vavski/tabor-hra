@@ -6,6 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>Zkouška Piráti</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pannellum/2.5.6/pannellum.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap">
 <style>
 /* Jen zkouška tří momentů. Tmavá noc na moři, mosazné ovládání, vše pro telefon na výšku. */
 :root{--bg:#081321;--panel:#0f2236;--line:#2b4560;--fg:#e9eef4;--muted:#93a6b8;--brass:#d4a94e;--ok:#5fd38d;color-scheme:dark}
@@ -45,6 +46,13 @@ input[type=text]{flex:1;min-width:0;font:inherit;font-size:20px;text-transform:u
 #semWord span.done{opacity:1;color:var(--ok)}
 #semWord span.cur{opacity:1;color:var(--brass);text-decoration:underline}
 #sky{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+#mv{position:absolute;inset:0;width:100%;height:100%;background:radial-gradient(circle at 50% 45%,#16304b,#081321 70%)}
+#arBtn{position:absolute;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top) + 64px);width:auto;padding:12px 18px;white-space:nowrap}
+#fvid,#fov{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+#posterOut{position:absolute;inset:0;z-index:9;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#081321f7;padding:calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 16px)}
+#posterOut.on{display:flex}
+#posterOut img{max-width:100%;max-height:72vh;border-radius:6px;box-shadow:0 10px 40px #000a}
+#posterOut .row{width:100%;max-width:420px}
 .big{font-size:44px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -57,6 +65,8 @@ input[type=text]{flex:1;min-width:0;font:inherit;font-size:20px;text-transform:u
   <button class="btn" data-go="paluba" data-motion>1 · Paluba v 360°<small>Otáčej se s telefonem po pokoji. Najdi fregatu a rozlušti její vlajky.</small></button>
   <button class="btn" data-go="semafor">2 · Semafor<small>Postav se před kameru a ukazuj rukama písmena. Kamera je kontroluje.</small></button>
   <button class="btn" data-go="hvezdy" data-motion>3 · Hvězdy a kompas<small>Lehni si, najdi Polárku nad sebou, pak natoč telefon na kurz 240°.</small></button>
+  <button class="btn" data-go="truhla">4 · Truhla v obýváku<small>Kamera položí truhlu na podlahu. Obejdi ji a najdi kód.</small></button>
+  <button class="btn" data-go="plakat">5 · Hledaný plakát<small>Kamera posádce nasadí klobouky a pásky. Vznikne plakát ke sdílení.</small></button>
   <p class="note" id="motionState"></p>
 </section>
 
@@ -95,7 +105,36 @@ input[type=text]{flex:1;min-width:0;font:inherit;font-size:20px;text-transform:u
   </div>
 </section>
 
+<section id="truhla" class="screen">
+  <model-viewer id="mv" ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" ar-placement="floor" camera-controls shadow-intensity="1" exposure="1.1" camera-orbit="30deg 70deg auto" alt="Pirátská truhla">
+    <button slot="ar-button" class="btn primary" id="arBtn">Položit truhlu do pokoje</button>
+  </model-viewer>
+  <div class="bar"><button class="chip" data-back>← Zpět</button><span class="t">Truhla</span></div>
+  <div class="bottom">
+    <div class="msg" id="chestMsg"><b>Kapitán:</b> Truhla má na každé straně znak a číslo. Kód je v pořadí: lebka, kotva, růže, hvězda.</div>
+    <div class="row"><input type="text" id="chestIn" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Kód truhly"><button class="btn primary" id="chestOk" style="width:auto">Otevřít</button></div>
+  </div>
+</section>
+
+<section id="plakat" class="screen">
+  <video id="fvid" playsinline muted></video>
+  <canvas id="fov"></canvas>
+  <div class="bar"><button class="chip" data-back>← Zpět</button><span class="t">Hledaný plakát</span></div>
+  <div class="bottom">
+    <div class="msg" id="posterMsg"><b>Kapitán:</b> Utekli jsme. Flotila po nás vyhlásí pátrání, tak ať na plakátě aspoň vypadáte dobře.</div>
+    <div class="row"><input type="text" id="crewIn" placeholder="Jméno posádky" maxlength="24" autocomplete="off" aria-label="Jméno posádky" style="letter-spacing:normal;text-transform:none;font-size:17px"></div>
+    <div class="row"><button class="btn primary" id="faceOn">Zapnout kameru</button><button class="btn primary" id="snap" hidden>Vyfotit plakát</button></div>
+  </div>
+  <div id="posterOut">
+    <img id="posterImg" alt="Hledaný plakát posádky">
+    <div class="row"><button class="btn primary" id="shareBtn">Sdílet</button><button class="btn" id="againBtn" style="width:auto">Znovu</button></div>
+  </div>
+</section>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pannellum/2.5.6/pannellum.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.4.0/dist/model-viewer.min.js"></script>
 <script>
 const $=s=>document.querySelector(s);
 const vibe=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
@@ -125,6 +164,8 @@ function show(id){
   current=id;
   document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));
   if(id!=='semafor') stopCam();
+  if(id!=='plakat') stopFace();
+  if(id==='truhla') initChest();
   if(id==='paluba') initPano();
   if(id==='hvezdy') initSky();
 }
@@ -356,6 +397,135 @@ $('#skyStart').onclick=()=>{
   $('#skyMsg').innerHTML='<b>Kapitán:</b> Nakláněj telefon a hledej. Polárka musí do kříže a chvilku tam vydržet.';
 };
 $('#flipDir').onclick=()=>{sky.sign*=-1};
+/* ---------- 4 · truhla v obýváku ---------- */
+// Truhla se staví kódem (three.js) a předá se model-vieweru jako soubor GLB. Žádný stažený model.
+function drawSym(x,s,cx,cy,r){
+  x.save();x.translate(cx,cy);x.lineWidth=r*.14;x.lineCap='round';
+  if(s==='kotva'){x.beginPath();x.arc(0,-r*.85,r*.18,0,7);x.stroke();x.beginPath();x.moveTo(0,-r*.67);x.lineTo(0,r*.9);x.moveTo(-r*.45,-r*.4);x.lineTo(r*.45,-r*.4);x.stroke();x.beginPath();x.arc(0,r*.2,r*.7,.15*Math.PI,.85*Math.PI);x.stroke()}
+  else if(s==='lebka'){x.beginPath();x.arc(0,-r*.15,r*.7,0,7);x.fill();x.fillRect(-r*.4,r*.3,r*.8,r*.55);x.fillStyle='#6b4423';x.beginPath();x.arc(-r*.28,-r*.15,r*.18,0,7);x.arc(r*.28,-r*.15,r*.18,0,7);x.fill();x.fillRect(-r*.05,r*.4,r*.1,r*.4)}
+  else if(s==='hvezda'){x.beginPath();for(let i=0;i<10;i++){const a=i*Math.PI/5-Math.PI/2,rr=i%2?r*.4:r;x.lineTo(Math.cos(a)*rr,Math.sin(a)*rr)}x.closePath();x.fill()}
+  else if(s==='ruze'){x.beginPath();x.arc(0,0,r*.75,0,7);x.stroke();x.beginPath();for(let i=0;i<8;i++){const a=i*Math.PI/4-Math.PI/2,rr=i%2?r*.22:r;x.lineTo(Math.cos(a)*rr,Math.sin(a)*rr)}x.closePath();x.fill()}
+  x.restore();
+}
+function sideMat(sym,num,w,h){
+  const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');
+  x.fillStyle='#6b4423';x.fillRect(0,0,w,h);
+  x.strokeStyle='#4a2d15';x.lineWidth=6;for(let y=h/4;y<h;y+=h/4){x.beginPath();x.moveTo(0,y);x.lineTo(w,y);x.stroke()}
+  const R=rng(w+h+(sym||'x').length*31);for(let i=0;i<70;i++){x.strokeStyle='rgba(40,20,5,.25)';x.lineWidth=2;const yy=R()*h,xx=R()*w;x.beginPath();x.moveTo(xx,yy);x.lineTo(xx+40+R()*80,yy+R()*4-2);x.stroke()}
+  if(sym){x.fillStyle='#ecdcae';x.strokeStyle='#ecdcae';drawSym(x,sym,w/2,h*.4,h*.24);
+    x.font=`700 ${Math.round(h*.2)}px Georgia,serif`;x.textAlign='center';x.textBaseline='middle';x.fillText(num,w/2,h*.8)}
+  return new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(c),roughness:.85});
+}
+let chestBuilt=false;
+function initChest(){
+  if(chestBuilt)return;
+  if(typeof THREE==='undefined'||!THREE.GLTFExporter){$('#chestMsg').innerHTML='3D knihovna se nenačetla. Zkus obnovit stránku.';return}
+  chestBuilt=true;
+  const scene=new THREE.Scene(),W=.9,H=.45,D=.55,plain=sideMat('',0,256,256);
+  const body=new THREE.Mesh(new THREE.BoxGeometry(W,H,D),[sideMat('lebka','7',384,320),sideMat('kotva','3',384,320),plain,plain,sideMat('ruze','9',640,320),sideMat('hvezda','1',640,320)]);
+  body.position.y=H/2;scene.add(body);
+  const lid=new THREE.Mesh(new THREE.CylinderGeometry(D/2,D/2,W,24,1,false,0,Math.PI),plain);lid.rotation.z=Math.PI/2;lid.position.y=H;scene.add(lid);
+  const metal=new THREE.MeshStandardMaterial({color:0x2a2a2a,metalness:.8,roughness:.35});
+  [-W*.36,W*.36].forEach(bx=>{const b=new THREE.Mesh(new THREE.BoxGeometry(.04,H+.01,D+.012),metal);b.position.set(bx,H/2,0);scene.add(b)});
+  const lock=new THREE.Mesh(new THREE.BoxGeometry(.09,.1,.03),new THREE.MeshStandardMaterial({color:0xc9a24a,metalness:.9,roughness:.3}));lock.position.set(0,H*.9,D/2+.016);scene.add(lock);
+  new THREE.GLTFExporter().parse(scene,glb=>{
+    const mv=$('#mv');mv.src=URL.createObjectURL(new Blob([glb],{type:'model/gltf-binary'}));
+    mv.addEventListener('load',()=>{if(!mv.canActivateAR)$('#chestMsg').innerHTML='<b>Kapitán:</b> Tady truhla do pokoje nejde, otáčej s ní prstem. Kód je v pořadí: lebka, kotva, růže, hvězda.'},{once:true});
+  },{binary:true});
+}
+$('#chestOk').onclick=()=>{
+  const v=$('#chestIn').value.replace(/\D/g,'');
+  if(v==='7391'){$('#chestMsg').innerHTML='<b>Kapitán:</b> Cvak. Uvnitř je kus mapy a moje ponožky. Neptej se.';vibe([60,40,120])}
+  else $('#chestMsg').innerHTML='<b>Kapitán:</b> Nic. Obejdi ji pořádně, každá strana má jiný znak.';
+};
+
+/* ---------- 5 · hledaný plakát ---------- */
+let faceLm=null,fStream=null,fRaf=0,posterBlob=null;
+async function loadFace(){
+  if(faceLm)return faceLm;
+  const V='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
+  const {FaceLandmarker,FilesetResolver}=await import(V+'/vision_bundle.mjs');
+  const fs=await FilesetResolver.forVisionTasks(V+'/wasm');
+  const opts=d=>({baseOptions:{modelAssetPath:'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',delegate:d},runningMode:'VIDEO',numFaces:4});
+  try{faceLm=await FaceLandmarker.createFromOptions(fs,opts('GPU'))}catch(e){faceLm=await FaceLandmarker.createFromOptions(fs,opts('CPU'))}
+  return faceLm;
+}
+function stopFace(){cancelAnimationFrame(fRaf);if(fStream){fStream.getTracks().forEach(t=>t.stop());fStream=null}}
+function drawPirate(x,lm,W,H){
+  const P=i=>({x:lm[i].x*W,y:lm[i].y*H});
+  const L=P(234),R=P(454),fw=Math.hypot(R.x-L.x,R.y-L.y);
+  const e1=P(33),e2=P(133),eo=P(263),ang=Math.atan2(eo.y-e1.y,eo.x-e1.x),pc={x:(e1.x+e2.x)/2,y:(e1.y+e2.y)/2};
+  const t1=P(127),t2=P(356);
+  x.strokeStyle='#111';x.lineWidth=fw*.035;x.lineCap='round';
+  x.beginPath();x.moveTo(t1.x,t1.y-fw*.05);x.lineTo(pc.x,pc.y);x.lineTo(t2.x,t2.y-fw*.22);x.stroke();
+  x.save();x.translate(pc.x,pc.y);x.rotate(ang);x.fillStyle='#0d0d0d';x.beginPath();x.ellipse(0,0,fw*.15,fw*.11,0,0,7);x.fill();x.restore();
+  const top=P(10),w=fw*1.7,h=fw*.75;
+  x.save();x.translate(top.x,top.y);x.rotate(ang);x.translate(0,-fw*.12);
+  x.fillStyle='#1b120b';x.beginPath();x.moveTo(-w/2,0);x.quadraticCurveTo(-w*.38,-h*.95,0,-h);x.quadraticCurveTo(w*.38,-h*.95,w/2,0);x.quadraticCurveTo(0,-h*.3,-w/2,0);x.closePath();x.fill();
+  x.strokeStyle='#d4a94e';x.lineWidth=fw*.03;x.beginPath();x.moveTo(-w/2,0);x.quadraticCurveTo(0,-h*.3,w/2,0);x.stroke();
+  x.fillStyle='#f1ead8';x.beginPath();x.arc(0,-h*.45,fw*.09,0,7);x.fill();
+  x.fillStyle='#1b120b';x.beginPath();x.arc(-fw*.03,-h*.46,fw*.022,0,7);x.arc(fw*.03,-h*.46,fw*.022,0,7);x.fill();
+  x.restore();
+}
+async function startFace(){
+  $('#faceOn').disabled=true;$('#posterMsg').innerHTML='Načítám rozpoznávání obličeje, chvilku to trvá…';
+  try{await loadFace()}catch(e){$('#posterMsg').innerHTML='Rozpoznávání se nenačetlo ('+e.message+').';$('#faceOn').disabled=false;return}
+  try{stopFace();fStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:720},height:{ideal:960}},audio:false})}
+  catch(e){$('#posterMsg').innerHTML='Kamera nejde zapnout ('+e.name+'). Povol kameru v nastavení prohlížeče.';$('#faceOn').disabled=false;return}
+  const v=$('#fvid');v.srcObject=fStream;try{await v.play()}catch(e){}
+  $('#faceOn').hidden=true;$('#snap').hidden=false;
+  $('#posterMsg').innerHTML='<b>Kapitán:</b> Celá posádka do záběru. Klobouky vám půjčím, pásky si nechte.';
+  const cv=$('#fov'),x=cv.getContext('2d');
+  const step=()=>{
+    if(!fStream)return;
+    if(v.readyState>=2&&v.videoWidth){
+      if(cv.width!==v.videoWidth){cv.width=v.videoWidth;cv.height=v.videoHeight}
+      let r=null;try{r=faceLm.detectForVideo(v,performance.now())}catch(e){}
+      x.clearRect(0,0,cv.width,cv.height);((r&&r.faceLandmarks)||[]).forEach(lm=>drawPirate(x,lm,cv.width,cv.height));
+    }
+    fRaf=requestAnimationFrame(step);
+  };
+  fRaf=requestAnimationFrame(step);
+}
+async function makePoster(ph){
+  try{await document.fonts.load('120px "Pirata One"')}catch(e){}
+  const c=document.createElement('canvas');c.width=1080;c.height=1350;const x=c.getContext('2d');
+  x.fillStyle='#e6cf9c';x.fillRect(0,0,1080,1350);
+  const R=rng(9);for(let i=0;i<2500;i++){x.fillStyle=`rgba(120,80,30,${R()*.08})`;x.fillRect(R()*1080,R()*1350,2+R()*6,2+R()*6)}
+  const g=x.createRadialGradient(540,675,300,540,675,900);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(80,45,10,.55)');x.fillStyle=g;x.fillRect(0,0,1080,1350);
+  x.fillStyle='#3a2412';x.textAlign='center';
+  x.font='150px "Pirata One", Georgia, serif';x.fillText('HLEDÁ SE',540,200,960);
+  const fx=110,fy=250,fw=860,fh=640,s=Math.max(fw/ph.width,fh/ph.height),sw=fw/s,sh=fh/s;
+  x.save();x.beginPath();x.rect(fx,fy,fw,fh);x.clip();x.filter='sepia(.75) contrast(1.1) brightness(.95)';
+  x.drawImage(ph,(ph.width-sw)/2,(ph.height-sh)*.2,sw,sh,fx,fy,fw,fh);x.restore();
+  x.strokeStyle='#3a2412';x.lineWidth=10;x.strokeRect(fx,fy,fw,fh);
+  const name=($('#crewIn').value.trim()||'bez jména').slice(0,24);
+  x.font='70px "Pirata One", Georgia, serif';x.fillText('Posádka '+name,540,990,960);
+  x.font='italic 38px Georgia, serif';x.fillText('za útěk před královskou fregatou',540,1050,960);
+  x.font='96px "Pirata One", Georgia, serif';x.fillText('ODMĚNA 10 000 DUKÁTŮ',540,1175,980);
+  x.font='30px Georgia, serif';x.fillStyle='#5a3a1e';x.fillText('@unikovka.ve.meste',540,1290);
+  return c;
+}
+async function snap(){
+  const v=$('#fvid'),W=v.videoWidth,H=v.videoHeight;if(!W)return;
+  const ph=document.createElement('canvas');ph.width=W;ph.height=H;const x=ph.getContext('2d');
+  x.translate(W,0);x.scale(-1,1);x.drawImage(v,0,0,W,H);x.drawImage($('#fov'),0,0,W,H);
+  vibe(40);
+  const c=await makePoster(ph);
+  $('#posterImg').src=c.toDataURL('image/jpeg',.9);
+  c.toBlob(b=>{posterBlob=b},'image/jpeg',.9);
+  $('#posterOut').classList.add('on');
+}
+$('#faceOn').onclick=startFace;
+$('#snap').onclick=snap;
+$('#againBtn').onclick=()=>$('#posterOut').classList.remove('on');
+$('#shareBtn').onclick=async()=>{
+  if(!posterBlob)return;
+  const f=new File([posterBlob],'hledana-posadka.jpg',{type:'image/jpeg'});
+  if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f]})}catch(e){}}
+  else{const a=document.createElement('a');a.href=URL.createObjectURL(posterBlob);a.download='hledana-posadka.jpg';document.body.append(a);a.click();a.remove()}
+};
+
 $('#hintBtn').onclick=()=>{sky.hint=Math.min(2,sky.hint+1);
   $('#skyMsg').innerHTML=sky.hint===1?'<b>Kapitán:</b> Najdi Velký vůz, sedm jasných hvězd jako kastrol. Prodluž jeho přední hranu zhruba pětkrát.':'<b>Kapitán:</b> Zlatá čára ukazuje vůz, čárkovaná vede k Polárce.'};
 </script>
