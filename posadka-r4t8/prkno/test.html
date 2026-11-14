@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Prkno · zkouška ve víc telefonech</title>
+<style>
+/* Testovací stránka: víc telefonů vedle sebe na jednom počítači. Každé okno má vlastní uložení. */
+:root{--bg:#05080d;--fg:#e9e3d6;--muted:#93a1b3;--brass:#d4a94e;--line:#26364c;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:2;display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:10px 16px;background:#0b121c;border-bottom:1px solid var(--line)}
+header b{color:var(--brass);font-size:18px;margin-right:6px}
+select,button{font:inherit;color:inherit;background:#122033;border:1px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer}
+button.primary{background:var(--brass);color:#1a1205;border-color:var(--brass);font-weight:700}
+.note{color:var(--muted);font-size:13px}
+#grid{display:flex;flex-wrap:wrap;gap:18px;padding:16px;justify-content:center}
+.ph{display:flex;flex-direction:column;align-items:center;gap:6px}
+.ph .lab{font-size:13px;color:var(--muted)}
+.ph .lab b{color:var(--fg)}
+.frame{width:calc(390px*var(--s));height:calc(780px*var(--s));overflow:hidden;border-radius:calc(28px*var(--s));border:calc(8px*var(--s)) solid #1b2533;background:#000}
+.frame iframe{width:390px;height:780px;border:0;transform:scale(var(--s));transform-origin:0 0;display:block}
+</style>
+</head>
+<body>
+<header>
+  <b>Prkno · zkouška</b>
+  <label>Hráčů <select id="n"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option></select></label>
+  <label>Velikost <select id="s"><option value="1">100 %</option><option value=".8" selected>80 %</option><option value=".65">65 %</option><option value=".5">50 %</option></select></label>
+  <button class="primary" id="go">Nová hra</button>
+  <span class="note" id="info"></span>
+</header>
+<div id="grid"></div>
+<script>
+// Na počítači nejde naklánět ani třást: hra má všude náhradu prstem (tlačítko „Ťukej sem“, „Sypat“).
+const ABC='ABCDEFHJKLMNPRSTUVXZ',grid=document.getElementById('grid');
+function build(code,n){
+  grid.innerHTML='';
+  for(let i=1;i<=n;i++){
+    const w=document.createElement('div');w.className='ph';
+    w.innerHTML=`<div class="lab"><b>Telefon ${i}</b> · karta ${i}</div><div class="frame"><iframe title="Telefon ${i}" src="index.html?slot=${i}&code=${code}&card=${i}"></iframe></div>`;
+    grid.append(w);
+  }
+  document.getElementById('info').textContent=`Kód posádky ${code}. Okna mají každé svoje uložení, obnovení stránky hru nesmaže.`;
+}
+function setScale(){document.documentElement.style.setProperty('--s',document.getElementById('s').value)}
+document.getElementById('s').onchange=setScale;setScale();
+document.getElementById('go').onclick=()=>{
+  const n=+document.getElementById('n').value;let c='';for(let i=0;i<4;i++)c+=ABC[Math.floor(Math.random()*ABC.length)];
+  for(let i=1;i<=6;i++)try{localStorage.removeItem('prkno-v1-'+i)}catch(e){}
+  try{localStorage.setItem('prkno-test',JSON.stringify({code:c+n,n}))}catch(e){}
+  build(c+n,n);
+};
+// po obnovení stránky pokračuje rozehraná zkouška
+try{const t=JSON.parse(localStorage.getItem('prkno-test'));if(t){document.getElementById('n').value=t.n;build(t.code,t.n)}}catch(e){}
+</script>
+</body>
+</html>

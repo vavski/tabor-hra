@@ -213,7 +213,9 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const vibe=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
 
 /* ================= obsah (pracovní) ================= */
-const KEY='prkno-v1', NPC='Starý Bart';
+// ?slot=N dává každému oknu vlastní uložení (testovací stránka s víc telefony vedle sebe)
+const QS=new URLSearchParams(location.search),SLOT=QS.get('slot');
+const KEY='prkno-v1'+(SLOT?'-'+SLOT:''), NPC='Starý Bart';
 const P={ // postavy: oslovují se příjmením, to sedí na muže i ženu
   H:{sur:'Hawke',m:'Eli',f:'Ellie',nick:'Oko',c:'#2f6fa8',past:'Bývalý pašerák. Loď pozná na tři míle podle plachet.',
      power:'Orlí zrak',pt:'Otáčíš se s telefonem po pokoji a vidíš věci, které ostatní nevidí.',weak:'Neumíš číst. Co vidíš, musíš popsat.',line:'„Číst? Proč, když vidím?“',
@@ -266,7 +268,12 @@ document.querySelectorAll('[data-to]').forEach(b=>b.onclick=()=>show(b.dataset.t
 if(/Instagram|FBAN|FBAV|FB_IAB/i.test(navigator.userAgent))$('#gate').classList.add('on');
 $('#gateGo').onclick=()=>$('#gate').classList.remove('on');
 const saved=load();
-if(saved&&saved.seat>=0){const b=$('#resumeBtn');b.hidden=false;b.innerHTML=`Pokračovat v rozehrané hře<small>Posádka ${esc(saved.code)} · karta ${saved.seat+1}</small>`;b.onclick=async()=>{G=saved;await askMotion();G.t0?startGame():whoScreen()}}
+// rychlý vstup z testovací stránky: ?code=KRAB2&card=1 → rovnou karta postavy
+if(QS.get('code')&&QS.get('card')){
+  const code=QS.get('code').toUpperCase(),card=+QS.get('card')-1;
+  if(saved&&saved.code===code&&saved.seat===card){G=saved;setTimeout(()=>G.t0?startGame():whoScreen(),0)}
+  else if(/^[A-Z]{4}[1-6]$/.test(code)){G=newG(code,+code[4]);G.seat=card;save();setTimeout(whoScreen,0)}
+}else if(saved&&saved.seat>=0){const b=$('#resumeBtn');b.hidden=false;b.innerHTML=`Pokračovat v rozehrané hře<small>Posádka ${esc(saved.code)} · karta ${saved.seat+1}</small>`;b.onclick=async()=>{G=saved;await askMotion();G.t0?startGame():whoScreen()}}
 
 const ABC='ABCDEFHJKLMNPRSTUVXZ';
 for(let n=1;n<=6;n++){const b=el('button','btn',String(n));b.onclick=()=>{let c='';for(let i=0;i<4;i++)c+=ABC[Math.floor(Math.random()*ABC.length)];G=newG(c+n,n);$('#codeBig').textContent=G.code;show('s-code')};$('#nums').append(b)}
