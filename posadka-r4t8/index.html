@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#081321">
+<title>Posádka</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pannellum/2.5.6/pannellum.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap">
+<style>
+/* Kostra hry Posádka (14. 11. 2026). Pracovní verze: texty, slova a vzhled se budou měnit. */
+:root{--bg:#081321;--panel:#0f2236;--panel2:#132b44;--line:#2b4560;--fg:#e9eef4;--muted:#93a6b8;--brass:#d4a94e;--ok:#5fd38d;--bad:#ef6a5b;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+button{font:inherit;color:inherit}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;overflow:auto;gap:14px;padding:calc(env(safe-area-inset-top) + 20px) max(16px,env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 20px) max(16px,env(safe-area-inset-left))}
+.screen.on{display:flex}
+.logo{font-family:"Pirata One",serif;font-weight:400;font-size:64px;line-height:1;margin:24px 0 0;color:var(--brass)}
+.tag{margin:0;font-size:18px;color:var(--fg)}
+h2{font-family:"Pirata One",serif;font-weight:400;font-size:34px;margin:4px 0 0;color:var(--brass)}
+.note{color:var(--muted);font-size:14px;margin:0}
+.btn{appearance:none;border:1px solid var(--line);background:var(--panel);font-weight:650;padding:16px;border-radius:14px;text-align:left;width:100%;cursor:pointer}
+.btn small{display:block;font-weight:400;color:var(--muted);margin-top:4px}
+.btn.primary{background:var(--brass);border-color:var(--brass);color:#1a1205;text-align:center}
+.btn.primary small{color:#3a2a0c}
+.btn:disabled{opacity:.45}
+.btn:focus-visible,.chip:focus-visible,.opt:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+.chip{appearance:none;border:1px solid var(--line);background:#0f2236d9;font-size:14px;padding:8px 12px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.back{align-self:flex-start}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.nums .btn{text-align:center;font-size:28px;padding:18px 0}
+.code{font-size:56px;font-weight:800;letter-spacing:.18em;text-align:center;padding:18px 0;border:2px dashed var(--brass);border-radius:18px;color:var(--brass);font-variant-numeric:tabular-nums}
+input[type=text]{width:100%;min-width:0;font:inherit;font-size:22px;text-transform:uppercase;letter-spacing:.2em;padding:12px;border-radius:12px;border:1px solid var(--line);background:#06101c;color:var(--fg)}
+#s-game{padding:0;gap:0;overflow:hidden}
+.gbar{display:flex;gap:8px;align-items:center;padding:calc(env(safe-area-inset-top) + 10px) 12px 8px;background:var(--panel);border-bottom:1px solid var(--line)}
+.gbar .who{flex:1;min-width:0}
+.gch{font-family:"Pirata One",serif;font-size:24px;line-height:1.1;color:var(--brass)}
+.gseat{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:6px;padding:8px 12px;overflow-x:auto;border-bottom:1px solid var(--line)}
+.tabs:empty{display:none}
+.tabs .chip[aria-selected=true]{background:var(--brass);border-color:var(--brass);color:#1a1205;font-weight:700}
+.stage{flex:1;position:relative;overflow:hidden}
+.pane{position:absolute;inset:0;overflow:auto;padding:14px 12px 20px;display:none}
+.pane.on{display:block}
+.pane.full{padding:0}
+.gbottom{display:flex;flex-direction:column;gap:8px;padding:10px 12px calc(env(safe-area-inset-bottom) + 12px);background:var(--panel);border-top:1px solid var(--line);max-height:46vh;overflow:auto}
+.msg{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:15px}
+.msg b{color:var(--brass)}
+.row{display:flex;gap:8px;align-items:stretch}
+.row .btn{text-align:center;padding:12px;width:auto;flex:0 0 auto}
+.row input{flex:1}
+.lbl{font-size:13px;color:var(--muted)}
+.heslo{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.heslo .btn{text-align:center;padding:12px 4px;font-size:15px}
+.bigword{font-size:40px;font-weight:800;text-align:center;letter-spacing:.08em;color:var(--brass)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:12px}
+.card h3{margin:0 0 6px;font-size:16px}
+.flags{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+.flags figure{margin:0;text-align:center;font-weight:800;font-size:22px}
+.flags canvas{width:100%;height:auto;display:block;margin-bottom:6px;border-radius:2px}
+.pano{position:absolute;inset:0}
+/* panel útěku */
+.order{background:#1d1606;border:2px solid var(--brass);border-radius:14px;padding:12px;margin-bottom:12px;text-align:center}
+.order .now{font-size:26px;font-weight:800;line-height:1.15;min-height:62px;display:flex;align-items:center;justify-content:center}
+.order .bar2{height:6px;border-radius:3px;background:#3a2f15;overflow:hidden;margin-top:8px}
+.order .bar2 i{display:block;height:100%;background:var(--brass);width:0}
+.order ol{text-align:left;margin:8px 0 0;padding-left:22px;font-size:15px}
+.ctrls{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ctrl{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px}
+.ctrl .nm{font-weight:700;margin-bottom:8px}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opt{appearance:none;flex:1 1 auto;min-width:64px;border:1px solid var(--line);background:#06101c;border-radius:10px;padding:10px 6px;font-weight:650;cursor:pointer}
+.opt.act{background:#2c4a6a;border-color:#6d93bb}
+.flash-ok{animation:fo .5s}
+@keyframes fo{from{box-shadow:0 0 0 4px var(--ok)}to{box-shadow:0 0 0 0 transparent}}
+.done{border-color:var(--ok);background:#0e2a1d}
+.prog{font-size:13px;color:var(--muted);margin:0 0 10px}
+.overlay{position:fixed;inset:0;z-index:50;display:none;flex-direction:column;justify-content:center;gap:14px;padding:24px max(16px,env(safe-area-inset-right)) 24px max(16px,env(safe-area-inset-left));background:#081321f7}
+.overlay.on{display:flex}
+#pump{background:#0a2a44f7;text-align:center}
+#pump .big{font-size:64px;font-weight:800;font-variant-numeric:tabular-nums}
+.water{height:14px;border-radius:7px;background:#123;overflow:hidden}
+.water i{display:block;height:100%;width:100%;background:#3d8fd6;transition:width .2s}
+#cardImg{max-width:100%;max-height:52vh;display:block;margin:0 auto 12px;border-radius:8px;box-shadow:0 8px 30px #000a}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div id="gate" class="overlay">
+  <h2>Otevři mě v prohlížeči</h2>
+  <p>Instagram a Facebook nepustí hře kameru ani pohyb telefonu. Ťukni na <b>⋯</b> vpravo nahoře a vyber <b>Otevřít v prohlížeči</b> (Chrome nebo Safari).</p>
+  <button class="btn" id="gateGo">Zkusit i tak</button>
+</div>
+
+<section id="s-start" class="screen on">
+  <h1 class="logo">Posádka</h1>
+  <p class="tag">Dobrodružství, ale doma</p>
+  <p class="note">Pracovní kostra hry. Hraje 1–6 lidí, každý na svém telefonu, v jednom bytě. Kapitola 1 a 2 jsou hratelné, 3–5 se staví.</p>
+  <button class="btn primary" id="resumeBtn" hidden></button>
+  <button class="btn primary" id="newCrew">Založit posádku<small>Budu Kapitán a ostatním řeknu kód</small></button>
+  <button class="btn" id="joinCrew">Připojit se ke kódu<small>Kapitán mi řekne kód posádky</small></button>
+</section>
+
+<section id="s-create" class="screen">
+  <button class="chip back" data-to="s-start">← Zpět</button>
+  <h2>Kolik vás hraje?</h2>
+  <p class="note">Počítejte telefony. Sám to jde taky, jen je to těžší.</p>
+  <div class="nums" id="nums"></div>
+</section>
+
+<section id="s-code" class="screen">
+  <button class="chip back" data-to="s-create">← Zpět</button>
+  <h2>Kód posádky</h2>
+  <div class="code" id="codeBig"></div>
+  <p class="note">Řekni ho ostatním, ať si ho opíšou. Hra nic neposílá přes internet. Stejný kód znamená, že všichni mají stejnou hru.</p>
+  <button class="btn primary" id="toSeats">Vybrat si místo</button>
+</section>
+
+<section id="s-join" class="screen">
+  <button class="chip back" data-to="s-start">← Zpět</button>
+  <h2>Kód posádky</h2>
+  <input type="text" id="joinIn" maxlength="6" autocomplete="off" autocapitalize="characters" placeholder="ABCD4" aria-label="Kód posádky">
+  <p class="note" id="joinErr">Čtyři písmena a číslo, jak ho má Kapitán na telefonu.</p>
+  <button class="btn primary" id="joinOk">Dál</button>
+</section>
+
+<section id="s-seat" class="screen">
+  <button class="chip back" data-to="s-start">← Zpět</button>
+  <h2>Kdo jsi?</h2>
+  <p class="note">Domluvte se, ať má každý jiné místo. Místo 1 patří Kapitánovi.</p>
+  <div id="seats" style="display:flex;flex-direction:column;gap:10px"></div>
+</section>
+
+<section id="s-game" class="screen">
+  <div class="gbar">
+    <div class="who"><div class="gch" id="gTitle"></div><div class="gseat" id="gSeat"></div></div>
+    <button class="chip" id="hintChip" hidden>Nápověda</button>
+    <button class="chip" id="menuChip" aria-label="Menu">⋯</button>
+  </div>
+  <div class="tabs" id="tabs" role="tablist"></div>
+  <div class="stage" id="stage"></div>
+  <div class="gbottom" id="gBottom"></div>
+</section>
+
+<div id="pump" class="overlay" role="alertdialog" aria-labelledby="pumpT">
+  <h2 id="pumpT">Voda v podpalubí!</h2>
+  <p>Spletl ses a loď nabrala vodu. <b>Zatřes telefonem</b>, ať ji vypumpuješ.</p>
+  <div class="big" id="pumpN">0</div>
+  <div class="water"><i id="pumpW"></i></div>
+  <button class="btn" id="pumpTap">Nejde třást? Ťukej sem</button>
+</div>
+
+<div id="hintBox" class="overlay">
+  <h2>Nápověda</h2>
+  <div id="hintList" style="display:flex;flex-direction:column;gap:8px"></div>
+  <p class="note">Nápověda nebere čas, jen hvězdy na kartě posádky.</p>
+  <button class="btn primary" id="hintMore">Další krok</button>
+  <button class="btn" id="hintClose">Zavřít</button>
+</div>
+
+<div id="gmenu" class="overlay">
+  <h2>Menu</h2>
+  <p id="menuInfo"></p>
+  <button class="btn" id="menuSkip">Přeskočit kapitolu<small>Jen pro zkoušení kostry</small></button>
+  <button class="btn" id="menuReset">Začít úplně znovu<small>Smaže postup na tomhle telefonu</small></button>
+  <button class="btn primary" id="menuClose">Zpět do hry</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pannellum/2.5.6/pannellum.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const el=(t,cls,html)=>{const e=document.createElement(t);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const vibe=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
+
+/* ---------- pracovní obsah ---------- */
+const NPC='Papoušek';                // hlas hry, pracovní jméno
+const KEY='posadka-v1';
+const ROLES={K:'Kapitán',H:'Hlídka',N:'Navigátor',D:'Dělmistr',L:'Lodník',Ku:'Kuchař'};
+const ROLE_INFO={K:'rozhoduje a zadává kódy',H:'rozhlíží se kolem lodi',N:'hvězdy, mapy a kompas',D:'děla a kódová kniha',L:'lana, kotva a truhla',Ku:'drží nápovědy'};
+const SEATS={1:[['K','H','N','D','L','Ku']],2:[['K','H','L','Ku'],['N','D']],3:[['K','Ku'],['H','L'],['N','D']],4:[['K','Ku'],['H','L'],['N'],['D']],5:[['K','Ku'],['H'],['N'],['D'],['L']],6:[['K'],['H'],['N'],['D'],['L'],['Ku']]};
+const HESLA=['KRAKEN','RUM','KOTVA','SALVA','BOUŘE','PERLA','ŽRALOK','KOMPAS','LAGUNA','MUŠKETA','DUKÁT','PAPOUŠEK'];
+const WORDS1=['STUJ','STOP','DOLU','VZDEJ','KONEC'];
+const CTRL={
+  K:[['Kormidlo',['Levobok','Rovně','Pravobok']],['Zvon',['Zvonit']],['Vlajka',['Černá','Obchodní']],['Kurz',['Sever','Východ','Jih','Západ']]],
+  H:[['Dalekohled',['Vysunout','Zasunout']],['Lucerna',['Rozsvítit','Zhasnout']],['Roh',['Troubit']],['Koš',['Nahoru','Dolů']]],
+  N:[['Mapa',['Rozvinout','Svinout']],['Olovnice',['Spustit']],['Hodiny',['Otočit']],['Přístroj',['Sextant','Kompas']]],
+  D:[['Levé dělo',['Pal']],['Pravé dělo',['Pal']],['Prach',['1 sud','2 sudy','3 sudy']],['Zápal',['Zapálit','Uhasit']]],
+  L:[['Kotva',['Spustit','Vytáhnout']],['Plachta',['Stáhnout','Půl','Plná']],['Lano',['Utáhnout']],['Ráhno',['Vlevo','Vpravo']]],
+  Ku:[['Kotel',['Přiložit']],['Rum',['Rozdat']],['Sud',['Zavalit','Otevřít']],['Pánev',['Bouchnout']]]
+};
+const ORDER_T=[0,7,14,21,27,32,37,42];   // kdy přijde další rozkaz (s); zrychluje se
+
+/* ---------- náhoda ze seedu: stejný kód = stejná hra na všech telefonech ---------- */
+function hash(s){let h=2166136261;for(const ch of s){h^=ch.codePointAt(0);h=Math.imul(h,16777619)}return h>>>0}
+function rng(seed){return()=>{seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const R=tag=>rng(hash(G.code+'|'+tag));
+const pick=(r,a)=>a[Math.floor(r()*a.length)];
+function shuffle(r,a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+/* ---------- stav (ukládá se, zamknutý displej hru nesmaže) ---------- */
+let G=null;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(G))}catch(e){}}
+function load(){try{const g=JSON.parse(localStorage.getItem(KEY));return g&&g.code?g:null}catch(e){return null}}
+const roles=()=>SEATS[G.n][G.seat];
+const has=r=>roles().includes(r);
+const seatLabel=(n,i)=>`Místo ${i+1} · `+SEATS[n][i].map(r=>ROLES[r]).join(', ');
+const elapsed=()=>Date.now()-G.t0;
+function fmt(ms){const s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor(s/60)%60,x=s%60;return(h?h+':'+String(m).padStart(2,'0'):m)+':'+String(x).padStart(2,'0')}
+
+/* ---------- obrazovky před hrou ---------- */
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id))}
+document.querySelectorAll('[data-to]').forEach(b=>b.onclick=()=>show(b.dataset.to));
+if(/Instagram|FBAN|FBAV|FB_IAB/i.test(navigator.userAgent))$('#gate').classList.add('on');
+$('#gateGo').onclick=()=>$('#gate').classList.remove('on');
+
+const saved=load();
+if(saved){const b=$('#resumeBtn');b.hidden=false;b.innerHTML=`Pokračovat v rozehrané hře<small>Posádka ${esc(saved.code)} · ${esc(seatLabel(saved.n,saved.seat))}</small>`;
+  b.onclick=async()=>{G=saved;await askMotion();startGame()}}
+
+const ABC='ABCDEFHJKLMNPRSTUVXZ';
+for(let n=1;n<=6;n++){const b=el('button','btn',String(n));b.onclick=()=>{
+  let c='';for(let i=0;i<4;i++)c+=ABC[Math.floor(Math.random()*ABC.length)];
+  G={code:c+n,n,seat:0,ch:0,t0:0,errs:0,hints:0,hs:{},c2:{p:0,start:0}};
+  $('#codeBig').textContent=G.code;show('s-code')};$('#nums').append(b)}
+$('#toSeats').onclick=()=>seatScreen();
+$('#newCrew').onclick=()=>show('s-create');
+$('#joinCrew').onclick=()=>{show('s-join');setTimeout(()=>$('#joinIn').focus(),50)};
+$('#joinOk').onclick=()=>{
+  const v=$('#joinIn').value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if(!/^[A-Z]{4}[1-6]$/.test(v)){$('#joinErr').textContent='Tohle nevypadá jako kód. Čtyři písmena a číslo 1–6, třeba KRAB4.';return}
+  G={code:v,n:+v[4],seat:0,ch:0,t0:0,errs:0,hints:0,hs:{},c2:{p:0,start:0}};seatScreen()};
+function seatScreen(){
+  const box=$('#seats');box.innerHTML='';
+  SEATS[G.n].forEach((rs,i)=>{const b=el('button','btn'+(i===0?' primary':''),esc(`Místo ${i+1}`)+'<small>'+rs.map(r=>`<b>${ROLES[r]}</b> – ${ROLE_INFO[r]}`).join('<br>')+'</small>');
+    b.style.textAlign='left';b.onclick=async()=>{G.seat=i;G.t0=Date.now();await askMotion();save();startGame()};box.append(b)});
+  show('s-seat');
+}
+
+/* ---------- pohyb telefonu (otáčení, třesení) ---------- */
+let motionOK=false;
+async function askMotion(){
+  try{
+    if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function')
+      motionOK=(await DeviceOrientationEvent.requestPermission())==='granted';
+    else motionOK=typeof DeviceOrientationEvent!=='undefined';
+    if(typeof DeviceMotionEvent!=='undefined'&&typeof DeviceMotionEvent.requestPermission==='function')await DeviceMotionEvent.requestPermission();
+  }catch(e){motionOK=false}
+}
+let wake=null;
+async function keepAwake(){try{if('wakeLock' in navigator&&!wake){wake=await navigator.wakeLock.request('screen');wake.addEventListener('release',()=>wake=null)}}catch(e){}}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&$('#s-game').classList.contains('on'))keepAwake()});
+
+/* ---------- zvuk ---------- */
+let AC=null;
+function beep(f=660,d=.12){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.frequency.value=f;o.connect(g);g.connect(AC.destination);g.gain.setValueAtTime(.15,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.start();o.stop(AC.currentTime+d)}catch(e){}}
+
+/* ---------- herní obrazovka ---------- */
+let timers=[],cleanups=[];
+const later=(f,ms)=>timers.push(setTimeout(f,ms));
+const every=(f,ms)=>timers.push(setInterval(f,ms));
+function cleanup(){timers.forEach(t=>{clearTimeout(t);clearInterval(t)});timers=[];cleanups.forEach(f=>{try{f()}catch(e){}});cleanups=[]}
+const npc=t=>`<div class="msg"><b>${NPC}:</b> ${t}</div>`;
+function setTabs(list){
+  const tabs=$('#tabs'),stage=$('#stage');tabs.innerHTML='';stage.innerHTML='';
+  const panes=list.map((t,i)=>{const p=el('div','pane'+(t.full?' full':''));stage.append(p);t.render(p);return p});
+  const sel=i=>{panes.forEach((p,k)=>p.classList.toggle('on',k===i));[...tabs.children].forEach((b,k)=>b.setAttribute('aria-selected',k===i));list[i].onShow&&list[i].onShow()};
+  if(list.length>1)list.forEach((t,i)=>{const b=el('button','chip',esc(t.label));b.setAttribute('role','tab');b.onclick=()=>sel(i);tabs.append(b)});
+  sel(0);
+}
+const bottom=html=>{$('#gBottom').innerHTML=html};
+
+function startGame(){
+  show('s-game');keepAwake();
+  $('#gSeat').textContent=`Posádka ${G.code} · `+seatLabel(G.n,G.seat);
+  enterCh(G.ch);
+}
+function enterCh(i){
+  cleanup();G.ch=i;save();
+  $('#gTitle').textContent=CH[i].t;
+  $('#hintChip').hidden=!(has('Ku')&&CH[i].hints);
+  CH[i].start();
+}
+
+/* heslo: Kapitán ho po vyřešení zakřičí, ostatní na něj ťuknou. Telefony se tak srovnají bez internetu. */
+function heslo(i){const w=shuffle(R('heslo'+i),HESLA);return{ok:w[0],opts:shuffle(R('hopt'+i),w.slice(0,3))}}
+function hesloRow(i){
+  if(has('K'))return'';
+  const h=heslo(i);
+  setTimeout(()=>document.querySelectorAll('[data-heslo]').forEach(b=>b.onclick=()=>{
+    if(b.dataset.heslo===h.ok){beep(880);enterCh(i+1)}
+    else{b.disabled=true;b.textContent='To neřekl';vibe(200)}
+  }),0);
+  return`<div class="lbl">Až Kapitán zakřičí heslo, ťukni na něj:</div><div class="heslo">${h.opts.map(w=>`<button class="btn" data-heslo="${w}">${w}</button>`).join('')}</div>`;
+}
+function captainSolved(i,text){
+  beep(880);vibe([60,40,120]);
+  const h=heslo(i);
+  bottom(npc(text)+(G.n>1?`<div class="lbl">Zakřič na posádku heslo:</div><div class="bigword">${h.ok}</div>`:'')+`<button class="btn primary" id="nextCh">Pokračovat</button>`);
+  $('#nextCh').onclick=()=>enterCh(i+1);
+}
+/* Kapitánovo políčko na kód; po 75 minutách nabídne zkratku */
+function captainInput(label,answer,okText,badText,numeric){
+  const short=elapsed()>75*60e3;
+  return{html:`<div class="lbl">${label}</div><div class="row"><input type="text" id="capIn" ${numeric?'inputmode="numeric"':''} autocomplete="off" aria-label="${esc(label)}"><button class="btn primary" id="capOk">Zadat</button></div>`+(short?`<button class="btn" id="capShort">Zkratka (hrajete přes 75 minut)</button>`:''),
+    bind(i){
+      const go=()=>{const v=$('#capIn').value.toUpperCase().replace(/\s/g,'');
+        if(v===answer)captainSolved(i,okText);
+        else{const m=$('#gBottom .msg');if(m)m.innerHTML=`<b>${NPC}:</b> ${badText}`;water()}};
+      $('#capOk').onclick=go;$('#capIn').onkeydown=e=>{if(e.key==='Enter')go()};
+      if(short)$('#capShort').onclick=()=>{$('#capIn').value=answer};
+    }};
+}
+
+/* ---------- voda v podpalubí (chyba = pohyb, ne konec) ---------- */
+let pumpLeft=0,lastShake=0;
+const NEED=6,TAPS=12;
+function water(){
+  G.errs++;save();vibe([200,80,200]);beep(180,.35);
+  pumpLeft=NEED;let taps=0;
+  const upd=()=>{$('#pumpN').textContent=pumpLeft;$('#pumpW').style.width=(pumpLeft/NEED*100)+'%'};
+  upd();$('#pump').classList.add('on');
+  const done=()=>{if(pumpLeft<=0){$('#pump').classList.remove('on');window.removeEventListener('devicemotion',onM);beep(990)}};
+  const onM=e=>{const a=e.accelerationIncludingGravity||e.acceleration;if(!a)return;const m=Math.hypot(a.x||0,a.y||0,a.z||0);
+    const t=Date.now();if(m>22&&t-lastShake>280){lastShake=t;pumpLeft--;upd();vibe(30);done()}};
+  window.addEventListener('devicemotion',onM);
+  $('#pumpTap').onclick=()=>{taps++;if(taps%2===0){pumpLeft--;upd();done()}};
+}
+
+/* ---------- nápovědy (u Kuchaře) ---------- */
+$('#hintChip').onclick=()=>{renderHints();$('#hintBox').classList.add('on')};
+$('#hintClose').onclick=()=>$('#hintBox').classList.remove('on');
+$('#hintMore').onclick=()=>{const c=G.ch;G.hs[c]=(G.hs[c]||0)+1;G.hints++;save();renderHints()};
+function renderHints(){
+  const list=CH[G.ch].hints(),n=G.hs[G.ch]||0;
+  $('#hintList').innerHTML=n?list.slice(0,n).map((t,i)=>`<div class="msg"><b>${i+1}.</b> ${t}</div>`).join(''):'<p class="note">Zatím žádná. První krok jen naznačí směr.</p>';
+  $('#hintMore').hidden=n>=list.length;
+  $('#hintMore').textContent=n===list.length-1?'Ukázat řešení':'Další krok';
+}
+
+/* ---------- menu ---------- */
+$('#menuChip').onclick=()=>{$('#menuInfo').textContent=`Posádka ${G.code} · ${seatLabel(G.n,G.seat)} · hrajete ${fmt(elapsed())}`;$('#gmenu').classList.add('on')};
+$('#menuClose').onclick=()=>$('#gmenu').classList.remove('on');
+$('#menuSkip').onclick=()=>{$('#gmenu').classList.remove('on');if(G.ch<CH.length-1)enterCh(G.ch+1)};
+$('#menuReset').onclick=()=>{if(confirm('Opravdu smazat postup a začít znovu?')){try{localStorage.removeItem(KEY)}catch(e){};location.reload()}};
+
+/* ---------- vlajky (mezinárodní signální abeceda, kreslená kódem) ---------- */
+const FC={r:'#d52b1e',w:'#f4f4f0',b:'#1f4aa8',y:'#f3c614',k:'#141414'};
+function drawFlag(c,L,x,y,w,h){
+  c.save();c.translate(x,y);
+  const R_=(col,a,b2,cw,ch)=>{c.fillStyle=col;c.fillRect(a,b2,cw,ch)};
+  const P=(col,pts)=>{c.fillStyle=col;c.beginPath();c.moveTo(pts[0],pts[1]);for(let i=2;i<pts.length;i+=2)c.lineTo(pts[i],pts[i+1]);c.closePath();c.fill()};
+  const X=(col,lw)=>{c.strokeStyle=col;c.lineWidth=lw;c.beginPath();c.moveTo(0,0);c.lineTo(w,h);c.moveTo(w,0);c.lineTo(0,h);c.stroke()};
+  switch(L){
+    case 'A':R_(FC.w,0,0,w/2,h);P(FC.b,[w/2,0,w,0,w*.72,h/2,w,h,w/2,h]);break;
+    case 'B':P(FC.r,[0,0,w,0,w*.72,h/2,w,h,0,h]);break;
+    case 'C':[FC.b,FC.w,FC.r,FC.w,FC.b].forEach((col,i)=>R_(col,0,i*h/5,w,h/5+1));break;
+    case 'D':R_(FC.y,0,0,w,h);R_(FC.b,0,h/5,w,3*h/5);break;
+    case 'E':R_(FC.b,0,0,w,h/2);R_(FC.r,0,h/2,w,h/2);break;
+    case 'F':R_(FC.w,0,0,w,h);P(FC.r,[w/2,0,w,h/2,w/2,h,0,h/2]);break;
+    case 'G':for(let i=0;i<6;i++)R_(i%2?FC.b:FC.y,i*w/6,0,w/6+1,h);break;
+    case 'H':R_(FC.w,0,0,w/2,h);R_(FC.r,w/2,0,w/2,h);break;
+    case 'I':R_(FC.y,0,0,w,h);c.fillStyle=FC.k;c.beginPath();c.arc(w/2,h/2,h*.28,0,7);c.fill();break;
+    case 'J':R_(FC.b,0,0,w,h);R_(FC.w,0,h/3,w,h/3);break;
+    case 'K':R_(FC.y,0,0,w/2,h);R_(FC.b,w/2,0,w/2,h);break;
+    case 'L':R_(FC.y,0,0,w,h);R_(FC.k,w/2,0,w/2,h/2);R_(FC.k,0,h/2,w/2,h/2);break;
+    case 'M':R_(FC.b,0,0,w,h);X(FC.w,h*.2);break;
+    case 'N':for(let i=0;i<4;i++)for(let j=0;j<4;j++)R_((i+j)%2?FC.w:FC.b,i*w/4,j*h/4,w/4+1,h/4+1);break;
+    case 'O':R_(FC.y,0,0,w,h);P(FC.r,[0,0,w,0,w,h]);break;
+    case 'P':R_(FC.b,0,0,w,h);R_(FC.w,w/3,h/3,w/3,h/3);break;
+    case 'Q':R_(FC.y,0,0,w,h);break;
+    case 'R':R_(FC.r,0,0,w,h);R_(FC.y,w*.42,0,w*.16,h);R_(FC.y,0,h*.4,w,h*.2);break;
+    case 'S':R_(FC.w,0,0,w,h);R_(FC.b,w/3,h/3,w/3,h/3);break;
+    case 'T':R_(FC.r,0,0,w/3,h);R_(FC.w,w/3,0,w/3,h);R_(FC.b,2*w/3,0,w/3+1,h);break;
+    case 'U':R_(FC.w,0,0,w,h);R_(FC.r,0,0,w/2,h/2);R_(FC.r,w/2,h/2,w/2,h/2);break;
+    case 'V':R_(FC.w,0,0,w,h);X(FC.r,h*.2);break;
+    case 'W':R_(FC.b,0,0,w,h);R_(FC.w,w/6,h/6,w*2/3,h*2/3);R_(FC.r,w/3,h/3,w/3,h/3);break;
+    case 'X':R_(FC.w,0,0,w,h);R_(FC.b,w*.42,0,w*.16,h);R_(FC.b,0,h*.4,w,h*.2);break;
+    case 'Y':c.save();c.beginPath();c.rect(0,0,w,h);c.clip();for(let i=-6;i<12;i++)P(i%2?FC.r:FC.y,[i*w/6,0,(i+1)*w/6,0,(i+1)*w/6-h,h,i*w/6-h,h]);c.restore();break;
+    case 'Z':P(FC.y,[0,0,w/2,h/2,0,h]);P(FC.k,[0,0,w,0,w/2,h/2]);P(FC.b,[w,0,w,h,w/2,h/2]);P(FC.r,[0,h,w,h,w/2,h/2]);break;
+  }
+  c.strokeStyle='rgba(0,0,0,.55)';c.lineWidth=2;c.strokeRect(0,0,w,h);c.restore();
+}
+function drawFrigate(x,cx,hy,word){
+  x.fillStyle='#10161f';
+  x.beginPath();x.moveTo(cx-380,hy-30);x.lineTo(cx+400,hy-42);x.lineTo(cx+320,hy+55);x.lineTo(cx-320,hy+55);x.closePath();x.fill();
+  x.fillStyle='#e8c56a';for(let i=0;i<10;i++)x.fillRect(cx-290+i*62,hy-12,14,10);
+  [cx-260,cx,cx+260].forEach((m,i)=>{const top=hy-(i===1?560:440);x.fillStyle='#10161f';x.fillRect(m-7,top,14,hy-top);
+    x.fillStyle='#9aa3ad';const w=i===1?150:120;for(let k=0;k<3;k++)x.fillRect(m-w/2,top+24+k*122,w,96)});
+  const fx=cx+95,fy=hy-540;
+  x.strokeStyle='#10161f';x.lineWidth=3;x.beginPath();x.moveTo(cx,fy);x.lineTo(fx+40,fy+14);x.lineTo(fx+40,fy+22+word.length*78);x.stroke();
+  [...word].forEach((L,i)=>drawFlag(x,L,fx,fy+24+i*78,80,58));
+}
+function makePanorama(word,yaw){
+  const W=4096,H=2048,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');const r=rng(7);
+  let g=x.createLinearGradient(0,0,0,H/2);g.addColorStop(0,'#040a18');g.addColorStop(.7,'#182c4e');g.addColorStop(1,'#48678c');x.fillStyle=g;x.fillRect(0,0,W,H/2);
+  for(let i=0;i<1000;i++){x.fillStyle=`rgba(255,255,255,${.3+r()*.7})`;const s=r()<.05?3:1.6;x.fillRect(r()*W,r()*H*.42,s,s)}
+  g=x.createLinearGradient(0,H/2,0,H);g.addColorStop(0,'#2a4866');g.addColorStop(1,'#050d18');x.fillStyle=g;x.fillRect(0,H/2,W,H/2);
+  x.strokeStyle='rgba(180,210,240,.2)';x.lineWidth=2;
+  for(let i=0;i<1500;i++){const y=H/2+Math.pow(r(),1.6)*H*.3,len=10+(y-H/2)*.15*r(),xx=r()*W;x.beginPath();x.moveTo(xx,y);x.quadraticCurveTo(xx+len/2,y-3,xx+len,y);x.stroke()}
+  drawFrigate(x,((yaw/360+.5)%1)*W,H/2,word);
+  x.fillStyle='#4a2f1a';x.fillRect(0,1290,W,38);
+  x.fillStyle='#3a2414';for(let px=0;px<W;px+=90)x.fillRect(px,1328,22,140);
+  x.fillStyle='#5b3a20';x.fillRect(0,1460,W,H-1460);
+  x.strokeStyle='#3d2614';x.lineWidth=4;for(let y=1460;y<H;y+=36){x.beginPath();x.moveTo(0,y);x.lineTo(W,y);x.stroke()}
+  x.fillStyle='#3b2615';x.fillRect(W/2-26,0,52,1460);
+  x.fillStyle='#d9ccb0';x.beginPath();x.moveTo(W/2-300,180);x.quadraticCurveTo(W/2,240,W/2+300,180);x.lineTo(W/2+330,820);x.quadraticCurveTo(W/2,900,W/2-330,820);x.closePath();x.fill();
+  return c.toDataURL('image/jpeg',.85);
+}
+
+/* ---------- kapitoly ---------- */
+function chIntro(){
+  setTabs([{label:'Posádka',render:p=>{
+    p.innerHTML=`<div class="card"><h3>Tvoje role</h3>${roles().map(r=>`<p style="margin:4px 0"><b>${ROLES[r]}</b> – ${ROLE_INFO[r]}</p>`).join('')}</div>
+    <div class="card"><h3>Jak se hraje</h3><p style="margin:4px 0">Každý vidí na telefonu něco jiného. Nic si neukazujte, <b>říkejte si to nahlas</b>.</p>
+    <p style="margin:4px 0">Když se spleteš, loď nabere vodu a musíš ji vypumpovat třesením telefonu.</p>
+    <p style="margin:4px 0">Kapitola končí, když Kapitán zakřičí heslo. Ostatní na něj ťuknou.</p></div>
+    <div class="card"><h3>Posádka</h3>${SEATS[G.n].map((_,i)=>`<p style="margin:4px 0">${esc(seatLabel(G.n,i))}${i===G.seat?' ← ty':''}</p>`).join('')}</div>`}}]);
+  bottom(npc('Vítej na palubě nejhorší lodi v Karibiku. Smlouvu už jste podepsali, takže teď jste posádka, ať chcete, nebo ne.')+`<button class="btn primary" id="go1">Vyplout</button>`);
+  $('#go1').onclick=()=>enterCh(1);
+}
+
+function ch1(){
+  const r=R('ch1'),word=pick(r,WORDS1),yaw=100+Math.floor(r()*160);
+  const pages={D:'ABCDEF',N:'GHIJKLM',L:'NOPQRST',Ku:'UVWXYZ'};
+  const tabs=[];let viewer=null;
+  if(has('H'))tabs.push({label:'Dalekohled',full:true,render:p=>{p.append(el('div','pano'))},
+    onShow:()=>{if(viewer||typeof pannellum==='undefined')return;
+      viewer=pannellum.viewer($('.pano'),{type:'equirectangular',panorama:makePanorama(word,yaw),autoLoad:true,orientationOnByDefault:motionOK,showZoomCtrl:false,showFullscreenCtrl:false,compass:false,hfov:95,yaw:0,pitch:0})}});
+  ['D','N','L','Ku'].filter(has).forEach(rl=>tabs.push({label:'Kniha · '+ROLES[rl],render:p=>{
+    p.innerHTML=`<p class="note">Tvoje stránka kódové knihy. Ostatní mají jiná písmena. Hlídka ti popíše vlajky, ty najdi písmeno.</p>`;
+    const g=el('div','flags');shuffle(R('book'+rl),[...pages[rl]]).forEach(L=>{const f=el('figure'),c=el('canvas');c.width=180;c.height=130;drawFlag(c.getContext('2d'),L,0,0,180,130);f.append(c,document.createTextNode(L));g.append(f)});p.append(g)}}));
+  if(!tabs.length)tabs.push({label:'Paluba',render:p=>{p.innerHTML=`<div class="card"><h3>Ty rozhoduješ</h3><p>Hlídka vidí fregatu, ostatní mají kódovou knihu. Poslouchej je a zadej, co fregata vzkazuje.</p></div>`}});
+  setTabs(tabs);
+  cleanups.push(()=>{if(viewer){try{viewer.destroy()}catch(e){}viewer=null}});
+  const intro='Za námi je královská fregata a mává na nás vlajkama. Hlídko, otoč se a popiš je. Ostatní, listujte knihou.';
+  if(has('K')){const ci=captainInput('Co fregata vzkazuje?',word,'Chtějí, ať zastavíme. Roztomilý. Plné plachty!','Tohle nedává smysl. Vlajky se čtou shora dolů.');bottom(npc(intro)+ci.html);ci.bind(1)}
+  else bottom(npc(intro)+hesloRow(1));
+}
+
+function panel(j){
+  const all=[];SEATS[G.n][j].forEach(rl=>CTRL[rl].forEach((c,k)=>all.push({id:rl+k,name:c[0],opts:c[1]})));
+  return all.length>6?shuffle(R('panel'+j),all).slice(0,6):all;
+}
+function orders(j){
+  const r=R('ord'+j),cs=panel(j),st={},out=[];let last=null;
+  for(let k=0;k<ORDER_T.length;k++){
+    const c=pick(r,cs.filter(x=>x.id!==last));let o=0;
+    if(c.opts.length>1){const cur=st[c.id]||0;const ch=c.opts.map((_,i)=>i).filter(i=>i!==cur);o=pick(r,ch)}
+    st[c.id]=o;last=c.id;out.push({id:c.id,name:c.name,o,txt:c.name+' → '+c.opts[o]});
+  }
+  return out;
+}
+const digit=j=>Math.floor(R('dig'+j)()*10);
+function ch2(){
+  const me=G.seat,n=G.n,target=(me+1)%n,src=orders(target),mine=orders(me),cs=panel(me),st={};
+  const code=SEATS[n].map((_,j)=>digit(j)).join('');
+  setTabs([{label:'Panel',render:p=>{
+    p.innerHTML=`<div class="order" id="ord"><div class="lbl">Rozkazy, které musíš zakřičet</div><div class="now" id="ordNow">Až Kapitán řekne „Teď!“, ťukni Začít.</div><div class="bar2"><i id="ordBar"></i></div><button class="btn primary" id="ordGo" style="margin-top:10px">Začít</button></div>
+      <p class="prog" id="prog"></p><div class="ctrls" id="ctrls"></div>`;
+    const box=p.querySelector('#ctrls');
+    cs.forEach(c=>{const d=el('div','ctrl');d.dataset.id=c.id;d.innerHTML=`<div class="nm">${esc(c.name)}</div>`;const os=el('div','opts');
+      c.opts.forEach((o,i)=>{const b=el('button','opt'+(c.opts.length>1&&i===0?' act':''),esc(o));b.onclick=()=>tap(c,i,d,os,b);os.append(b)});d.append(os);box.append(d)});
+  }}]);
+  const prog=()=>{const p=G.c2.p;$('#prog').textContent=p>=mine.length?'':`Tvůj panel: splněno ${p} z ${mine.length} rozkazů. Poslouchej, co křičí ostatní.`;
+    if(p>=mine.length){$('#ctrls').innerHTML=`<div class="card done" style="grid-column:1/-1"><h3>Tvůj panel je hotový</h3><p>Číslo pro Kapitána: <b style="font-size:32px">${digit(me)}</b> (místo ${me+1})</p></div>`}};
+  function tap(c,i,d,os,b){
+    if($('#pump').classList.contains('on')||G.c2.p>=mine.length)return;
+    if(c.opts.length>1){[...os.children].forEach((x,k)=>x.classList.toggle('act',k===i))}
+    const exp=mine[G.c2.p];
+    if(exp&&exp.id===c.id&&exp.o===i){G.c2.p++;save();beep(760,.08);d.classList.remove('flash-ok');void d.offsetWidth;d.classList.add('flash-ok');prog()}
+    else{water();const l=$('#soloList');if(l)l.hidden=false}
+  }
+  prog();
+  // rozkazy pro cizí panel běží podle hodin od Začít; po obnovení stránky pokračují
+  const runOrders=()=>{
+    $('#ordGo').hidden=true;
+    const solo=n===1;let shown=-1;
+    every(()=>{
+      const t=(Date.now()-G.c2.start)/1000;let k=-1;ORDER_T.forEach((s,i)=>{if(t>=s)k=i});
+      if(k!==shown&&k<src.length){shown=k;$('#ordNow').textContent=src[k].txt;beep(520,.1);vibe(60)}
+      const end=ORDER_T[ORDER_T.length-1]+6;
+      if(solo&&k>=0&&t-ORDER_T[k]>2.5&&t<end)$('#ordNow').textContent='…';
+      const nxt=ORDER_T[k+1]??end,prv=ORDER_T[k]??0;$('#ordBar').style.width=Math.min(100,(t-prv)/(nxt-prv)*100)+'%';
+      if(t>=end&&!solo){$('#ord').innerHTML=`<div class="lbl">Všechny rozkazy vydány. Kdo je nestihl, tady jsou znovu:</div><ol>${src.map(o=>`<li>${esc(o.txt)}</li>`).join('')}</ol>`;cleanupTimersOnly()}
+      if(t>=end&&solo){$('#ord').innerHTML=`<div class="lbl">Rozkazy došly. Splň, co si pamatuješ. Po chybě se ukážou znovu.</div><ol hidden id="soloList">${src.map(o=>`<li>${esc(o.txt)}</li>`).join('')}</ol>`;cleanupTimersOnly()}
+    },200);
+  };
+  const cleanupTimersOnly=()=>{timers.forEach(t=>clearInterval(t));timers=[]};
+  $('#ordGo').onclick=()=>{G.c2.start=Date.now();save();runOrders()};
+  if(G.c2.start)runOrders();
+  const intro=n>1?'Fregata nabírá rychlost. Rozkazy na tvém telefonu nejsou pro tebe, tak je řvi, ať je splní ten, kdo má ten ovladač.':'Fregata nabírá rychlost. Rozkaz se ukáže jen na chvilku, tak si ho zapamatuj a splň ho na panelu.';
+  if(has('K')){const ci=captainInput(n>1?`Čísla od posádky podle míst (1 až ${n})`:'Číslo z hotového panelu',code,'Utekli jsme jim o tři délky. Kdo nabral vodu, ať se radši nepřizná.','Tohle číslo nesedí. Čísla jdou podle míst: 1, 2, 3…',true);bottom(npc(intro)+ci.html);ci.bind(2)}
+  else bottom(npc(intro)+hesloRow(2));
+}
+
+function chStub(i,title,what){
+  setTabs([{label:title,render:p=>{p.innerHTML=`<div class="card"><h3>${esc(title)} se staví</h3><p>${what}</p><p class="note">V kostře se kapitola jen přeskočí, ať jde vyzkoušet přechod mezi telefony.</p></div>`}}]);
+  if(has('K')){bottom(npc('Tady bude další kus cesty. Zatím ho přeskočíme.')+`<button class="btn primary" id="stubGo">Přeskočit kapitolu</button>`);$('#stubGo').onclick=()=>captainSolved(i,'Přeskočeno. Ať to nikdo neví.')}
+  else bottom(npc('Tady bude další kus cesty. Kapitán ho přeskočí.')+hesloRow(i));
+}
+
+function stars(){return Math.max(1,3-Math.floor(G.hints/2)-Math.floor(G.errs/5))}
+function cardTitle(){const r=roles()[0],w=r==='H'?'která':'který';return G.errs?`${ROLES[r]}, ${w} ${G.errs}× nabral${r==='H'?'a':''} vodu`:`${ROLES[r]} bez jediné chyby`}
+async function makeCard(name){
+  try{await document.fonts.load('80px "Pirata One"')}catch(e){}
+  const W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+  let g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0b1d33');g.addColorStop(1,'#040a14');x.fillStyle=g;x.fillRect(0,0,W,H);
+  const r=rng(hash(G.code));for(let i=0;i<260;i++){x.fillStyle=`rgba(255,255,255,${.2+r()*.6})`;x.fillRect(r()*W,r()*H*.55,2,2)}
+  x.strokeStyle='#d4a94e';x.lineWidth=6;x.strokeRect(40,40,W-80,H-80);
+  x.textAlign='center';x.fillStyle='#d4a94e';
+  x.font='64px "Pirata One",serif';x.fillText('POSÁDKA',W/2,190);
+  x.font='112px "Pirata One",serif';x.fillText(name.slice(0,18),W/2,320);
+  x.fillStyle='#e9eef4';x.font='600 46px system-ui,sans-serif';x.fillText('utekla královské fregatě',W/2,400);
+  x.font='800 190px system-ui,sans-serif';x.fillText(fmt(G.done-G.t0),W/2,640);
+  x.fillStyle='#d4a94e';x.font='120px system-ui,sans-serif';x.fillText('★'.repeat(stars())+'☆'.repeat(3-stars()),W/2,800);
+  x.fillStyle='#e9eef4';x.font='italic 600 52px system-ui,sans-serif';x.fillText('„'+cardTitle()+'“',W/2,950);
+  x.fillStyle='#93a6b8';x.font='40px system-ui,sans-serif';x.fillText(`nápovědy: ${G.hints} · voda: ${G.errs}×`,W/2,1030);
+  x.fillStyle='#d4a94e';x.font='60px "Pirata One",serif';x.fillText('Dobrodružství, ale doma',W/2,1200);
+  return c;
+}
+function chEnd(){
+  if(!G.done){G.done=Date.now();save()}
+  setTabs([{label:'Karta posádky',render:p=>{
+    p.innerHTML=`<img id="cardImg" alt="Karta posádky"><div class="row"><input type="text" id="crewName" maxlength="18" placeholder="Jméno posádky" aria-label="Jméno posádky" style="text-transform:none;letter-spacing:normal;font-size:18px"><button class="btn" id="cardRe">Přepsat</button></div>
+    <p class="note" style="margin-top:10px">Každý má svou kartu s vlastní rolí. Hledaný plakát s obličeji se přidá z <a href="../zkouska-pirati-k7m2/" style="color:var(--brass)">zkoušky</a>.</p>`;
+  }}]);
+  let canvas=null;
+  const draw=async()=>{canvas=await makeCard(($('#crewName').value||G.code).toUpperCase());$('#cardImg').src=canvas.toDataURL('image/png')};
+  $('#cardRe').onclick=draw;draw();
+  bottom(npc('Země! Fregata to vzdala a na molu už visí plakáty s vašima ksichtama.')+`<button class="btn primary" id="shareCard">Sdílet kartu</button><button class="btn" id="again">Nová hra</button>`);
+  $('#shareCard').onclick=async()=>{
+    if(!canvas)return;const blob=await new Promise(r=>canvas.toBlob(r,'image/png'));const f=new File([blob],'posadka.png',{type:'image/png'});
+    try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});return}}catch(e){if(e.name==='AbortError')return}
+    const a=el('a');a.href=URL.createObjectURL(blob);a.download='posadka.png';a.click();
+  };
+  $('#again').onclick=()=>{try{localStorage.removeItem(KEY)}catch(e){};location.reload()};
+}
+
+const CH=[
+  {t:'Nábor',start:chIntro},
+  {t:'1 · Vyplutí',start:ch1,hints:()=>{const w=pick(R('ch1'),WORDS1);return['Vlajky visí na fregatě pod sebou a čtou se shora dolů.','Hlídka popisuje barvy a tvary, ostatní je hledají ve své části kódové knihy. Každý má jen kus.',`Fregata vzkazuje: ${w}.`]}},
+  {t:'2 · Útěk',start:ch2,hints:()=>[G.n>1?'Rozkazy nahoře nejsou pro tebe. Zakřič je, ať je splní ten, kdo má ten ovladač.':'Rozkaz se ukáže jen na chvilku. Splň ho na panelu dřív, než zmizí.','Kdo splní všech 8 rozkazů na svém panelu, dostane číslo. Kapitán je zadá podle míst: 1, 2, 3…','Kód pro Kapitána: '+SEATS[G.n].map((_,j)=>digit(j)).join('')]},
+  {t:'3 · Mlha',start:()=>chStub(3,'Mlha','Zhasnout. Fregata poslouchá přes mikrofon, domlouvat se smí jen šeptem. Navigátorovi bliká maják v morseovce, tabulku má Lodník.')},
+  {t:'4 · Ostrov',start:()=>chStub(4,'Ostrov','Lodník položí truhlu do pokoje, ostatní ji obcházejí a hlásí symboly. Pořadí je na mapě u Dělmistra, kotouč u Kapitána.')},
+  {t:'5 · Hvězdy',start:()=>chStub(5,'Hvězdy','Navigátor najde Polárku a popisuje souhvězdí, ostatní mají knihu hvězd. Pak všechny telefony na stejný kurz a závěrečný odpočet.')},
+  {t:'Konec',start:chEnd}
+];
+</script>
+</body>
+</html>
