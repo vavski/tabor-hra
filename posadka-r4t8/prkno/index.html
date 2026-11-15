@@ -42,6 +42,7 @@ input[type=text]{width:100%;min-width:0;font:inherit;font-size:26px;padding:12px
 .pc{border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--panel)}
 .pc img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
 .pc .nick{font-family:"Pirata One",serif;font-size:58px;line-height:1;color:#fff;text-align:center;margin:-64px 0 0;position:relative;text-shadow:0 3px 14px #000;padding-bottom:10px}
+.pc .bio{padding:14px 16px;border-top:1px solid var(--line);font-size:18px;line-height:1.45}
 .pc .role{text-align:center;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);padding-bottom:10px}
 .stats{display:grid;gap:9px;padding:14px 16px;border-top:1px solid var(--line)}
 .stat{display:grid;grid-template-columns:78px 1fr;align-items:center;gap:10px;font-size:16px;color:var(--muted)}
@@ -177,8 +178,8 @@ canvas.full{width:100%;height:auto;display:block;border-radius:14px}
 </section>
 
 <section id="s-seal" class="screen" style="justify-content:center;text-align:center">
-  <h2>Podepiš přiznání</h2>
-  <p class="note">Drž prst na pečeti.</p>
+  <h2>Připraveni?</h2>
+  <p class="note">Všichni naráz: držte prst na pečeti.</p>
   <button id="seal" aria-label="Podržet a podepsat"><svg viewBox="0 0 178 178"><circle id="ring" cx="89" cy="89" r="78"/></svg><span>P</span></button>
 </section>
 
@@ -242,14 +243,13 @@ const QS=new URLSearchParams(location.search),SLOT=QS.get('slot');
 const KEY='prkno-v4'+(SLOT?'-'+SLOT:''),NPC='Bart';
 
 /* ================= postavy =================
-   Jeden telefon = jedna postava. Jména podle skutečných pirátů (Anne Bonny, Henry Morgan, Ching Shih, William Kidd).
+   Jeden telefon = jedna postava. Jména podle skutečných pirátů (Anne Bonny, Henry Morgan, Ching Shih, Calico Jack Rackham).
    Postava je kdo jsi. Co v kapitole děláš, určuje tvůj telefon (role H/O/M/V níž), ne postava. */
-const STATS=['Síla','Hbitost','Lest'];
 const HEROES=[
-  {nick:'Bonny',img:'img/bonny.jpg',role:'Pašeračka',st:[2,4,4],line:'„Vidím je dřív než oni mě.“'},
-  {nick:'Morgan',img:'img/morgan.jpg',role:'Zloděj',st:[2,5,3],line:'„Zamčeno? Roztomilý.“'},
-  {nick:'Ching',img:'img/ching.jpg',role:'Travička',st:[1,4,5],line:'„To se jí. Většinou.“'},
-  {nick:'Kidd',img:'img/kidd.jpg',role:'Dělostřelec',st:[5,2,3],line:'„Malý výbuch. Fakt malý.“'}
+  {nick:'Bonny',img:'img/bonny.jpg',role:'Pašeračka',bio:'Pašovala rum guvernérovi pod nosem. Vidí loď na tři míle a lež na tři kroky. Na Bílou laň utekla, protože ji v přístavu hledali.',line:'„Vidím je dřív než oni mě.“'},
+  {nick:'Morgan',img:'img/morgan.jpg',role:'Zloděj',bio:'Kluk z přístavu, co otevře každý zámek. Na moři je poprvé a nesnáší ho. V podpalubí Bílé laně schovával něco, o čem nikdo neví.',line:'„Zamčeno? Roztomilý.“'},
+  {nick:'Ching',img:'img/ching.jpg',role:'Kuchařka',bio:'Vaří na Bílé lani. Aspoň to tvrdí. Co míchala dřív, se nikdo neptá dvakrát.',line:'„To se jí. Většinou.“'},
+  {nick:'Rackham',img:'img/rackham.jpg',role:'Kormidelník',bio:'Uřídí cokoli, co plave, a na každou hádku má vtip. V kartách prohrál víc lodí, než jich kdy řídil. Kapitánce Černé prý kdysi dlužil peníze.',line:'„Řekni kam a drž se.“'}
 ];
 const SEATS={1:[['H','O','M','V']],2:[['H','V'],['O','M']],3:[['H'],['O','M'],['V']],4:[['H'],['O'],['M'],['V']]};
 const HESLA=['KRAKEN','RUM','KOTVA','SALVA','BOUŘE','PERLA','ŽRALOK','KOMPAS','LAGUNA','MUŠKETA','DUKÁT','PRKNO'];
@@ -275,7 +275,7 @@ const me=()=>heroOf(G.seat);
 // krysa: při 2 telefonech jen v polovině her, při 3–4 skoro vždy. Nikdo neví jistě, jestli tu je.
 const krysaSeat=()=>{if(G.n<2)return-1;const r=R('krysa');if(r()<(G.n===2?.5:.2))return-1;return Math.floor(r()*G.n)};
 const isKrysa=()=>G.seat===krysaSeat();
-const secret=()=>{const r=R('sec'+G.seat);return r()<.5?{t:'peek',txt:'Nakoukni někomu do telefonu, ať si toho nevšimne. Na konci řekni, co tam bylo.'}:{t:'word',txt:`Přiměj někoho, ať řekne slovo „${pick(r,WORDS)}“. Ty ho říct nesmíš.`}};
+const secret=()=>{const r=R('sec'+G.seat);return r()<.5?{t:'peek',txt:'Nakoukni někomu do telefonu, ať si toho nevšimne. Na konci řekni, co tam bylo.'}:{t:'word',txt:`Přiměj někoho, ať řekne slovo „${shuffle(R('words'),WORDS)[G.seat]}“. Ty ho říct nesmíš.`}};
 const elapsed=()=>Date.now()-G.t0;
 function fmt(ms){const s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor(s/60)%60,x=s%60;return(h?h+':'+String(m).padStart(2,'0'):m)+':'+String(x).padStart(2,'0')}
 const npc=t=>`<div class="msg"><img src="img/bart.jpg" alt=""><div>${t}</div></div>`;
@@ -336,27 +336,28 @@ $('#seal').addEventListener('pointerdown',e=>{e.preventDefault();askMotion();hel
 const cancelHold=()=>{if(!held){cancelAnimationFrame(holdRaf);ringEl.style.strokeDashoffset=490}};
 $('#seal').addEventListener('pointerup',cancelHold);$('#seal').addEventListener('pointerleave',cancelHold);
 $('#seal').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')sealed()});
-function sealed(){if(held)return;held=true;vibe([40,60,140]);beep(140,.5);whoScreen()}
+function sealed(){if(held)return;held=true;vibe([40,60,140]);beep(140,.5);musicSync();prolog().then(whoScreen)}
 
 function holdReveal(box){const h=box.querySelector('.hid'),on=()=>h.style.filter='none',off=()=>h.style.filter='';box.addEventListener('pointerdown',on);box.addEventListener('pointerup',off);box.addEventListener('pointerleave',off)}
 function charCard(h){const d=el('div','pc');
   d.innerHTML=`<img src="${h.img}" alt="${esc(h.nick)}"><div class="nick">${esc(h.nick)}</div><div class="role">${esc(h.role)}</div>
-  <div class="stats">${STATS.map((s,i)=>`<div class="stat"><span>${s}</span><div class="pips">${[0,1,2,3,4].map(k=>`<i class="${k<h.st[i]?'on':''}"></i>`).join('')}</div></div>`).join('')}</div>
+  <div class="bio">${esc(h.bio)}</div>
   <div class="sec line" style="padding:12px 16px;border-top:1px solid var(--line)">${esc(h.line)}</div>`;return d}
 function whoScreen(){const box=$('#myCards');box.innerHTML='';
   box.append(charCard(me()));
-  if(G.n>1){const k=el('div','secret',`<div class="lbl">Tajná karta · drž prst, nikomu neukazuj</div><div class="hid">${isKrysa()?'<b>Jsi krysa.</b> Kapitánka ti slíbila život. Nech loď třikrát nabrat vodu a nenech se chytit.':`<b>Nejsi krysa.</b> Tvůj úkol: ${esc(secret().txt)} Splníš? Dostaneš dukát.`}</div>`);holdReveal(k);box.append(k)}
+  if(G.n>1){const k=el('div','secret',`<div class="lbl">Tajný úkol · drž prst, nikomu neukazuj</div><div class="hid">${isKrysa()?'<b>Jsi krysa.</b> Kapitánka ti slíbila měšec zlata. Třikrát schválně udělej chybu, ať loď nabere vodu. A nenech se na konci nechat na Černé vdově.':`${esc(secret().txt)} Splníš? Dostaneš dukát.`}</div>`);holdReveal(k);box.append(k)}
+  if(lead())box.append(el('p','note','🔊 Z tvého telefonu mluví Bart a hraje hudba. Dej ho nahlas doprostřed.'));
   $('#startBtn').textContent=G.t0?'Zpět do hry':'Probudit se';show('s-who')}
-$('#startBtn').onclick=async()=>{if(!G.t0){musicSync();await prolog();G.t0=Date.now();save()}startGame()};
+$('#startBtn').onclick=()=>{if(!G.t0){G.t0=Date.now();save()}startGame()};
 
 /* úvod: čtyři obrázky, Bart vypráví (hlas jen z telefonu 1, ostatní mají titulky) */
-const PROLOG=[['uvod1','Byli jste posádka Bílé laně.',8.6],['uvod2','Pak z mlhy vyjela Černá vdova.',9.2],['uvod3','Kapitánka vám nabídla život. Jeden z vás kývl.',10.7],['uvod4','Teď sedíte v kobce. Do úsvitu zbývá hodina.',11.6]];
+const PROLOG=[['uvod1','Byli jste posádka Bílé laně.',8.6],['uvod2','Pak z mlhy vyjela Černá vdova.',9.2],['uvod3','Kapitánka každému nabídla: přidej se, nebo prkno.',8.6],['uvod4','Teď sedíte v kobce. Do úsvitu zbývá hodina.',11.6]];
 PROLOG.forEach(p=>{const i=new Image();i.src='img/'+p[0]+'.jpg'});
 function prolog(){return new Promise(res=>{const o=$('#prolog');o.classList.add('on');let i=-1,t=0;
   const next=()=>{clearTimeout(t);i++;
     if(i>=PROLOG.length){o.classList.remove('on');if(voice)voice.pause();res();return}
     const [img,txt,d]=PROLOG[i],old=o.querySelector('img'),im=el('img');im.src='img/'+img+'.jpg';im.alt='';if(old)old.remove();o.prepend(im);
-    $('#prologTxt').textContent=txt;$('#prologNext').textContent=i===PROLOG.length-1?'Probudit se':'Dál';say('prolog'+(i+1));t=setTimeout(next,(d+1)*1000)};
+    $('#prologTxt').textContent=txt;$('#prologNext').textContent=i===PROLOG.length-1?'Kdo jsem?':'Dál';say('prolog'+(i+1));t=setTimeout(next,(d+1)*1000)};
   $('#prologNext').onclick=next;$('#prologSkip').onclick=()=>{i=PROLOG.length-1;next()};next()})}
 
 /* ================= pohyb, zvuk, hudba ================= */
@@ -559,26 +560,26 @@ function ch4(){const d=c4(),tabs=[];
   if(!tabs.length)tabs.push({label:'Kajuta',render:p=>{p.innerHTML='<p class="big1">Nejdřív uspat stráž, pak sejf.</p>'}});
   setTabs(tabs);const intro='Nejdřív uspat stráž. Pak sejf.';
   if(has('O')){bottom(npc(intro)+`<div id="dl"></div><button class="btn primary" id="try4">Otevřít sejf</button>`);const dl=dials(3,SYMS,s=>symCanvas(s));$('#dl').append(dl);
-    $('#try4').onclick=()=>{if(dl.value().join()===d.safe.join())solved(4,'Mapa. A dopis: „Díky za pomoc. Tvoje I.“ Někdo z vás jí pomáhá?');else{badMsg('Sejf drží. Stráž zachrápala.');water()}}}
+    $('#try4').onclick=()=>{if(dl.value().join()===d.safe.join())solved(4,'Mapa! Teď nahoru na palubu.');else{badMsg('Sejf drží. Stráž zachrápala.');water()}}}
   else bottom(npc(intro)+hesloRow(4))}
 
 /* ================= 5 · PALUBA (krysa) =================
    Všichni ťuknou stejnou volbu (domluví se nahlas). Z volby a z toho, jestli krysa byla, vyjde jeden ze tří konců. */
 function outcome(){const k=krysaSeat(),a=G.accused==null?-1:G.accused;return a===k?'A':(k>=0?'B':'C')}
 function ch5(){
-  setTabs([{label:'Paluba',render:p=>{p.innerHTML=`<p class="big1">Je mezi vámi krysa?</p><div class="card"><p>1. Každý řekne jednu větu na svou obranu.</p><p>2. Na tři ukažte prstem. Na krysu, nebo na nikoho.</p><p>3. Kdo dostal nejvíc prstů? Ťukněte to všichni.</p></div>
-    <div class="tiles" id="vote"></div><button class="btn" id="voteNone" style="margin-top:10px">Na nikoho</button><div id="revOut" style="margin-top:12px"></div>
+  setTabs([{label:'Paluba',render:p=>{p.innerHTML=`<p class="big1">Lano je blízko.</p><div class="card"><p>Kapitánka nabídla život každému z vás. Věříte si?</p><p>1. Každý řekne jednu větu, proč má jet s vámi.</p><p>2. Na tři ukažte prstem na toho, koho necháte tady. Nebo na nikoho.</p><p>3. Ťukněte to všichni.</p></div>
+    <div class="tiles" id="vote"></div><button class="btn" id="voteNone" style="margin-top:10px">Plujeme všichni</button><div id="revOut" style="margin-top:12px"></div>
     <div class="card" style="margin-top:12px"><p style="margin:0 0 8px">Hádáte se? Rozhodne souboj.</p><button class="btn" id="duel">Souboj!</button><div id="duelOut"></div></div>`;
     const box=p.querySelector('#vote');for(let i=0;i<G.n;i++){const t=groupTile(i);t.onclick=()=>vote(i);box.append(t)}
     p.querySelector('#voteNone').onclick=()=>vote(-1)}}]);
   function vote(a){G.accused=a;G.caught=a>=0&&a===krysaSeat();save();vibe([40,60,140]);beep(140,.4);
     document.querySelectorAll('#vote .tile').forEach((t,i)=>t.style.borderColor=i===a?'var(--bad)':'');
-    const kr=isKrysa();$('#revOut').innerHTML=`<div class="card" style="border-color:var(--brass);text-align:center"><p class="big1" style="margin:0">${a<0?'Nikoho jste neobvinili.':esc(heroOf(a).nick)+' jde do pout.'}</p><p class="note" style="margin-top:6px">${kr?(a===G.seat?'Chytili tě. Teď jim aspoň pokaž útěk.':'Nechytili tě. Vydrž do konce.'):'Pravdu se dozvíte na konci.'}</p></div>`;
+    const kr=isKrysa();$('#revOut').innerHTML=`<div class="card" style="border-color:var(--brass);text-align:center"><p class="big1" style="margin:0">${a<0?'Plujete všichni.':esc(heroOf(a).nick)+' zůstává v poutech.'}</p><p class="note" style="margin-top:6px">${kr?(a===G.seat?'Chytili tě. Teď jim aspoň pokaž útěk.':'Nechytili tě. Vydrž do konce.'):'Jak to dopadlo, uvidíte na konci.'}</p></div>`;
     $('#go6').disabled=false}
   $('#duel').onclick=()=>{const o=$('#duelOut');o.innerHTML='<p class="big1" style="margin-top:12px">Telefony proti sobě. Až zčervená, sekni!</p><button class="btn" id="slash" style="height:120px">…</button>';let t0=0,go=false;
     const b=$('#slash');setTimeout(()=>{go=true;t0=performance.now();b.style.background='#c0392b';b.textContent='SEKNI!';vibe(80)},1500+Math.random()*3000);
     b.onclick=()=>{if(!go){b.textContent='Brzo! Prohrál jsi.';go=null;return}if(go===null)return;b.textContent=`${Math.round(performance.now()-t0)} ms`;go=null}};
-  bottom(npc('Tak co? Kývl někdo kapitánce?')+`<button class="btn primary" id="go6"${G.accused==null?' disabled':''}>Na Bílou laň!</button>`);$('#go6').onclick=()=>enterCh(6)}
+  bottom(npc('Tak co? Pojedete všichni?')+`<button class="btn primary" id="go6"${G.accused==null?' disabled':''}>Na Bílou laň!</button>`);$('#go6').onclick=()=>enterCh(6)}
 
 /* ================= 6 · ÚTĚK ================= */
 const CTRL={H:[['Dalekohled',['Ven','Dovnitř']],['Lucerna',['Rozsvítit','Zhasnout']],['Roh',['Troubit']],['Koš',['Nahoru','Dolů']]],
@@ -613,12 +614,12 @@ function ch6(){const me=G.seat,n=G.n,src=orders((me+1)%n),mine6=orders(me),cs=pa
 const ENDS={
   A:{t:'Svoboda',img:'img/koneca.jpg',card:'PŘEŽILI PRKNO',txt:'Bílá laň pluje domů. Za vámi hoří Černá vdova.',bart:'Hezky. Mě jste tam samozřejmě nechali.'},
   B:{t:'Krysa vyhrála',img:'img/konecb.jpg',card:'KRYSA VYHRÁLA',txt:'Za úsvitu vás Černá vdova dohnala. Po prkně jdete všichni, až na krysu.',bart:'Říkal jsem, ať si dáte pozor.'},
-  C:{t:'Nevinný přes palubu',img:'img/konecc.jpg',card:'NEVINNÝ PŘES PALUBU',txt:'Doplouli jste domů. Jen jeden zůstává v loďce uprostřed moře.',bart:'Ten dopis jsem psal já. Nudil jsem se.'}};
+  C:{t:'Nevinný přes palubu',img:'img/konecc.jpg',card:'NEVINNÝ PŘES PALUBU',txt:'Doplouli jste domů. Jen jeden zůstává v loďce uprostřed moře.',bart:'Já to věděl. Neřekl jsem nic.'}};
 const FEM=['Bonny','Ching'];
-function truth(){const k=krysaSeat(),o=outcome();
-  if(o==='A')return k>=0?`Krysa: ${heroOf(k).nick}. Chytili jste ji.`:'Krysa nebyla. Dopis kapitánce psal Bart. Nenaletěli jste.';
-  if(o==='B')return isKrysa()?`Krysa jsi byl${FEM.includes(me().nick)?'a':''} ty. Měšec zlata je tvůj.`:`Krysa: ${heroOf(k).nick}.`;
-  const n=heroOf(G.accused).nick;return `${n} byl${FEM.includes(n)?'a':''} nevinn${FEM.includes(n)?'á':'ý'}. Krysa nebyla.`}
+function truth(){const k=krysaSeat(),o=outcome(),f=n=>FEM.includes(n)?'a':'';
+  if(o==='A'){if(k<0)return 'Nikdo z vás kapitánce nekývl. Věřili jste si a měli jste pravdu.';const n=heroOf(k).nick;return `Kapitánce kývl${f(n)} ${n}. Nechali jste ${FEM.includes(n)?'ji':'ho'} tam.`}
+  if(o==='B'){if(isKrysa())return `Kapitánce jsi kývl${f(me().nick)} ty. Měšec zlata je tvůj.`;const n=heroOf(k).nick;return `Kapitánce kývl${f(n)} ${n}.`}
+  const n=heroOf(G.accused).nick;return `${n} kapitánce nikdy nekývl${f(n)}. Nikdo z vás nekývl.`}
 function stars(){return Math.max(1,Math.min(3,3-Math.floor(G.hints/2)-Math.floor(G.errs/5)))}
 function imgP(src){return new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=src})}
 async function makeCard(){try{await document.fonts.load('80px "Pirata One"')}catch(e){}
@@ -652,10 +653,10 @@ function ch0(){setTabs([{label:'Kobka',render:p=>{p.innerHTML=`<div class="card"
 const CH=[
   {t:'Kobka',start:ch0,scene:'kobka',find:'🔑 Najdi klíče od cely',voice:'kobka',line:'Strážný spí. Klíče má u pasu.'},
   {t:'Kobka',start:ch1,scene:'kobka',find:'🔑 Najdi klíče od cely',voice:'kobka',line:'Strážný spí. Klíče má u pasu.',hints:()=>{const d=c1();return['Kdo má zámek, vidí čtyři lesklé znaky. To je kód.','Šipky na zdi dají všech šest znaků do řady. Lesklé si z ní vyberte.',`Kód: ${d.code.join(', ')}.`]}},
-  {t:'Skladiště',start:ch2,scene:'sklad',find:'🐀 Najdi krysu',voice:'sklad',line:'Najděte prach, ne rum.',hints:()=>{const d=c2();return['Prach smrdí po vejcích a kouři. Vejce cítí i jinde.','Každý sud má dvě vůně. Každou cítí někdo jiný.',`Prach je sud ${ROMAN[d.ok]}. Sypat pomalu.`]}},
+  {t:'Skladiště',start:ch2,scene:'sklad',find:'🐀 Najdi potkana',voice:'sklad',line:'Najděte prach, ne rum.',hints:()=>{const d=c2();return['Prach smrdí po vejcích a kouři. Vejce cítí i jinde.','Každý sud má dvě vůně. Každou cítí někdo jiný.',`Prach je sud ${ROMAN[d.ok]}. Sypat pomalu.`]}},
   {t:'Ubikace',start:ch3,scene:'ubikace',find:'🚪 Najdi východ',voice:'ubikace',line:'Šeptejte.',hints:()=>{const d=c3();const L=([x,y])=>'ABCDE'[x]+(5-y);return['Jeden telefon vidí spáče, jiný vrzající prkna. Kdo má šipky, jde potmě.','Začíná se dole vlevo, východ je nahoře vpravo. Říkejte kroky.',`Spáči: ${d.pir.map(L).join(' ')} · prkna: ${d.crk.map(L).join(' ')} (sloupce A–E zleva, řady 1–5 zdola)`]}},
   {t:'Kajuta',start:ch4,scene:'kajuta',find:'🗝️ Najdi sejf',voice:'kajuta',line:'Uspěte stráž a vybílete sejf.',hints:()=>{const d=c4();return['Recept, police a obraz má každý jiný telefon.','Nejdřív lektvar, pak sejf. Znaky na sejf jsou na náhrdelníku zleva doprava.',`Lahvičky: ${d.recipe.map(b=>BOT[b][2]+' '+BOT[b][1]).join(', ')}. Sejf: ${d.safe.join(', ')}.`]}},
-  {t:'Paluba',start:ch5,scene:'paluba',find:'⛵ Najdi Bílou laň',voice:'paluba',line:'Jeden z vás kývl kapitánce. Nebo ne.'},
+  {t:'Paluba',start:ch5,scene:'paluba',find:'⛵ Najdi Bílou laň',voice:'paluba',line:'Vezmete na Bílou laň všechny?'},
   {t:'Útěk',start:ch6,scene:'utek',find:'🪢 Najdi lano',voice:'utek',line:'Přeseknout lano a pryč!'},
   {t:'Konec',start:chEnd}
 ];
