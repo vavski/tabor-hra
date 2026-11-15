@@ -301,19 +301,38 @@ $('#seal').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')sealed
 function sealed(){if(held)return;held=true;vibe([40,60,140]);beep(140,.5);whoScreen()}
 
 function holdReveal(box){const h=box.querySelector('.hid'),on=()=>h.style.filter='none',off=()=>h.style.filter='';box.addEventListener('pointerdown',on);box.addEventListener('pointerup',off);box.addEventListener('pointerleave',off)}
+function portrait(c,size=220){ // jednoduchý obrázek postavy kreslený kódem (pracovní, skutečné ilustrace přijdou později)
+  const cv=el('canvas');cv.width=cv.height=size*2;cv.style.width=cv.style.height=size+'px';const x=cv.getContext('2d'),S=size*2,p=P[c];
+  let g=x.createRadialGradient(S/2,S*.35,10,S/2,S/2,S*.75);g.addColorStop(0,p.c);g.addColorStop(1,'#0a0f18');x.fillStyle=g;x.fillRect(0,0,S,S);
+  x.fillStyle='#14100d';x.beginPath();x.moveTo(S*.12,S);x.quadraticCurveTo(S/2,S*.52,S*.88,S);x.fill();             // ramena
+  x.fillStyle='#c79a72';x.beginPath();x.ellipse(S/2,S*.45,S*.17,S*.2,0,0,7);x.fill();                                   // hlava
+  x.fillStyle='#1b1410';x.beginPath();x.arc(S*.44,S*.45,S*.02,0,7);x.arc(S*.56,S*.45,S*.02,0,7);x.fill();               // oči
+  x.strokeStyle='#5a3a26';x.lineWidth=S*.012;x.beginPath();x.arc(S/2,S*.5,S*.06,.15*Math.PI,.85*Math.PI);x.stroke();     // úsměšek
+  if(c==='H'){x.fillStyle='#7a1414';x.beginPath();x.ellipse(S/2,S*.3,S*.2,S*.07,0,Math.PI,0);x.fill();x.fillRect(S*.3,S*.29,S*.4,S*.03);
+    x.fillStyle='#000';x.beginPath();x.ellipse(S*.44,S*.45,S*.05,S*.04,0,0,7);x.fill();x.strokeStyle='#000';x.lineWidth=S*.01;x.beginPath();x.moveTo(S*.34,S*.38);x.lineTo(S*.66,S*.47);x.stroke();
+    x.fillStyle='#b8862e';x.save();x.translate(S*.72,S*.8);x.rotate(-.6);x.fillRect(0,-S*.03,S*.28,S*.06);x.fillRect(S*.22,-S*.045,S*.08,S*.09);x.restore()}
+  if(c==='O'){x.fillStyle='#1f2a1f';x.beginPath();x.moveTo(S*.28,S*.55);x.quadraticCurveTo(S/2,S*.05,S*.72,S*.55);x.quadraticCurveTo(S/2,S*.3,S*.28,S*.55);x.fill();
+    x.save();x.translate(S*.7,S*.8);x.rotate(-.4);drawSym(x,'Klíč',0,0,S*.12,'#ffd27a');x.restore()}
+  if(c==='M'){x.fillStyle='#e8e2d4';x.fillRect(S*.33,S*.2,S*.34,S*.1);x.beginPath();x.arc(S*.4,S*.2,S*.07,0,7);x.arc(S/2,S*.17,S*.08,0,7);x.arc(S*.6,S*.2,S*.07,0,7);x.fill();
+    x.save();x.translate(S*.74,S*.82);drawSym(x,'Lahev',0,0,S*.12,'#7dff8a');x.restore()}
+  if(c==='V'){x.fillStyle='#2a2a2a';x.beginPath();x.ellipse(S/2,S*.29,S*.22,S*.06,0,0,7);x.fill();x.fillRect(S*.38,S*.17,S*.24,S*.12);
+    x.fillStyle='#000';x.globalAlpha=.35;x.beginPath();x.arc(S*.58,S*.52,S*.06,0,7);x.fill();x.globalAlpha=1;
+    x.save();x.translate(S*.74,S*.8);drawSym(x,'Bomba',0,0,S*.13,'#ffb070');x.restore()}
+  return cv;
+}
 function charCard(c){
   const p=P[c],d=el('div','pc');d.style.setProperty('--c',p.c);
-  d.innerHTML=`<div class="top"><div class="ico"></div><div class="nick">${esc(nm(c))}</div></div>
-   <div class="sec"><b>Umíš:</b> ${esc(p.power)}</div><div class="sec"><b>Neumíš:</b> ${esc(p.weak)}</div><div class="sec line">${esc(p.line)}</div>
-   <div class="secret"><div class="lbl">Tajný úkol · podrž prst</div><div class="hid">${esc(p.secret)}</div></div>`;
-  d.querySelector('.ico').append(symCanvas(p.icon,64,'#fff'));holdReveal(d.querySelector('.secret'));return d;
+  d.innerHTML=`<div class="top" style="flex-direction:column;align-items:center;text-align:center"><div class="ico" style="width:220px;height:220px;flex:none;border-radius:16px;overflow:hidden"></div><div class="nick" style="margin-top:10px">${esc(nm(c))}</div></div>
+   <div class="sec"><b>Umíš:</b> ${esc(p.power)}</div><div class="sec line">${esc(p.line)}</div>`;
+  d.querySelector('.ico').append(portrait(c));return d;
 }
 function whoScreen(){
   const box=$('#myCards');box.innerHTML='';
   $('#whoT').textContent=`Hráč ${G.seat+1}`;
   if(G.n>1)box.append(el('p','note',`Posádka: ${deal().map((s,i)=>`hráč ${i+1} = ${s.map(c=>P[c].nick).join(' + ')}`).join(' · ')}`));
   mine().forEach(c=>box.append(charCard(c)));
-  if(isKrysa()){const k=el('div','secret','<div class="lbl">Ještě něco · podrž prst</div><div class="hid"><b>Jsi krysa.</b> Kapitánka ti slíbila život. Nech loď třikrát nabrat vodu a nenech se chytit.</div>');holdReveal(k);box.append(k)}
+  if(krysaSeat()>=0){ // tajná karta má každý, takže krysu nepoznáš podle toho, kdo kouká do telefonu
+    const k=el('div','secret',`<div class="lbl">Tajná karta · podrž prst, nikomu neukazuj</div><div class="hid">${isKrysa()?'<b>Jsi krysa.</b> Kapitánka ti slíbila život. Nech loď třikrát nabrat vodu a nenech se chytit.':'<b>Nejsi krysa.</b> Ale jeden z vás je.'}</div>`);holdReveal(k);box.append(k)}
   $('#startBtn').textContent=G.t0?'Zpět do hry':'Probudit se';show('s-who');
 }
 $('#startBtn').onclick=()=>{if(!G.t0){G.t0=Date.now();save()}startGame()};
@@ -576,21 +595,21 @@ function ch6(){
 }
 
 /* ================= konec ================= */
-function stars(){return Math.max(1,Math.min(4,3-Math.floor(G.hints/2)-Math.floor(G.errs/5)+(G.secretOk?1:0)))}
+function stars(){return Math.max(1,Math.min(4,3-Math.floor(G.hints/2)-Math.floor(G.errs/5)))}
 async function makeCard(){try{await document.fonts.load('80px "Pirata One"')}catch(e){}
   const c0=mine()[0],W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
   let g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0c1a2e');g.addColorStop(.7,'#2a1d22');g.addColorStop(1,'#d08a4a');x.fillStyle=g;x.fillRect(0,0,W,H);
   x.strokeStyle='#d4a94e';x.lineWidth=6;x.strokeRect(40,40,W-80,H-80);x.textAlign='center';
   x.fillStyle='#d4a94e';x.font='64px "Pirata One",serif';x.fillText('PŘEŽILI PRKNO',W/2,170);
-  drawSym(x,P[c0].icon,W/2,300,80,'#fff');x.fillStyle='#fff';x.font='140px "Pirata One",serif';x.fillText(nm(c0).slice(0,12),W/2,520);
-  x.font='800 170px system-ui,sans-serif';x.fillText(fmt(G.done-G.t0),W/2,720);
-  x.fillStyle='#ffd27a';x.font='110px system-ui,sans-serif';x.fillText('★'.repeat(stars())+'☆'.repeat(Math.max(0,3-stars())),W/2,870);
-  x.fillStyle='#fff3e0';x.font='italic 600 52px system-ui,sans-serif';x.fillText(isKrysa()?(G.caught?'„Krysa. Chytili ji.“':'„Krysa. Nikdo nic nepoznal.“'):(G.errs?`„${G.errs}× voda v podpalubí“`:'„Ani kapka vody“'),W/2,1000);
+  {const pc=portrait(c0,160);x.drawImage(pc,W/2-160,190,320,320)}x.fillStyle='#fff';x.font='140px "Pirata One",serif';x.fillText(nm(c0).slice(0,12),W/2,600);
+  x.font='800 150px system-ui,sans-serif';x.fillText(fmt(G.done-G.t0),W/2,790);
+  x.fillStyle='#ffd27a';x.font='110px system-ui,sans-serif';x.fillText('★'.repeat(stars())+'☆'.repeat(Math.max(0,3-stars())),W/2,925);
+  x.fillStyle='#fff3e0';x.font='italic 600 52px system-ui,sans-serif';x.fillText(isKrysa()?(G.caught?'„Krysa. Chytili ji.“':'„Krysa. Nikdo nic nepoznal.“'):(G.errs?`„${G.errs}× voda v podpalubí“`:'„Ani kapka vody“'),W/2,1050);
   x.fillStyle='#1a1205';x.font='66px "Pirata One",serif';x.fillText('Prkno',W/2,1210);return c}
 function chEnd(){if(!G.done){G.done=Date.now();save()}
-  setTabs([{label:'Konec',render:p=>{p.innerHTML=`<img id="cardImg" alt="Karta posádky"><div class="card"><p class="big1">Splnil jsi tajný úkol?</p><p class="note">${esc(P[mine()[0]].secret)}</p><div class="row"><button class="btn" id="sY">Ano</button><button class="btn" id="sN">Ne</button></div></div>`}}]);
+  setTabs([{label:'Konec',render:p=>{p.innerHTML=`<img id="cardImg" alt="Karta posádky">`}}]);
   let canvas=null;const draw=async()=>{canvas=await makeCard();$('#cardImg').src=canvas.toDataURL('image/png')};
-  $('#sY').onclick=()=>{G.secretOk=true;save();draw()};$('#sN').onclick=()=>{G.secretOk=false;save();draw()};draw();
+  draw();
   bottom(npc('Slunce vychází a vy jste pryč. Mě jste tam nechali.')+`<button class="btn primary" id="shareCard">Sdílet kartu</button><button class="btn" id="again">Nová hra</button>`);
   $('#shareCard').onclick=async()=>{if(!canvas)return;const blob=await new Promise(r=>canvas.toBlob(r,'image/png'));const f=new File([blob],'prkno.png',{type:'image/png'});
     try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});return}}catch(e){if(e.name==='AbortError')return}
