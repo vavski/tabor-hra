@@ -26,7 +26,7 @@ button.primary{background:var(--brass);color:#1a1205;border-color:var(--brass);f
 <body>
 <header>
   <b>Prkno · zkouška</b>
-  <label>Hráčů <select id="n"><option>1</option><option>2</option><option>3</option><option selected>4</option></select></label>
+  <label>Hráčů <select id="n"><option selected>2</option><option>3</option><option>4</option></select></label>
   <label>Velikost <select id="s"><option value="1">100 %</option><option value=".8" selected>80 %</option><option value=".65">65 %</option><option value=".5">50 %</option></select></label>
   <button class="primary" id="go">Nová hra</button>
   <span class="note" id="info"></span>
@@ -48,7 +48,7 @@ function setScale(){document.documentElement.style.setProperty('--s',document.ge
 document.getElementById('s').onchange=setScale;setScale();
 document.getElementById('go').onclick=()=>{
   const n=+document.getElementById('n').value;let c='';for(let i=0;i<4;i++)c+=ABC[Math.floor(Math.random()*ABC.length)];
-  for(let i=1;i<=4;i++)try{localStorage.removeItem('prkno-v2-'+i)}catch(e){}
+  for(let i=1;i<=4;i++)try{localStorage.removeItem('prkno-v3-'+i)}catch(e){}
   try{localStorage.setItem('prkno-test',JSON.stringify({code:c+n,n}))}catch(e){}
   build(c+n,n);
 };
