@@ -227,6 +227,7 @@ canvas.full{width:100%;height:auto;display:block;border-radius:14px}
   <button class="btn" id="menuMe">Moje karta</button>
   <button class="btn" id="menuIntro">Úvod znovu</button>
   <button class="btn" id="menuMusic">Hudba: zapnout</button>
+  <button class="btn" id="menuTrack">Skladba</button>
   <button class="btn" id="menuSkip">Přeskočit kapitolu</button>
   <button class="btn" id="menuReset">Začít znovu</button>
   <button class="btn primary" id="menuClose">Zpět do hry</button>
@@ -372,24 +373,41 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 // Hlas a hudba hrají jen z telefonu hráče 1, jinak by se ozvěna mlátila.
 const lead=()=>G.seat===0;
 let voice=null;function say(file){if(!lead())return;try{if(voice)voice.pause();voice=new Audio('audio/'+file+'.mp3');voice.volume=1;voice.play().catch(()=>{})}catch(e){}}
-// pirátská hudba generovaná v telefonu (žádná nahrávka): harmonika, basa, buben, d moll ve 6/8
+// pirátská hudba generovaná v telefonu (žádná nahrávka). Tři skladby na výběr v menu.
+// 0 Shanty: harmonika, d moll 6/8 · 1 Bouře: temné smyčce a válečné bubny · 2 Krčma: rychlý jig, housle a tleskání
+const TRACKS=[
+  {name:'Shanty',step:.2,beat:3,
+   mel:[0,null,3,5,null,3, 7,null,5,3,null,2, 0,null,3,5,null,7, 8,7,5,3,null,null, 5,null,7,8,null,7, 5,null,3,2,null,-2, 0,null,2,3,null,2, 0,null,null,0,null,null],
+   bas:[-12,-12,-9,-14,-12,-12,-17,-12],lead:['sawtooth',.5,1600],bass:['triangle',.9,500,2.6],drum:i=>i%3===0?'kick':null},
+  {name:'Bouře',step:.15,beat:4,
+   mel:[-12,-12,-9,-12,-5,-12,-7,-12, -12,-12,-9,-12,-4,-5,-7,-9, -14,-14,-10,-14,-7,-14,-9,-14, -16,-16,-12,-16,-9,-11,-12,-14],
+   bas:[-24,-24,-26,-28],lead:['sawtooth',.55,900],bass:['sawtooth',.7,300,4.6],pad:[[0,3,7],[0,3,7],[-2,2,5],[-4,0,3]],
+   drum:i=>i%16===0||i%16===6||i%16===10?'kick':(i%8===4?'snare':null)},
+  {name:'Krčma',step:.13,beat:3,
+   mel:[0,2,4, 5,4,2, 0,2,4, 7,null,5, 4,2,0, 2,4,2, 0,-3,-5, 0,null,null, 7,5,4, 5,4,2, 4,2,0, 2,null,4, 5,4,2, 0,2,-1, 0,null,null, 0,null,null],
+   bas:[-12,-5,-12,-7,-12,-5,-10,-12],lead:['square',.32,2600],bass:['triangle',.9,600,.9],drum:i=>i%6===0?'kick':(i%6===3?'clap':null)}
+];
 let mus=null;
 function musicOn(){if(mus)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume();
-  const out=AC.createGain();out.gain.value=.05;out.connect(AC.destination);
-  const D=293.66,st=s=>D*Math.pow(2,s/12);
-  const mel=[0,null,3,5,null,3, 7,null,5,3,null,2, 0,null,3,5,null,7, 8,7,5,3,null,null, 5,null,7,8,null,7, 5,null,3,2,null,-2, 0,null,2,3,null,2, 0,null,null,0,null,null];
-  const bas=[-12,-12,-9,-14,-12,-12,-17,-12];let i=0;const step=.2;
+  const T=TRACKS[G.mstyle||0],out=AC.createGain();out.gain.value=.05;out.connect(AC.destination);
+  const D=293.66,st=s=>D*Math.pow(2,s/12);let i=0;
   const note=(f,t,d,type,vol,cut)=>{const o1=AC.createOscillator(),o2=AC.createOscillator(),g=AC.createGain(),lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=cut;
     o1.type=o2.type=type;o1.frequency.value=f;o2.frequency.value=f*1.006;o1.connect(lp);o2.connect(lp);lp.connect(g);g.connect(out);
     g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.03);g.gain.setValueAtTime(vol,t+d*.7);g.gain.linearRampToValueAtTime(0,t+d);o1.start(t);o2.start(t);o1.stop(t+d+.05);o2.stop(t+d+.05)};
-  const drum=t=>{const b=AC.createBuffer(1,AC.sampleRate*.15,AC.sampleRate),dd=b.getChannelData(0);for(let k=0;k<dd.length;k++)dd[k]=(Math.random()*2-1)*Math.pow(1-k/dd.length,4);const s=AC.createBufferSource(),f=AC.createBiquadFilter(),g=AC.createGain();s.buffer=b;f.type='lowpass';f.frequency.value=180;g.gain.value=1.4;s.connect(f);f.connect(g);g.connect(out);s.start(t)};
+  const noise=(t,len,type,freq,vol)=>{const b=AC.createBuffer(1,AC.sampleRate*len,AC.sampleRate),dd=b.getChannelData(0);for(let k=0;k<dd.length;k++)dd[k]=(Math.random()*2-1)*Math.pow(1-k/dd.length,4);
+    const s=AC.createBufferSource(),f=AC.createBiquadFilter(),g=AC.createGain();s.buffer=b;f.type=type;f.frequency.value=freq;g.gain.value=vol;s.connect(f);f.connect(g);g.connect(out);s.start(t)};
+  const hit=(k,t)=>{if(k==='kick')noise(t,.18,'lowpass',T.name==='Bouře'?110:180,T.name==='Bouře'?2.4:1.4);if(k==='snare')noise(t,.14,'bandpass',1800,.9);if(k==='clap')noise(t,.06,'highpass',2500,.7)};
   let next=AC.currentTime+.1;
-  const tick=()=>{while(next<AC.currentTime+.4){const m=mel[i%mel.length];if(m!=null)note(st(m),next,step*.95,'sawtooth',.5,1600);
-      if(i%3===0){note(st(bas[(i/3|0)%bas.length]),next,step*2.6,'triangle',.9,500);drum(next)}i++;next+=step}};
+  const tick=()=>{while(next<AC.currentTime+.4){const m=T.mel[i%T.mel.length];if(m!=null)note(st(m),next,T.step*.95,T.lead[0],T.lead[1],T.lead[2]);
+      if(i%T.beat===0){const b=T.bas[(i/T.beat|0)%T.bas.length];note(st(b),next,T.step*T.bass[3]*(T.beat/3),T.bass[0],T.bass[1],T.bass[2])}
+      if(T.pad&&i%16===0){T.pad[(i/16|0)%T.pad.length].forEach(s=>note(st(s-12),next,T.step*16,'sine',.25,1200))}
+      const k=T.drum(i);if(k)hit(k,next);i++;next+=T.step}};
   const iv=setInterval(tick,100);tick();mus={stop:()=>{clearInterval(iv);out.disconnect()}}}catch(e){}}
 function musicOff(){if(mus){mus.stop();mus=null}}
-function musicSync(){const on=G.music!==false&&lead();on?musicOn():musicOff();$('#menuMusic').textContent='Hudba: '+(mus?'vypnout':'zapnout')}
-$('#menuMusic').onclick=()=>{G.music=!mus;save();if(G.music){musicOn()}else musicOff();$('#menuMusic').textContent='Hudba: '+(mus?'vypnout':'zapnout')};
+function musicLabel(){$('#menuMusic').textContent='Hudba: '+(mus?'vypnout':'zapnout');$('#menuTrack').textContent='Skladba: '+TRACKS[G.mstyle||0].name+' · další'}
+function musicSync(){const on=G.music!==false&&lead();on?musicOn():musicOff();musicLabel()}
+$('#menuMusic').onclick=()=>{G.music=!mus;save();if(G.music){musicOn()}else musicOff();musicLabel()};
+$('#menuTrack').onclick=()=>{G.mstyle=((G.mstyle||0)+1)%TRACKS.length;G.music=true;save();musicOff();musicOn();musicLabel()};
 
 /* ================= herní obrazovka ================= */
 let timers=[],cleanups=[];
@@ -435,7 +453,7 @@ $('#hintMore').onclick=()=>{G.hs[G.ch]=(G.hs[G.ch]||0)+1;G.hints++;save();render
 function renderHints(){const list=CH[G.ch].hints(),n=G.hs[G.ch]||0;
   $('#hintList').innerHTML=list.slice(0,n).map(t=>`<div class="msg" style="padding:12px">${t}</div>`).join('');
   $('#hintMore').hidden=n>=list.length;$('#hintMore').textContent=n===list.length-1?'Řekni to rovnou':(n?'Další rada':'Ano, raď')}
-$('#menuChip').onclick=()=>{$('#menuInfo').textContent=`Posádka ${G.code} · ${fmt(elapsed())} · voda ${G.errs}×`;$('#menuMusic').hidden=!lead();$('#gmenu').classList.add('on')};
+$('#menuChip').onclick=()=>{$('#menuInfo').textContent=`Posádka ${G.code} · ${fmt(elapsed())} · voda ${G.errs}×`;$('#menuMusic').hidden=$('#menuTrack').hidden=!lead();musicLabel();$('#gmenu').classList.add('on')};
 $('#menuClose').onclick=()=>$('#gmenu').classList.remove('on');
 $('#menuIntro').onclick=async()=>{$('#gmenu').classList.remove('on');await prolog()};
 $('#menuMe').onclick=()=>{$('#gmenu').classList.remove('on');cleanup();whoScreen()};
