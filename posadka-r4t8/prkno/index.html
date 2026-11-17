@@ -260,6 +260,7 @@ canvas.full{width:100%;height:auto;display:block;border-radius:14px}
   <button class="btn" id="menuIntro">Úvod znovu</button>
   <button class="btn" id="menuMusic">Hudba: zapnout</button>
   <button class="btn" id="menuTrack">Skladba</button>
+  <div id="filmBox" hidden><p class="note">Natáčení: skok rovnou na moment</p><div class="row" style="flex-wrap:wrap"><button class="btn" data-film="hlidka">Hlídka</button><button class="btn" data-film="signal">Signál</button><button class="btn" data-film="lano">Lano</button><button class="btn" data-film="rozkazy">Rozkazy</button><button class="btn" data-film="sudy">Sudy</button><button class="btn" data-film="konec">Konec</button></div></div>
   <button class="btn" id="menuSkip">Přeskočit kapitolu</button>
   <button class="btn" id="menuReset">Začít znovu</button>
   <button class="btn primary" id="menuClose">Zpět do hry</button>
@@ -500,6 +501,17 @@ $('#menuChip').onclick=()=>{$('#menuInfo').textContent=`Posádka ${G.code} · ${
 $('#menuClose').onclick=()=>$('#gmenu').classList.remove('on');
 $('#menuIntro').onclick=async()=>{$('#gmenu').classList.remove('on');await prolog()};
 $('#menuMe').onclick=()=>{$('#gmenu').classList.remove('on');cleanup();whoScreen()};
+// skrytý režim pro natáčení reelsů: odkaz …/prkno/?natacet=1 (zapamatuje se v telefonu, vypne ?natacet=0)
+const FILM=(()=>{try{if(QS.has('natacet'))localStorage.setItem('prkno-film',QS.get('natacet')==='0'?'0':'1');return localStorage.getItem('prkno-film')==='1'}catch(e){return QS.get('natacet')==='1'}})();
+$('#filmBox').hidden=!FILM;
+const CHI=t=>CH.findIndex(c=>c.t===t);
+document.querySelectorAll('[data-film]').forEach(b=>b.onclick=async()=>{$('#gmenu').classList.remove('on');const f=b.dataset.film;
+  Object.assign(G.seen,{kobka:1,sklad:1,ubikace:1,kajuta:1,paluba:1,utek:1});save();
+  if(f==='hlidka')return watchOut();if(f==='lano')return runSteps(20);
+  if(f==='signal'){G.sig=0;G.accused=null;save();return enterCh(CHI('Paluba'))}
+  if(f==='rozkazy'){G.c6={p:0,start:0,boom:false};save();return enterCh(CHI('Útěk'))}
+  if(f==='sudy')return enterCh(CHI('Skladiště'));
+  if(f==='konec'){G.done=0;save();return enterCh(CHI('Konec'))}});
 $('#menuSkip').onclick=()=>{$('#gmenu').classList.remove('on');if(G.ch<CH.length-1)enterCh(G.ch+1)};
 $('#menuReset').onclick=()=>{if(confirm('Smazat postup a začít znovu?')){try{localStorage.removeItem(KEY)}catch(e){};musicOff();location.href=location.pathname+(SLOT?'?slot='+SLOT:'')}};
 
