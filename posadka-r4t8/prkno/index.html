@@ -143,6 +143,8 @@ canvas.full{width:100%;height:auto;display:block;border-radius:14px}
 .guns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .guns .btn{padding:14px 0;font-size:18px}
 #watch,#run{text-align:center}
+.kapimg{display:block;width:100%;aspect-ratio:3/2;max-height:34vh;object-fit:cover;border-radius:14px;margin:0 0 12px;border:1px solid var(--line)}
+.ovimg{display:block;width:100%;max-width:420px;aspect-ratio:3/2;object-fit:cover;border-radius:16px;margin:0 auto;border:1px solid var(--line)}
 #watch .big,#run .big{font-size:72px;font-weight:800}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -230,6 +232,7 @@ canvas.full{width:100%;height:auto;display:block;border-radius:14px}
 </div>
 
 <div id="watch" class="overlay" role="alertdialog" aria-labelledby="watchT">
+  <img class="ovimg" src="img/kap/hlidka.jpg" alt="">
   <h2 id="watchT">Hlídka na chodbě!</h2>
   <p><b>Telefon displejem dolů na zem. Všichni k zemi a ani muk.</b></p>
   <div class="big" id="watchN">12</div>
@@ -239,6 +242,7 @@ canvas.full{width:100%;height:auto;display:block;border-radius:14px}
 </div>
 
 <div id="run" class="overlay" role="alertdialog" aria-labelledby="runT">
+  <img class="ovimg" src="img/kap/paluba.jpg" alt="">
   <h2 id="runT">Přeběhni po laně!</h2>
   <p><b>Vstaň a s telefonem v ruce ujdi kroky.</b> Klidně kolem stolu.</p>
   <div class="big" id="runN">20</div>
@@ -465,7 +469,10 @@ function startGame(){show('s-game');keepAwake();
   clearInterval(dawnT);const dw=()=>$('#dawn').style.transform=`scaleX(${Math.min(1,elapsed()/(70*60e3))})`;dw();dawnT=setInterval(dw,5000);
   musicSync();enterCh(G.ch)}
 async function enterCh(i){cleanup();G.ch=i;save();$('#gTitle').textContent=CH[i].t;$('#hintChip').hidden=!CH[i].hints;$('#viewChip').hidden=!CH[i].scene;
-  CH[i].start();if(CH[i].scene&&!G.seen[CH[i].scene]){G.seen[CH[i].scene]=1;save();await view3D(CH[i],true)}
+  CH[i].start();
+  // obrázek kapitoly nahoře v první záložce (obraz místo textu)
+  if(CH[i].img){const p=document.querySelector('#stage .pane');if(p){const im=el('img','kapimg');im.src=CH[i].img;im.alt='';p.prepend(im)}}
+  if(CH[i].scene&&!G.seen[CH[i].scene]){G.seen[CH[i].scene]=1;save();await view3D(CH[i],true)}
   // pohybová vložka po 3D (hlídka apod.), jen jednou za hru
   if(CH[i].after&&!G.seen['after'+i]&&G.ch===i){G.seen['after'+i]=1;save();await CH[i].after()}}
 $('#viewChip').onclick=()=>{const c=CH[G.ch];if(c.scene)view3D(c,false)};
@@ -676,7 +683,7 @@ function outcome(){const k=krysaSeat(),a=G.accused==null?-1:G.accused;return a==
 /* signál pro Bílou laň: každý najde v bytě věc své barvy a ukáže ji do kamery. Obraz se zpracuje jen v telefonu, nikam se neposílá. */
 const SIG=[['ČERVENÉHO','#e74c3c',h=>h<14||h>340],['MODRÉHO','#3d8fd6',h=>h>195&&h<255],['ZELENÉHO','#2ecc71',h=>h>85&&h<165],['ŽLUTÉHO','#f1c40f',h=>h>40&&h<68]];
 function signal(box,onOk){const [nm,col,test]=SIG[G.seat%4];
-  box.innerHTML=`<p class="big1">Bílá laň vás hledá v mlze. Zamávejte jí.</p><p style="margin:0 0 10px">Vstaň a najdi v bytě něco <b style="color:${col}">${nm}</b>. Ukaž to zblízka do kamery.</p>
+  box.innerHTML=`<img class="kapimg" src="img/kap/signal.jpg" alt=""><p class="big1">Bílá laň vás hledá v mlze. Zamávejte jí.</p><p style="margin:0 0 10px">Vstaň a najdi v bytě něco <b style="color:${col}">${nm}</b>. Ukaž to zblízka do kamery.</p>
     <button class="btn primary" id="camGo">Zapnout kameru</button><video id="camV" playsinline muted style="width:100%;max-height:34vh;object-fit:cover;border-radius:14px;display:none;margin-top:10px"></video>
     <div class="meter" style="margin-top:10px"><i id="camM"></i></div><button class="btn" id="camSkip" style="margin-top:10px" hidden>Kamera nejde, zamávali jsme rukou</button>`;
   const skipT=setTimeout(()=>{const s=$('#camSkip');if(s)s.hidden=false},25000);cleanups.push(()=>clearTimeout(skipT));
@@ -791,14 +798,14 @@ function ch0(){setTabs([{label:'Kobka',render:p=>{p.innerHTML=`<div class="card"
   bottom(npc('Za úsvitu jdete po prkně.')+`<button class="btn primary" id="go1">Jdeme</button>`);$('#go1').onclick=()=>enterCh(1)}
 
 const CH=[
-  {t:'Kobka',start:ch0,scene:'kobka',find:'🔑 Najdi klíče od cely',voice:'kobka',line:'Strážný spí. Klíče má u pasu.'},
-  {t:'Kobka',start:ch1,scene:'kobka',find:'🔑 Najdi klíče od cely',voice:'kobka',line:'Strážný spí. Klíče má u pasu.',hints:()=>{const d=c1();return['Kdo má zámek, vidí čtyři lesklé znaky. To je kód.','Šipky na zdi dají všech šest znaků do řady. Lesklé si z ní vyberte.',`Kód: ${d.code.join(', ')}.`]}},
-  {t:'Skladiště',start:ch2,scene:'sklad',find:'🐀 Najdi potkana',voice:'sklad',line:'Najděte prach, ne rum.',hints:()=>{const d=c2();return['Prach smrdí po vejcích a kouři. Vejce cítí i jinde.','Každý sud má dvě vůně. Každou cítí někdo jiný.',`Prach je sud ${ROMAN[d.ok]}. Sypat pomalu.`]}},
-  {t:'Dělová paluba',start:chGuns,hints:()=>{const d=ein();return['Každý slyšel jiné věty. Přečtěte si nahlas úplně všechno.','Nakreslete čtyři děla zleva doprava. Začněte tím, co víte jistě, a škrtejte, co nejde.',`Mléko pije ${d.who} u děla ${d.gun+1}.`]}},
-  {t:'Ubikace',start:ch3,scene:'ubikace',find:'🚪 Najdi východ',voice:'ubikace',line:'Šeptejte.',hints:()=>{const d=c3();const L=([x,y])=>'ABCDE'[x]+(5-y);return['Jeden telefon vidí spáče, jiný vrzající prkna. Kdo má šipky, jde potmě.','Začíná se dole vlevo, východ je nahoře vpravo. Říkejte kroky.',`Spáči: ${d.pir.map(L).join(' ')} · prkna: ${d.crk.map(L).join(' ')} (sloupce A–E zleva, řady 1–5 zdola)`]}},
-  {t:'Kajuta',start:ch4,after:watchOut,scene:'kajuta',find:'🗝️ Najdi sejf',voice:'kajuta',line:'Uspěte stráž a vybílete sejf.',hints:()=>{const d=c4();return['Recept, police a obraz má každý jiný telefon.','Nejdřív lektvar, pak sejf. Znaky na sejf jsou na náhrdelníku zleva doprava.',`Lahvičky: ${d.recipe.map(b=>BOT[b][2]+' '+BOT[b][1]).join(', ')}. Sejf: ${d.safe.join(', ')}.`]}},
+  {t:'Kobka',img:'img/kap/kobka.jpg',start:ch0,scene:'kobka',find:'🔑 Najdi klíče od cely',voice:'kobka',line:'Strážný spí. Klíče má u pasu.'},
+  {t:'Kobka',img:'img/kap/kobka.jpg',start:ch1,scene:'kobka',find:'🔑 Najdi klíče od cely',voice:'kobka',line:'Strážný spí. Klíče má u pasu.',hints:()=>{const d=c1();return['Kdo má zámek, vidí čtyři lesklé znaky. To je kód.','Šipky na zdi dají všech šest znaků do řady. Lesklé si z ní vyberte.',`Kód: ${d.code.join(', ')}.`]}},
+  {t:'Skladiště',img:'img/kap/sklad.jpg',start:ch2,scene:'sklad',find:'🐀 Najdi potkana',voice:'sklad',line:'Najděte prach, ne rum.',hints:()=>{const d=c2();return['Prach smrdí po vejcích a kouři. Vejce cítí i jinde.','Každý sud má dvě vůně. Každou cítí někdo jiný.',`Prach je sud ${ROMAN[d.ok]}. Sypat pomalu.`]}},
+  {t:'Dělová paluba',img:'img/kap/delo.jpg',start:chGuns,hints:()=>{const d=ein();return['Každý slyšel jiné věty. Přečtěte si nahlas úplně všechno.','Nakreslete čtyři děla zleva doprava. Začněte tím, co víte jistě, a škrtejte, co nejde.',`Mléko pije ${d.who} u děla ${d.gun+1}.`]}},
+  {t:'Ubikace',img:'img/kap/ubikace.jpg',start:ch3,scene:'ubikace',find:'🚪 Najdi východ',voice:'ubikace',line:'Šeptejte.',hints:()=>{const d=c3();const L=([x,y])=>'ABCDE'[x]+(5-y);return['Jeden telefon vidí spáče, jiný vrzající prkna. Kdo má šipky, jde potmě.','Začíná se dole vlevo, východ je nahoře vpravo. Říkejte kroky.',`Spáči: ${d.pir.map(L).join(' ')} · prkna: ${d.crk.map(L).join(' ')} (sloupce A–E zleva, řady 1–5 zdola)`]}},
+  {t:'Kajuta',img:'img/kap/kajuta.jpg',start:ch4,after:watchOut,scene:'kajuta',find:'🗝️ Najdi sejf',voice:'kajuta',line:'Uspěte stráž a vybílete sejf.',hints:()=>{const d=c4();return['Recept, police a obraz má každý jiný telefon.','Nejdřív lektvar, pak sejf. Znaky na sejf jsou na náhrdelníku zleva doprava.',`Lahvičky: ${d.recipe.map(b=>BOT[b][2]+' '+BOT[b][1]).join(', ')}. Sejf: ${d.safe.join(', ')}.`]}},
   {t:'Paluba',start:ch5,scene:'paluba',find:'⛵ Najdi Bílou laň',voice:'paluba',line:'Vezmete na Bílou laň všechny?'},
-  {t:'Útěk',start:ch6,scene:'utek',find:'🪢 Najdi lano',voice:'utek',line:'Přeseknout lano a pryč!'},
+  {t:'Útěk',img:'img/kap/paluba.jpg',start:ch6,scene:'utek',find:'🪢 Najdi lano',voice:'utek',line:'Přeseknout lano a pryč!'},
   {t:'Konec',start:chEnd}
 ];
 
