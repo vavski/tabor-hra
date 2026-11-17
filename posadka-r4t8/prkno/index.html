@@ -406,12 +406,22 @@ function prolog(){return new Promise(res=>{const o=$('#prolog');o.classList.add(
   $('#prologNext').onclick=next;$('#prologSkip').onclick=()=>{i=PROLOG.length-1;next()};next()})}
 
 /* ================= pohyb, zvuk, hudba ================= */
-let motionOK=false;const O={a:null,b:null,g:null};
+let motionOK=false,motionAsked=false;const O={a:null,b:null,g:null};
 addEventListener('deviceorientation',e=>{if(e.beta!=null){O.a=e.alpha;O.b=e.beta;O.g=e.gamma}});
-async function askMotion(){try{
-  if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function')motionOK=(await DeviceOrientationEvent.requestPermission())==='granted';else motionOK='ontouchstart' in window&&typeof DeviceOrientationEvent!=='undefined';
-  if(typeof DeviceMotionEvent!=='undefined'&&typeof DeviceMotionEvent.requestPermission==='function')await DeviceMotionEvent.requestPermission();}catch(e){}
-  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume()}catch(e){}}
+/* iPhone pustí čidla pohybu jen po žádosti přímo v ťuknutí (touchend/click). Při dosednutí prstu (pointerdown)
+   žádost tiše odmítne. Proto se obě žádosti posílají naráz, bez čekání mezi nimi, a dokud hráč neodpoví,
+   zkusí se to znovu při každém ťuknutí kdekoli. */
+const IOS_ASK=typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function';
+if(!IOS_ASK)motionOK='ontouchstart' in window&&typeof DeviceOrientationEvent!=='undefined';
+function askMotion(){
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume()}catch(e){}
+  if(!IOS_ASK||motionAsked)return Promise.resolve();
+  const reqs=[];
+  try{reqs.push(DeviceOrientationEvent.requestPermission())}catch(e){reqs.push(Promise.reject(e))}
+  try{if(typeof DeviceMotionEvent!=='undefined'&&typeof DeviceMotionEvent.requestPermission==='function')reqs.push(DeviceMotionEvent.requestPermission())}catch(e){}
+  return Promise.allSettled(reqs).then(r=>{if(r[0].status==='fulfilled'){motionAsked=true;motionOK=r[0].value==='granted'}})}
+if(IOS_ASK){const h=()=>{if(motionAsked){removeEventListener('touchend',h,true);removeEventListener('click',h,true)}else askMotion()};
+  addEventListener('touchend',h,true);addEventListener('click',h,true)}
 let AC=null;
 function beep(f=660,d=.12){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.frequency.value=f;o.connect(g);g.connect(AC.destination);g.gain.setValueAtTime(.15,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.start();o.stop(AC.currentTime+d)}catch(e){}}
 let wake=null;async function keepAwake(){try{if('wakeLock' in navigator&&!wake){wake=await navigator.wakeLock.request('screen');wake.addEventListener('release',()=>wake=null)}}catch(e){}}
