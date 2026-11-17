@@ -48,7 +48,7 @@ function setScale(){document.documentElement.style.setProperty('--s',document.ge
 document.getElementById('s').onchange=setScale;setScale();
 document.getElementById('go').onclick=()=>{
   const n=+document.getElementById('n').value;let c='';for(let i=0;i<4;i++)c+=ABC[Math.floor(Math.random()*ABC.length)];
-  for(let i=1;i<=4;i++)try{localStorage.removeItem('prkno-v4-'+i)}catch(e){}
+  for(let i=1;i<=4;i++)try{localStorage.removeItem('prkno-v5-'+i)}catch(e){}
   try{localStorage.setItem('prkno-test',JSON.stringify({code:c+n,n}))}catch(e){}
   build(c+n,n);
 };
