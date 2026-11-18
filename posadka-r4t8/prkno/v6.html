@@ -49,9 +49,11 @@ input[type=text]{width:100%;min-width:0;font:inherit;font-size:26px;padding:12px
 .pips{display:flex;gap:5px}.pips i{flex:1;height:10px;border-radius:5px;background:#24344a}.pips i.on{background:var(--brass)}
 #prolog{position:fixed;inset:0;z-index:46;display:none;background:#000;overflow:hidden}
 #prolog.on{display:block}
-#prolog img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:kb 12s ease-out forwards}
+#prolog img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;animation:kb 12s ease-out forwards}
+#prolog img.bg{object-fit:cover;filter:blur(22px) brightness(.45);transform:scale(1.2);animation:none}
+@media (orientation:landscape){#prolog img{object-fit:cover}}
 #prolog::after{content:"";position:absolute;inset:0;background:linear-gradient(#0000 45%,#000d 80%);pointer-events:none}
-@keyframes kb{from{transform:scale(1.18)}to{transform:scale(1.02)}}
+@keyframes kb{from{transform:scale(1.07)}to{transform:scale(1)}}
 #prologTxt{position:absolute;z-index:1;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 100px);padding:0 22px;text-align:center;font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:600;font-size:28px;line-height:1.25;text-shadow:0 2px 12px #000}
 #prologBtns{position:absolute;z-index:1;left:16px;right:16px;bottom:calc(env(safe-area-inset-bottom) + 20px);display:flex;gap:8px}
 .endimg{width:100%;aspect-ratio:1;object-fit:cover;border-radius:16px;display:block;margin-bottom:12px}
@@ -64,7 +66,8 @@ input[type=text]{width:100%;min-width:0;font:inherit;font-size:26px;padding:12px
 .row .btn{padding:12px;flex:1}
 #s-game{padding:0;gap:0;overflow:hidden}
 .gbar{display:flex;gap:8px;align-items:center;padding:calc(env(safe-area-inset-top) + 10px) 12px 8px;background:var(--panel);border-bottom:1px solid var(--line)}
-.gch{flex:1;font-family:"Pirata One",serif;font-size:28px;line-height:1.1;color:var(--brass)}
+.gch{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:"Pirata One",serif;font-size:28px;line-height:1.1;color:var(--brass)}
+.gbar .chip{flex-shrink:0;padding:8px 10px}
 .dawn{height:4px;background:linear-gradient(90deg,#1a2a44,#e8a35a);transform-origin:left;transform:scaleX(0);transition:transform 1s}
 .tabs{display:flex;gap:6px;padding:8px 12px;overflow-x:auto;border-bottom:1px solid var(--line)}
 .tabs:empty{display:none}
@@ -210,7 +213,8 @@ canvas.full{width:100%;height:auto;display:block;border-radius:14px}
   <div class="gbar">
     <div class="gch" id="gTitle"></div>
     <button class="chip" id="viewChip" aria-label="Rozhlédnout se">Rozhlédnout</button>
-    <button class="chip" id="hintChip">Rada od Barta</button>
+    <button class="chip" id="hintChip" aria-label="Rada od Barta">Rada</button>
+    <button class="chip" id="musChip" aria-label="Hudba" hidden>🎵</button>
     <button class="chip" id="menuChip" aria-label="Menu">⋯</button>
   </div>
   <div class="dawn" id="dawn"></div>
@@ -404,12 +408,12 @@ function whoScreen(){const box=$('#myCards');box.innerHTML='';
 $('#startBtn').onclick=()=>{if(!G.t0){G.t0=Date.now();save()}startGame()};
 
 /* úvod: čtyři obrázky, Bart vypráví (hlas jen z telefonu 1, ostatní mají titulky) */
-const PROLOG=[['uvod1','Bílá laň. Malá, rychlá, přestrojená za obchodníka. A na ní nejdrzejší piráti Karibiku.',7],['uvod2','Kapitánka Černá nosí u sebe mapu k pokladu. Připluli jste si pro ni v noci.',7],['uvod3','Jenže kapitánka vás chytila. Všechny.',5],['uvod4','Teď sedíte v kobce. Za úsvitu jdete po prkně.',6]];
+const PROLOG=[['uvod1','Bílá laň. Malá, rychlá, přestrojená za obchodníka. A na ní nejdrzejší piráti Karibiku.',7.2],['uvod2','Kapitánka Černá nosí u sebe mapu k pokladu. Připluli jste si pro ni v noci.',5],['uvod3','Jenže kapitánka vás chytila. Všechny.',3.4],['uvod4','Teď sedíte v kobce. Za úsvitu jdete po prkně.',3.8]];
 PROLOG.forEach(p=>{const i=new Image();i.src='img/'+p[0]+'.jpg'});
 function prolog(){return new Promise(res=>{const o=$('#prolog');o.classList.add('on');let i=-1,t=0;
   const next=()=>{clearTimeout(t);i++;
     if(i>=PROLOG.length){o.classList.remove('on');if(voice)voice.pause();res();return}
-    const [img,txt,d]=PROLOG[i],old=o.querySelector('img'),im=el('img');im.src='img/'+img+'.jpg';im.alt='';if(old)old.remove();o.prepend(im);
+    const [img,txt,d]=PROLOG[i],im=el('img'),bg=el('img','bg');im.src=bg.src='img/'+img+'.jpg';im.alt=bg.alt='';o.querySelectorAll('img').forEach(x=>x.remove());o.prepend(im);o.prepend(bg);
     $('#prologTxt').textContent=txt;$('#prologNext').textContent=i===PROLOG.length-1?'Kdo jsem?':'Dál';say('v6-prolog'+(i+1));t=setTimeout(next,(d+1)*1000)};
   $('#prologNext').onclick=next;$('#prologSkip').onclick=()=>{i=PROLOG.length-1;next()};next()})}
 
@@ -431,6 +435,7 @@ function askMotion(){
 if(IOS_ASK){const h=()=>{if(motionAsked){removeEventListener('touchend',h,true);removeEventListener('click',h,true)}else askMotion()};
   addEventListener('touchend',h,true);addEventListener('click',h,true)}
 let AC=null;
+['touchend','click'].forEach(ev=>addEventListener(ev,()=>{try{if(AC&&AC.state!=='running')AC.resume()}catch(e){}if(G&&G.t0&&G.music!==false&&lead()&&!mus)musicOn();if(G)musicLabel()},true));
 function beep(f=660,d=.12){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.frequency.value=f;o.connect(g);g.connect(AC.destination);g.gain.setValueAtTime(.15,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.start();o.stop(AC.currentTime+d)}catch(e){}}
 let wake=null;async function keepAwake(){try{if('wakeLock' in navigator&&!wake){wake=await navigator.wakeLock.request('screen');wake.addEventListener('release',()=>wake=null)}}catch(e){}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&$('#s-game').classList.contains('on'))keepAwake()});
@@ -468,8 +473,9 @@ function musicOn(){if(mus)return;try{AC=AC||new (window.AudioContext||window.web
       const k=T.drum(i);if(k)hit(k,next);i++;next+=T.step}};
   const iv=setInterval(tick,100);tick();mus={stop:()=>{clearInterval(iv);out.disconnect()}}}catch(e){}}
 function musicOff(){if(mus){mus.stop();mus=null}}
-function musicLabel(){$('#menuMusic').textContent='Hudba: '+(mus?'vypnout':'zapnout');$('#menuTrack').textContent='Skladba: '+TRACKS[G.mstyle||0].name+' · další'}
+function musicLabel(){const c=$('#musChip');if(c){c.hidden=!G||!lead();c.textContent=mus?'🎵':'🔇';c.title=mus?'Vypnout hudbu':'Zapnout hudbu';c.setAttribute('aria-pressed',!!mus)}$('#menuMusic').textContent='Hudba: '+(mus?'vypnout':'zapnout');$('#menuTrack').textContent='Skladba: '+TRACKS[G.mstyle||0].name+' · další'}
 function musicSync(){const on=G.music!==false&&lead();on?musicOn():musicOff();musicLabel()}
+$('#musChip').onclick=()=>{G.music=!mus;save();if(G.music)musicOn();else musicOff();musicLabel()};
 $('#menuMusic').onclick=()=>{G.music=!mus;save();if(G.music){musicOn()}else musicOff();musicLabel()};
 $('#menuTrack').onclick=()=>{G.mstyle=((G.mstyle||0)+1)%TRACKS.length;G.music=true;save();musicOff();musicOn();musicLabel()};
 
@@ -648,7 +654,7 @@ function deadGame(box,onDone){const order=shuffle(R('dead'),[...Array(G.n).keys(
 
 /* ================= ÚTĚK a) hej-rup na kotvu ================= */
 const HEJ=['Kotva je těžká jak Stará po rumu…','Kdo nezabere, ten zůstane tu…','Za námi vdova a pod námi dno…','Tahejte, žabaři, než přijde ráno…','Slaná louka volá, slyšíte ji?','Ruce jak hadry, ale pořád žijí…','Ještě jednou, zelenáči, hrrr…','A kotva je venku. Sakra, to šlo.'];
-const HEJ_P=4.6,HEJ_B=3.4;
+const HEJ_P=4.7,HEJ_B=3.5;
 function hejRup(box,onDone){
   box.innerHTML=`<img class="kapimg" src="img/kap/paluba.jpg" alt=""><p class="big1">Hej-rup na kotvu!</p><p>Chyťte jeden ručník nebo šálu za stejný konec jako lano a táhněte ho k sobě. <b>Nikdy proti sobě.</b> Bart zpívá, po každém řádku přijde úder bubnu. Přesně na úder všichni zařvěte <b>HEJ!</b> a zaberte.</p>`+
     (lead()?`<p class="note">Tenhle telefon poslouchá. Položte ho doprostřed.</p><label class="row" style="align-items:center;gap:8px"><input type="checkbox" id="quiet"> Tichá noc: místo řevu tleskněte</label>`:`<p class="note">Telefon Barta počítá trefené údery. Tvůj jen bliká do rytmu.</p>`)+`<div id="hj"></div>`;
