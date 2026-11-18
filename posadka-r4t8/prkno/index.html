@@ -148,6 +148,7 @@ canvas.full{width:100%;height:auto;display:block;border-radius:14px}
 #watch .big,#run .big{font-size:72px;font-weight:800}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 </head>
 <body>
 
@@ -820,11 +821,17 @@ const CH=[
 ];
 
 /* ================= 3D úvod kapitoly: rozhlédni se a najdi věc ================= */
-let THREE=null;
+let THREE=null,GLTF=null;
+/* Místnosti z Blenderu (Grok bot, 18. 11.). Když se model nenačte, hra postaví starou místnost z kostek. */
+const GLB={kobka:['kobka','PLAYER_EYE','TARGET_keys'],sklad:['sklad','PLAYER_EYE','TARGET_rat'],ubikace:['delova','PLAYER_EYE_FWD','TARGET_exit'],
+  kajuta:['kajuta','PLAYER_EYE','TARGET_safe'],paluba:['lod','PLAYER_EYE_DECK',null],utek:['lod','PLAYER_EYE_DECK','TARGET_rope']};
+const glbCache={};const loadGLB=n=>glbCache[n]=glbCache[n]||new Promise((ok,ko)=>GLTF.load('../scena/modely/web/'+n+'.glb',g=>ok(g.scene),undefined,ko)).catch(e=>{delete glbCache[n];throw e});
 async function view3D(ch,first){const ov=$('#v3d');ov.classList.add('on');
   $('#v3dHint').textContent=G.seen._hint?'':'Otáčej se s telefonem. Nebo táhni prstem.';G.seen._hint=1;save();
   $('#v3dLine').innerHTML='';$('#v3dGo').hidden=true;$('#v3dFind').hidden=true;$('#v3dAim').hidden=true;
-  try{THREE=THREE||await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js')}catch(e){ov.classList.remove('on');return}
+  try{THREE=THREE||await import('three')}catch(e){ov.classList.remove('on');return}
+  if(GLTF===null)try{const [{GLTFLoader},{MeshoptDecoder}]=await Promise.all([import('three/addons/loaders/GLTFLoader.js'),import('three/addons/libs/meshopt_decoder.module.js')]);
+    GLTF=new GLTFLoader();GLTF.setMeshoptDecoder(MeshoptDecoder)}catch(e){GLTF=null;console.warn('GLTF',e)}
   if(first)say(ch.voice);musicSync();
   return new Promise(res=>{let found=!first;
     const stop=buildScene(ch.scene,()=>{if(found)return;found=true;beep(880,.25);vibe([40,40,100]);$('#v3dFind').textContent='✓ Našel jsi to';$('#v3dAim').hidden=true;setTimeout(()=>$('#v3dGo').hidden=false,500)});
@@ -859,7 +866,8 @@ function buildScene(type,onFound){
     if(mode==='lie')g.rotation.z=Math.PI/2;g.rotation.y=ry;g.position.set(x,y,z);world.add(g);anim.push({g,mode,h,ph:Math.random()*6,y});return g};
   const targets=[];const target=o=>{targets.push(o);return o};
   sc.add(new THREE.HemisphereLight(0x8fa6d6,0x2a2018,1.1));sc.add(new THREE.AmbientLight(0x404858,.6));
-  if(type==='kobka'){room(4,2.6,4,new THREE.MeshStandardMaterial({map:stone,roughness:1}),new THREE.MeshStandardMaterial({map:stone,color:0x8a837a}),plank(2,2,0x776655));
+  const G3=GLTF&&GLB[type],old=!G3;
+  if(old&&type==='kobka'){room(4,2.6,4,new THREE.MeshStandardMaterial({map:stone,roughness:1}),new THREE.MeshStandardMaterial({map:stone,color:0x8a837a}),plank(2,2,0x776655));
     for(let i=-1.8;i<=1.8;i+=.25){const b=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,2.6,6),metal);b.position.set(i,1.3,-1.6);world.add(b)}
     box(4,.08,.08,metal,0,2.2,-1.6);box(4,.08,.08,metal,0,.3,-1.6);
     room(4,2.6,3.2,new THREE.MeshStandardMaterial({map:stone,roughness:1}),new THREE.MeshStandardMaterial({map:stone,color:0x8a837a}),plank(2,2,0x776655)).position.set(0,1.3,-3.2);
@@ -867,7 +875,7 @@ function buildScene(type,onFound){
     const key=target(new THREE.Mesh(new THREE.TorusGeometry(.11,.025,8,16),new THREE.MeshStandardMaterial({color:0xffd27a,emissive:0x996600,emissiveIntensity:.8,metalness:.8})));key.position.set(.75,.5,-2.35);world.add(key);
     lamp(-.8,2,-2.8,7);lamp(1.2,2.2,.9,3);box(1.2,.05,.8,new THREE.MeshStandardMaterial({color:0xa08850,roughness:1}),-1,.03,.8);
     person(-1.3,.3,.9,1.2,'lie',0x4a3a2a);rig.position.set(0,1.45,.8)}
-  if(type==='sklad'){room(8,3,6,plank(3,1.2),deckM(4,3),plank(3,2,0x7a6855));
+  if(old&&type==='sklad'){room(8,3,6,plank(3,1.2),deckM(4,3),plank(3,2,0x7a6855));
     [[-3,-2],[-2.3,-2.2],[-3.2,-1.2],[2.6,-2.2],[3.2,-1.4],[2.4,1.8],[3.1,2.1],[-2.8,1.9],[-3.3,1.1],[0,-2.5]].forEach(([x,z])=>barrel(x,z));
     box(.9,.7,.8,plank(1,1,0x9a8060),-1.2,.35,-2.4);box(.8,.6,.7,plank(1,1,0x9a8060),1.4,.3,2.4);
     person(1.6,1,-1,-.9,'talk',0x3d2b2b);person(2.4,1,-.4,2.2,'talk',0x2b3a2b);
@@ -876,11 +884,11 @@ function buildScene(type,onFound){
     for(const z of [-.03,.03]){const e=new THREE.Mesh(new THREE.SphereGeometry(.015,6,6),new THREE.MeshBasicMaterial({color:0xff3020}));e.position.set(.14,.03,z);rat.add(e)}
     rat.position.set(-3.5,.08,-2.6);rat.rotation.y=.6;world.add(rat);target(rb);
     lamp(0,2.3,0,6);lamp(-2.5,2.3,-1,4);lamp(2.5,2.3,1.5,3);rig.position.set(0,1.55,1)}
-  if(type==='ubikace'){room(10,2.4,5,plank(4,1),deckM(5,2.5),plank(4,2,0x6a5848));
+  if(old&&type==='ubikace'){room(10,2.4,5,plank(4,1),deckM(5,2.5),plank(4,2,0x6a5848));
     for(let i=-3.6;i<=4;i+=1.6)for(const z of [-1.5,1.5]){const h=new THREE.Mesh(new THREE.CylinderGeometry(.5,.5,1.8,12,1,true,Math.PI*.15,Math.PI*.7),new THREE.MeshStandardMaterial({color:0xc5b898,side:THREE.DoubleSide,roughness:1}));h.rotation.z=Math.PI/2;h.rotation.x=Math.PI;h.position.set(i,1.75,z);world.add(h);person(i,1.45,z,0,'lie',[0x3a2a22,0x2a3a4a,0x4a2a2a][Math.abs(i*3|0)%3])}
     const door=target(box(.08,1.9,1,plank(1,2,0x6a4a2a),4.95,.95,0));const strip=new THREE.Mesh(new THREE.PlaneGeometry(1,.06),new THREE.MeshBasicMaterial({color:0xffc070}));strip.position.set(4.9,.04,0);strip.rotation.y=-Math.PI/2;world.add(strip);
     lamp(-3,2,0,3);lamp(1,2,0,2.5);lamp(4.4,1.9,0,2);rig.position.set(-4.4,1.5,0);rig.rotation.y=-Math.PI/2}
-  if(type==='kajuta'){room(6,2.6,5,plank(3,1,0x9a7a5a),deckM(3,3),plank(3,2,0x6a5040));
+  if(old&&type==='kajuta'){room(6,2.6,5,plank(3,1,0x9a7a5a),deckM(3,3),plank(3,2,0x6a5040));
     const win=ctex(512,256,(x,w,h)=>{const g=x.createLinearGradient(0,0,0,h);g.addColorStop(0,'#1c2f53');g.addColorStop(1,'#53709a');x.fillStyle=g;x.fillRect(0,0,w,h);x.fillStyle='#fff';x.beginPath();x.arc(w*.7,h*.3,18,0,7);x.fill();x.strokeStyle='#2a1a0c';x.lineWidth=10;for(let i=1;i<6;i++){x.beginPath();x.moveTo(i*w/6,0);x.lineTo(i*w/6,h);x.stroke()}x.beginPath();x.moveTo(0,h/2);x.lineTo(w,h/2);x.stroke()});
     const wm=new THREE.Mesh(new THREE.PlaneGeometry(4,1.4),new THREE.MeshBasicMaterial({map:win}));wm.position.set(0,1.6,-2.48);world.add(wm);
     const ml=new THREE.DirectionalLight(0x9fc0ff,1);ml.position.set(0,2,-5);sc.add(ml);
@@ -894,19 +902,28 @@ function buildScene(type,onFound){
   if(type==='paluba'||type==='utek'){const sky=TL.load('../scena/sky.jpg');sky.colorSpace=THREE.SRGBColorSpace;
     const sm=new THREE.Mesh(new THREE.SphereGeometry(1500,32,16),new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,uniforms:{map:{value:sky}},vertexShader:'varying vec3 v;void main(){v=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
       fragmentShader:'uniform sampler2D map;varying vec3 v;void main(){vec3 d=normalize(v);float e=asin(clamp(d.y,-1.,1.));float u=fract(atan(d.x,-d.z)/6.2831853+.5);vec3 c=texture2D(map,vec2(u,.065+clamp(e/1.5708,0.,1.)*.935)).rgb*vec3(.75,.82,.95);c=mix(vec3(.2,.27,.38),c,smoothstep(0.,.16,e));gl_FragColor=vec4(c,1.);\n#include <colorspace_fragment>\n}'}));sc.add(sm);
-    const sea=new THREE.Mesh(new THREE.PlaneGeometry(4000,4000),new THREE.MeshStandardMaterial({color:0x0a2034,roughness:.3,metalness:.6}));sea.rotation.x=-Math.PI/2;sc.add(sea);sc.fog=new THREE.FogExp2(0x2a3a52,.004);
+    const hy=old?0:-4.5;
+    const sea=new THREE.Mesh(new THREE.PlaneGeometry(4000,4000),new THREE.MeshStandardMaterial({color:0x0a2034,roughness:.3,metalness:.6}));sea.rotation.x=-Math.PI/2;sea.position.y=hy;sc.add(sea);sc.fog=new THREE.FogExp2(0x2a3a52,old?.004:.0009);if(!old)r.toneMappingExposure=1;
     const ml=new THREE.DirectionalLight(0xc8d6ff,1.4);ml.position.set(50,40,-30);sc.add(ml);
-    box(10,.2,40,deckM(4,14),0,1.9,0);for(const s of [-1,1])box(.2,1,40,plank(10,1),s*5,2.5,0);
+    if(old){box(10,.2,40,deckM(4,14),0,1.9,0);for(const s of [-1,1])box(.2,1,40,plank(10,1),s*5,2.5,0);
     const mast=new THREE.Mesh(new THREE.CylinderGeometry(.25,.4,30,12),plank(1,6));mast.position.set(0,17,-4);world.add(mast);
     const sail=new THREE.Mesh(new THREE.PlaneGeometry(12,8,8,6),new THREE.MeshStandardMaterial({color:0x3a3a40,side:THREE.DoubleSide,roughness:1}));sail.position.set(0,16,-4.6);world.add(sail);
-    for(let i=0;i<4;i++)box(.8,.6,1.4,metal,-4.2,2.3,-10+i*5);person(3,2.9,-8,1,'talk',0x3d2b2b);person(2.2,2.9,-7.3,-2,'talk',0x2b3a2b);person(-2,2.9,6,-1,'stand',0x2d3a4a);
-    const hx=type==='utek'?-6:3,hz=type==='utek'?24:48;
-    const hull=new THREE.Mesh(new THREE.BoxGeometry(4,2,14),new THREE.MeshStandardMaterial({color:0xe2dac6}));hull.position.set(hx,.6,hz);sc.add(hull);
-    const ls=new THREE.Mesh(new THREE.PlaneGeometry(6,5),new THREE.MeshStandardMaterial({color:0xf0ead8,side:THREE.DoubleSide}));ls.position.set(hx,6,hz);sc.add(ls);
-    const rope=new THREE.Mesh(new THREE.CylinderGeometry(.1,.1,1,6),new THREE.MeshStandardMaterial({color:0x8a6a3a}));const a=new THREE.Vector3(0,2.4,20),b=new THREE.Vector3(hx,1.4,hz-7),dv=b.clone().sub(a);
+    for(let i=0;i<4;i++)box(.8,.6,1.4,metal,-4.2,2.3,-10+i*5);person(3,2.9,-8,1,'talk',0x3d2b2b);person(2.2,2.9,-7.3,-2,'talk',0x2b3a2b);person(-2,2.9,6,-1,'stand',0x2d3a4a)}
+    const hx=old?(type==='utek'?-6:3):(type==='utek'?-14:22),hz=old?(type==='utek'?24:48):(type==='utek'?-4:-18);
+    const hull=new THREE.Mesh(new THREE.BoxGeometry(4,2,14),new THREE.MeshStandardMaterial({color:0xe2dac6}));hull.position.set(hx,.6+hy,hz);sc.add(hull);
+    const ls=new THREE.Mesh(new THREE.PlaneGeometry(6,5),new THREE.MeshStandardMaterial({color:0xf0ead8,side:THREE.DoubleSide}));ls.position.set(hx,6+hy,hz);sc.add(ls);
+    if(old){const rope=new THREE.Mesh(new THREE.CylinderGeometry(.1,.1,1,6),new THREE.MeshStandardMaterial({color:0x8a6a3a}));const a=new THREE.Vector3(0,2.4,20),b=new THREE.Vector3(hx,1.4,hz-7),dv=b.clone().sub(a);
     rope.scale.y=dv.length();rope.position.copy(a).addScaledVector(dv,.5);rope.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dv.clone().normalize());world.add(rope);
-    if(type==='utek')target(rope);else{target(hull);target(ls)}
-    lamp(-3,4,2,5);lamp(3,4,-12,4);lamp(0,4,18,4);rig.position.set(0,3.5,10)}
+    if(type==='utek')target(rope);lamp(-3,4,2,5);lamp(3,4,-12,4);lamp(0,4,18,4);rig.position.set(0,3.5,10)}
+    if(type==='paluba'){target(hull);target(ls)}}
+  if(G3){const [name,eyeN,tgN]=G3,hint=$('#v3dHint'),was=hint.textContent;hint.textContent='Načítám místnost…';
+    const lampL=(p,i=5)=>{const s=new THREE.Sprite(new THREE.SpriteMaterial({map:glowT,blending:THREE.AdditiveBlending,depthWrite:false,transparent:true}));s.scale.set(.7,.7,1);s.position.copy(p);world.add(s);
+      const l=new THREE.PointLight(0xffa04a,i*2.2,14,1.4);l.userData.b=i*2.2;l.position.copy(p);world.add(l);lights.push(l)};
+    loadGLB(name).then(m=>{if(!run)return;world.add(m);m.updateMatrixWorld(true);const p=new THREE.Vector3(),q=new THREE.Quaternion();
+      const eye=m.getObjectByName(eyeN);if(eye){eye.getWorldPosition(rig.position);eye.getWorldQuaternion(q);const d=new THREE.Vector3(0,0,1).applyQuaternion(q);rig.rotation.y=Math.atan2(-d.x,-d.z)}
+      m.traverse(o=>{if(/^LIGHT_/.test(o.name)){o.getWorldPosition(p);lampL(p.clone())}});
+      const t=tgN&&m.getObjectByName(tgN);if(t){const s=new THREE.Mesh(new THREE.SphereGeometry(.4,8,6),new THREE.MeshBasicMaterial({visible:false}));t.getWorldPosition(s.position);world.add(s);target(s)}
+      hint.textContent=was}).catch(()=>{hint.textContent='Místnost se nenačetla, zkus to znovu.'})}
   // ovládání: telefon jako okno, jinak prst
   let yaw=0,pitch=0,base=null,drag=null,moved=0;const qF=new THREE.Quaternion(-Math.sqrt(.5),0,0,Math.sqrt(.5)),eu=new THREE.Euler(),qD=new THREE.Quaternion(),qY=new THREE.Quaternion(),Y=new THREE.Vector3(0,1,0);
   const ray=new THREE.Raycaster(),fw=new THREE.Vector3(),tp=new THREE.Vector3(),cp=new THREE.Vector3();
